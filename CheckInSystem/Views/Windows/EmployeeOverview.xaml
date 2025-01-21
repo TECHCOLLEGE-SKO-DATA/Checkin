@@ -1,0 +1,81 @@
+﻿<Window x:Class="CheckInSystem.Views.EmployeeOverview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:CheckInSystem.Views"
+        xmlns:checkInSystem="clr-namespace:CheckInSystem"
+        mc:Ignorable="d"
+        Title="Oversigt Check In System"
+        WindowStartupLocation="Manual"
+        WindowStyle="{Binding WindowStyle}"
+        ResizeMode="{Binding ResizeMode}"
+        WindowState="{Binding WindowState}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <ItemsControl ItemsSource="{Binding Groups}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Visibility="{Binding Path=Isvisible, Converter={x:Static checkInSystem:Converters.VisibleIfTrue}}">
+                        <TextBlock Text="{Binding Path=Name}" 
+                                   FontSize="100"
+                                   Margin="20 0 0 5 "/>
+                        <Border BorderBrush="Black" BorderThickness="2" Margin="10">
+                            <ItemsControl ItemsSource="{Binding Members}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <ItemContainerTemplate>
+                                        <StackPanel Margin="5"
+                                                    Background="#d55e00"
+                                                    x:Name="MemberPanel"
+                                                    Visibility="{Binding Path=IsOffSite, Converter={x:Static checkInSystem:Converters.VisibleIfFalse}}">
+                                            <StackPanel Orientation="Horizontal" Margin="10">
+                                                <TextBlock Text="{Binding Path=FirstName}" FontSize="70" Margin="0 0 20 0"/>
+                                                <TextBlock Text="{Binding Path=MiddleName}" FontSize="70" Margin="0 0 20 0">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="Text" Value="">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Path=LastName}" FontSize="70" Margin="0 0 0 0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <ItemContainerTemplate.Triggers>
+                                            <DataTrigger 
+                                                Binding="{Binding Path=IsCheckedIn}"
+                                                Value="True">
+                                                <Setter Property="Background" TargetName="MemberPanel" Value="#009e73">
+                                                </Setter>
+                                            </DataTrigger>
+                                        </ItemContainerTemplate.Triggers>
+                                    </ItemContainerTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding Path=ScaleSize}" ScaleY="{Binding Path=ScaleSize}"/>
+            </ItemsControl.LayoutTransform>
+        </ItemsControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="⌕" FontSize="30"/>
+            <Button Content="-" Width="30" FontSize="40" Padding="0 -10 0 0" Click="BtnZoomOut"/>
+            <Button Content="+" Width="30" FontSize="40" Padding="0 -10 0 0" Click="BtnZoomIn"/>
+            <Button Content="⛶" Width="30" FontSize="40" Padding="0 -10 0 0" Click="BtnFullScreenToggle" />
+        </StackPanel>
+    </Grid>
+</Window>

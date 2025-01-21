@@ -1,0 +1,33 @@
+﻿<Window x:Class="CheckInSystem.Views.Dialog.EditOffsiteDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:CheckInSystem.Views.Windows"
+        mc:Ignorable="d"
+        Title="Ændre orlov" Height="150" Width="300"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="På orlov"/>
+                <CheckBox x:Name="CbIsOffsite" Margin="5 0 0 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="På orlov Til og med"/>
+                <DatePicker x:Name="DpOffsiteUntil" Margin="5 0 0 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                <Button IsDefault="True"
+                        Content="Bekræft"
+                        Click="BtnConfrimed" 
+                        MinWidth="60" 
+                        Margin="0,0,10,0"/>
+                <Button IsCancel="True" MinWidth="60" Content="Annuller"/>
+            </StackPanel>
+            <StackPanel.LayoutTransform>
+                <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+            </StackPanel.LayoutTransform>
+        </StackPanel>
+    </Grid>
+</Window>
