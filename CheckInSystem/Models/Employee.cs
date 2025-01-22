@@ -193,7 +193,7 @@ public class Employee : INotifyPropertyChanged
             OnPropertyChanged(propertyName);
         }
     }
-    string ShortenName(string middelname)
+   public string ShortenName(string middelname)
     {
         string[] names = middelname.Split(" ");
         string shortenName = "";
