@@ -30,7 +30,10 @@ public class Employee : INotifyPropertyChanged
         get => _middleName;
         set => SetProperty(ref _middleName, value);
     }
-    
+    public string? MiddleNameShort
+    {
+        get { return ShortenName(_middleName); }
+    }
     private string? _lastName;
 
     public string? LastName
@@ -189,6 +192,19 @@ public class Employee : INotifyPropertyChanged
             variable = value;
             OnPropertyChanged(propertyName);
         }
+    }
+   public string ShortenName(string middelname)
+    {
+        string[] names = middelname.Split(" ");
+        string shortenName = "";
+        string seperate = ". ";
+        foreach (string name in names)
+        {
+            string letter = name.Substring(0, 1);
+            shortenName += letter + seperate;
+        }
+        shortenName = shortenName.Trim();
+        return shortenName;
     }
 }
 
