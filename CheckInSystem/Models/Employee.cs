@@ -196,7 +196,9 @@ public class Employee : INotifyPropertyChanged
    public string ShortenName(string middelname)
     {
         if (middelname == null)
+        {
             return "";
+        }
         string[] names = middelname.Split(" ");
         string shortenName = "";
         string seperate = ". ";
