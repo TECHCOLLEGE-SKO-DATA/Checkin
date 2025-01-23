@@ -8,7 +8,7 @@ namespace CheckInSystem.Tests
         [Fact]
         public void ShortenName()
         {
-            var emp = new 
+            //var emp = new 
         }
     }
 }
