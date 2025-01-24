@@ -1,5 +1,7 @@
-# CheckInSystem
+# TECHCOLLEGE
+This repository is trains students from TECHCOLLEGE in Denmark in coding. External contributions are as of now not necessary.
 
+# CheckInSystem
 A simple check in system using an [ACR122U][card-reader-docs] card reader and a
 local Microsoft SQL Server database.
 
