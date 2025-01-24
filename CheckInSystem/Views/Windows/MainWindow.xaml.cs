@@ -14,7 +14,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Closing += OnWindowClosing;
-        ViewmodelBase.MainContentControl = MainContent;
+        ViewModelBase.MainContentControl = MainContent;
         MainContent.Content = new LoginScreen();
     }
     

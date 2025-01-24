@@ -28,13 +28,13 @@ public partial class EmployeeTimeView : UserControl
     private void BtnCancel(object sender, RoutedEventArgs e)
     {
         vm.RevertSiteTimes();
-        ViewmodelBase.MainContentControl.Content = new AdminPanel();
+        ViewModelBase.MainContentControl.Content = new AdminPanel();
     }
 
     private void BtnSave(object sender, RoutedEventArgs e)
     {
         vm.SaveChanges();
-        ViewmodelBase.MainContentControl.Content = new AdminPanel();
+        ViewModelBase.MainContentControl.Content = new AdminPanel();
     }
 
     private void BtnAddTime(object sender, RoutedEventArgs e)

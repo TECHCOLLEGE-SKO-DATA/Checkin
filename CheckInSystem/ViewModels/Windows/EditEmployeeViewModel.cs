@@ -7,7 +7,7 @@ using CheckInSystem.Models;
 
 namespace CheckInSystem.ViewModels.Windows;
 
-public class EditEmployeeViewModel : ViewmodelBase
+public class EditEmployeeViewModel : ViewModelBase
 {
     public Employee EditEmployee { get; set; }
 
