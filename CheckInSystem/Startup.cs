@@ -48,6 +48,7 @@ public class Startup
         var admins = AdminUser.GetAdminUsers();
         if (admins.Count == 0)
         {
+
             AdminUser.CreateUser("sko", "test123");
         }
     }
