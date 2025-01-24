@@ -1,5 +1,5 @@
 # TECHCOLLEGE
-This repository is trains students from TECHCOLLEGE in Denmark in coding. External contributions are as of now not necessary.
+This repository is managed and maintained by students and teachers from TECHCOLLEGE in Denmark. External contributions are as of now not necessary.
 
 # CheckInSystem
 A simple check in system using an [ACR122U][card-reader-docs] card reader and a
