@@ -32,7 +32,7 @@ public partial class AdminEmployeeView : UserControl
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
         EmployeeTimeView timeView = new EmployeeTimeView(employee);
-        ViewmodelBase.MainContentControl.Content = timeView;
+        ViewModelBase.MainContentControl.Content = timeView;
     }
 
     private void BtnEditEmployeeGroup(object sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ public partial class AdminEmployeeView : UserControl
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
         
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewmodelBase.Groups);
+        EditGroupsForEmployees editGroupsForEmployees = new (ViewModelBase.Groups);
         if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
         {
             if (editGroupsForEmployees.AddGroup) editGroupsForEmployees.SelectedGroup.AddEmployee(employee);

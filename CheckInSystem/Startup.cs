@@ -15,9 +15,9 @@ public class Startup
     {
         if (!EnsureDatabaseAvailable()) return false;
         ACR122U.StartReader();
-        ViewmodelBase.Employees = new ObservableCollection<Employee>(Employee.GetAllEmployees());
-        ViewmodelBase.Groups =
-            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
+        ViewModelBase.Employees = new ObservableCollection<Employee>(Employee.GetAllEmployees());
+        ViewModelBase.Groups =
+            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
