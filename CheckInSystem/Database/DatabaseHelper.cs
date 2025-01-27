@@ -12,6 +12,7 @@ using BCrypt.Net;
 
 public class DatabaseHelper
 {
+    //From Admin User
     public static void CreateUser(string username, string password)
     {
         string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
@@ -65,4 +66,108 @@ public class DatabaseHelper
 
         connection.Query(deletionQuery, new { id = ID });
     }
+    //From Admin User
+
+    //From Employee
+    public static List<Employee> GetAllEmployees()
+    {
+        string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
+            [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
+            FROM employee
+            LEFT JOIN dbo.onSiteTime on onSiteTime.ID = (
+            SELECT TOP (1) ID 
+            FROM OnSiteTime
+            WHERE employee.ID = OnSiteTime.employeeID
+            ORDER BY arrivalTime DESC)";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var employees = connection.Query<Employee>(selectQuery).ToList();
+        return employees;
+    }
+
+    public static Employee? GetFromCardId(string cardID)
+    {
+        string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
+            [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
+            FROM employee
+            LEFT JOIN dbo.onSiteTime on onSiteTime.ID = (
+            SELECT TOP (1) ID 
+            FROM OnSiteTime
+            WHERE employee.ID = OnSiteTime.employeeID
+            ORDER BY arrivalTime DESC)
+            WHERE cardID = @cardID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var employees = connection.Query<Employee>(selectQuery, new { cardID = cardID }).FirstOrDefault();
+        return employees;
+    }
+
+    public (DateTime? ArrivalTime, DateTime? DepartureTime) GetUpdatedSiteTimes(int employeeId)
+    {
+        DateTime? ArrivalTime = null;
+        DateTime? DepartureTime = null;
+        string selectQuery = @"Select TOP(1) * FROM onSiteTime
+                WHERE employeeID = @ID
+                ORDER BY arrivalTime desc";
+
+        try
+        {
+            using var connection = Database.GetConnection();
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            var siteTime = connection.QuerySingle<OnSiteTime>(selectQuery, new { ID = employeeId });
+
+            ArrivalTime = siteTime.ArrivalTime;
+            DepartureTime = siteTime.DepartureTime;
+        }
+        catch (Exception)
+        {
+            ArrivalTime = null;
+            DepartureTime = null;
+        }
+
+        return (ArrivalTime, DepartureTime);
+    }
+
+
+
+    public void UpdateDb(Employee employee)
+    {
+        string updateQuery = @"
+            UPDATE employee
+            SET cardID = @CardID,
+            firstName = @FirstName,
+            middleName = @MiddleName,
+            lastName = @LastName,
+            isOffSite = @IsOffSite,
+            offSiteUntil = @OffSiteUntil
+            WHERE ID = @id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(updateQuery, employee);
+    }
+
+    public static void DeleteFromDb(int Id)
+    {
+        string deletionQuery = @"DELETE employee WHERE ID = @ID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(deletionQuery, Id);
+    }
+    
+
+    //From Employee
 }

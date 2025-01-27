@@ -137,7 +137,7 @@ public class ACR122U
         }
         else
         {
-            var dbEmployee = Employee.GetFromCardId(cardID);
+            var dbEmployee = DatabaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
                 Application.Current.Dispatcher.Invoke( () => {
