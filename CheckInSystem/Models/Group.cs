@@ -58,14 +58,18 @@ public class Group : INotifyPropertyChanged
     
     public void AddEmployee(Employee employee)
     {
-        databaseHelper.AddEmployee(employee, Members, ID);
-        Members.Add(employee);
+        if (databaseHelper.AddEmployee(employee, Members, ID))
+        {
+            Members.Add(employee);
+        }
     }
 
     public void RemoveEmployee(Employee employee)
     {
-        databaseHelper.RemoveEmployee(employee, Members, ID);
-        Members.Remove(employee);
+        if(databaseHelper.RemoveEmployee(employee, Members, ID))
+        {
+            Members.Remove(employee);
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

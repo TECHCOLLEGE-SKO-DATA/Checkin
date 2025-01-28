@@ -227,9 +227,9 @@ public class DatabaseHelper
         connection.Query(updateQuery, new { isvisible = Isvisible, ID = ID });
     }
 
-    public void AddEmployee(Employee employee,ObservableCollection<Employee> Members, int ID)
+    public bool AddEmployee(Employee employee,ObservableCollection<Employee> Members, int ID)
     {
-        if (Members.Contains(employee)) return;
+        if (Members.Contains(employee));
 
         string insertQuery = @"INSERT INTO employeeGroup (employeeID, groupID) VALUES (@employeeID, @groupID)";
 
@@ -238,13 +238,12 @@ public class DatabaseHelper
             throw new Exception("Could not establish database connection!");
 
         connection.Query(insertQuery, new { employeeID = employee.ID, @groupID = ID });
-
-        Members.Add(employee);
+        return true;
     }
 
-    public void RemoveEmployee(Employee employee, ObservableCollection<Employee> Members, int ID)
+    public bool RemoveEmployee(Employee employee, ObservableCollection<Employee> Members, int ID)
     {
-        if (!Members.Contains(employee)) return;
+        if (!Members.Contains(employee));
 
         string deletionQuery = @"DELETE employeeGroup WHERE employeeID = @employeeID AND groupID = @groupID";
 
@@ -253,8 +252,7 @@ public class DatabaseHelper
             throw new Exception("Could not establish database connection!");
 
         connection.Query(deletionQuery, new { employeeID = employee.ID, @groupID = ID });
-
-        Members.Remove(employee);
+        return true;
     }
 
     public static List<Group> GetAllGroups(List<Employee> employees)
