@@ -11,6 +11,8 @@ namespace CheckInSystem.Models;
 
 public class Group : INotifyPropertyChanged
 {
+    DatabaseHelper databaseHelper;
+
     public int ID { get; private set; }
     
     private string _name;
@@ -33,7 +35,7 @@ public class Group : INotifyPropertyChanged
     {
         string selectQueryGroups = @"SELECT * FROM [group]";
         string selectQueryEmployeesInGroup = @"SELECT employeeID FROM employeeGroup WHERE groupID = {0}";
-        
+
         using var connection = Database.Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
@@ -80,41 +82,17 @@ public class Group : INotifyPropertyChanged
 
     public void RemoveGroupDb()
     {
-        string deletionQuery = @"DELETE [group] WHERE ID = @ID";
-        
-        using var connection = Database.Database.GetConnection();
-        if (connection == null)
-            throw new Exception("Could not establish database connection!");
-
-        connection.Query(deletionQuery, new { ID = this.ID });
+        databaseHelper.RemoveGroupDb(ID);
     }
 
     public void UpdateName(string name)
     {
-        string updateQuery = @"UPDATE [group] 
-            SET name = @name
-            WHERE ID = @ID";
-
-        using var connection = Database.Database.GetConnection();
-        if (connection == null)
-            throw new Exception("Could not establish database connection!");
-
-        connection.Query(updateQuery, new {name = name, ID = this.ID});
-
-        this.Name = name;
+        this.Name = databaseHelper.UpdateName(name, ID);
     }
 
     public void Updatevisibility(bool visibility)
     {
-        string updateQuery = @"UPDATE [group] 
-            SET isvisible = @isvisible
-            WHERE ID = @ID";
-
-        using var connection = Database.Database.GetConnection();
-        if (connection == null)
-            throw new Exception("Could not establish database connection!");
-
-        connection.Query(updateQuery, new {isvisible = Isvisible, ID = this.ID});
+        databaseHelper.Updatevisibility(visibility,Isvisible,ID);
     }
     
     public void AddEmployee(Employee employee)
@@ -128,7 +106,7 @@ public class Group : INotifyPropertyChanged
             throw new Exception("Could not establish database connection!");
 
         connection.Query(insertQuery, new { employeeID = employee.ID, @groupID = this.ID });
-
+        
         this.Members.Add(employee);
     }
 

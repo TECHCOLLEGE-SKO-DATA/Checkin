@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using System.Collections.ObjectModel;
 
 public class DatabaseHelper
 {
@@ -66,6 +67,7 @@ public class DatabaseHelper
 
         connection.Query(deletionQuery, new { id = ID });
     }
+
     //From Admin User
 
     //From Employee
@@ -87,6 +89,26 @@ public class DatabaseHelper
         var employees = connection.Query<Employee>(selectQuery).ToList();
         return employees;
     }
+
+    public void UpdateDb(string cardID, string firstName, string middleName, string lastName, bool isOffSite, DateTime? offSiteUntil, int id)
+    {
+        string updateQuery = @"
+        UPDATE employee
+        SET cardID = @CardID,
+        firstName = @FirstName,
+        middleName = @MiddleName,
+        lastName = @LastName,
+        isOffSite = @IsOffSite,
+        offSiteUntil = @OffSiteUntil
+        WHERE ID = @id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(updateQuery, new { CardID = cardID, FirstName = firstName, MiddleName = middleName, LastName = lastName, IsOffSite = isOffSite, OffSiteUntil = offSiteUntil, ID = id });
+    }
+
 
     public static Employee? GetFromCardId(string cardID)
     {
@@ -135,28 +157,7 @@ public class DatabaseHelper
 
         return (ArrivalTime, DepartureTime);
     }
-
-
-
-    public void UpdateDb(Employee employee)
-    {
-        string updateQuery = @"
-            UPDATE employee
-            SET cardID = @CardID,
-            firstName = @FirstName,
-            middleName = @MiddleName,
-            lastName = @LastName,
-            isOffSite = @IsOffSite,
-            offSiteUntil = @OffSiteUntil
-            WHERE ID = @id";
-
-        using var connection = Database.GetConnection();
-        if (connection == null)
-            throw new Exception("Could not establish database connection!");
-
-        connection.Query(updateQuery, employee);
-    }
-
+    
     public static void DeleteFromDb(int Id)
     {
         string deletionQuery = @"DELETE employee WHERE ID = @ID";
@@ -167,7 +168,48 @@ public class DatabaseHelper
 
         connection.Query(deletionQuery, Id);
     }
-    
 
     //From Employee
+
+    //From Group
+    public void RemoveGroupDb(int ID)
+    {
+        string deletionQuery = @"DELETE [group] WHERE ID = @ID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(deletionQuery, new { ID = ID });
+    }
+
+    public string UpdateName(string name, int ID)
+    {
+        string updateQuery = @"UPDATE [group] 
+            SET name = @name
+            WHERE ID = @ID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(updateQuery, new { name = name, ID = ID });
+
+        return name;
+    }
+
+    public void Updatevisibility(bool visibility, bool Isvisible, int ID)
+    {
+        string updateQuery = @"UPDATE [group] 
+            SET isvisible = @isvisible
+            WHERE ID = @ID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(updateQuery, new { isvisible = Isvisible, ID = ID });
+    }
+
+    //From Group
 }

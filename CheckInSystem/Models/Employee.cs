@@ -73,17 +73,6 @@ public class Employee : INotifyPropertyChanged
         get => _departureTime;
         set => SetProperty(ref _departureTime, value);
     }
-
-    Employee(int id, string cardId, string firstName, string lastName, string middleName, bool isOffSite, DateTime? offsiteUntil)
-    {
-        ID = id;
-        CardID = cardId;
-        FirstName = firstName;
-        LastName = lastName;
-        MiddleName = middleName;
-        IsOffSite = isOffSite;
-        OffSiteUntil = offsiteUntil;
-    }
     
     public void CardScanned(string cardID)
     {
@@ -103,12 +92,11 @@ public class Employee : INotifyPropertyChanged
         DepartureTime = siteTimes.DepartureTime;
     }
 
-
     public void UpdateDb()
     {
-        Employee employee = new(ID,CardID,FirstName,LastName,MiddleName,IsOffSite,OffSiteUntil);
-        databaseHelper.UpdateDb(employee);
+        databaseHelper.UpdateDb(CardID, FirstName, MiddleName, LastName, IsOffSite, OffSiteUntil, ID);
     }
+
     public void DeleteFromDb()
     {
         DatabaseHelper.DeleteFromDb(this.ID);
