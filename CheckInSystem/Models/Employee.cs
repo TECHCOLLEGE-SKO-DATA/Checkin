@@ -9,7 +9,7 @@ namespace CheckInSystem.Models;
 
 public class Employee : INotifyPropertyChanged
 {
-    public int ID { get; private set; }
+    public int ID { get; set; }
     private string _cardID;
     public string CardID
     {
