@@ -306,4 +306,62 @@ public class DatabaseHelper
     }
 
     //From Group
+
+    //From OnSiteTime
+    public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
+    {
+        string selectQuery = @"SELECT * FROM onSiteTime 
+            where employeeID = @employeeID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var onSiteTimes = connection.Query<OnSiteTime>(selectQuery, new { employeeID = employee.ID })
+            .Select(t => new OnSiteTime(t)).ToList();
+
+        return onSiteTimes;
+    }
+
+    public void DeleteFromDbOnSiteTime(int Id)
+    {
+        string deletionQuery = @"DELETE FROM onSiteTime WHERE ID = @id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(deletionQuery, new { id = Id });
+    }
+
+    public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
+    {
+        string UpdateQuery = @"UPDATE onSiteTime SET 
+                      arrivalTime = @ArrivalTime,
+                      departureTime = @DepartureTime
+                      WHERE ID = @Id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(UpdateQuery, siteTimes);
+    }
+
+    public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
+    {
+        string insertQuery = @"INSERT INTO onSiteTime (employeeID, arrivalTime, departureTime)
+                        VALUES (@employeeId, @arrivalTime, @departureTime)
+                        SELECT SCOPE_IDENTITY()";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var siteTimeId = connection.ExecuteScalar<int>(insertQuery, new { employeeId, arrivalTime, departureTime });
+
+        return new OnSiteTime(siteTimeId, employeeId, arrivalTime, departureTime);
+    }
+
+    //From OnSiteTime
 }
