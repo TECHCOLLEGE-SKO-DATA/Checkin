@@ -13,7 +13,7 @@ public static class Database
     private const int RETRY_ATTEMPTS = 3;
     private const int RETRY_DELAY_MS = 1000;
 
-    public static string ConnectionString = $"Server=localhost\\SQLEXPRESS;Database=CheckInSystem;Trusted_Connection=True;Connect Timeout={CONNECTION_TIMEOUT};";
+    public static string ConnectionString = $"Server=localhost\\MSSQL$SQLEXPRESS;Database=CheckInSystem;Trusted_Connection=True;Connect Timeout={CONNECTION_TIMEOUT};";
     public static SqlConnection Connection = new SqlConnection(ConnectionString);
 
     public static bool EnsureDatabaseAvailable()
