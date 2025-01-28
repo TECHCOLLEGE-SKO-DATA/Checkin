@@ -10,9 +10,25 @@ using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
+using CheckInSystem.CardReader;
 
 public class DatabaseHelper
 {
+    //From ACR122U CardScanned
+
+    public void CardScanned(string cardID)
+    {
+        string insertQuery = "EXEC CardScanned @cardID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(insertQuery, new { cardID = cardID });
+    }
+
+    //From ACR122U CardScanned
+
     //From Admin User
     public static void CreateUser(string username, string password)
     {
@@ -209,6 +225,84 @@ public class DatabaseHelper
             throw new Exception("Could not establish database connection!");
 
         connection.Query(updateQuery, new { isvisible = Isvisible, ID = ID });
+    }
+
+    public void AddEmployee(Employee employee,ObservableCollection<Employee> Members, int ID)
+    {
+        if (Members.Contains(employee)) return;
+
+        string insertQuery = @"INSERT INTO employeeGroup (employeeID, groupID) VALUES (@employeeID, @groupID)";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(insertQuery, new { employeeID = employee.ID, @groupID = ID });
+
+        Members.Add(employee);
+    }
+
+    public void RemoveEmployee(Employee employee, ObservableCollection<Employee> Members, int ID)
+    {
+        if (!Members.Contains(employee)) return;
+
+        string deletionQuery = @"DELETE employeeGroup WHERE employeeID = @employeeID AND groupID = @groupID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Query(deletionQuery, new { employeeID = employee.ID, @groupID = ID });
+
+        Members.Remove(employee);
+    }
+
+    public static List<Group> GetAllGroups(List<Employee> employees)
+    {
+        string selectQueryGroups = @"SELECT * FROM [group]";
+        string selectQueryEmployeesInGroup = @"SELECT employeeID FROM employeeGroup WHERE groupID = {0}";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var groups = connection.Query<Group>(selectQueryGroups).ToList();
+
+        foreach (var group in groups)
+        {
+            string formattedQuery = string.Format(selectQueryEmployeesInGroup, group.ID);
+            var employeeIDs = connection.Query<int>(formattedQuery).ToList();
+            group.Members = new ObservableCollection<Employee>();
+
+            foreach (var employeeID in employeeIDs)
+            {
+                var temp = employees.Where(i => i.ID == employeeID).FirstOrDefault();
+                if (temp != null)
+                {
+                    group.Members.Add(temp);
+                }
+            }
+        }
+
+        return groups;
+    }
+    public static Group NewGroup(String name)
+    {
+        string insertQuery = @"INSERT INTO [group] (name) VALUES (@name)
+            SELECT SCOPE_IDENTITY();";
+        Group newGroup = new Group()
+        {
+            Name = name,
+            Members = new ObservableCollection<Employee>()
+        };
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        newGroup.ID = connection.QueryFirst<int>(insertQuery, new { name = name });
+
+        return newGroup;
     }
 
     //From Group
