@@ -11,7 +11,7 @@ namespace CheckInSystem.Models;
 
 public class Group : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper;
+    DatabaseHelper databaseHelper = new();
 
     public int ID { get; set; }
     

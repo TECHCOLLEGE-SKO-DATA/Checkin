@@ -125,7 +125,6 @@ public class DatabaseHelper
         connection.Query(updateQuery, new { CardID = cardID, FirstName = firstName, MiddleName = middleName, LastName = lastName, IsOffSite = isOffSite, OffSiteUntil = offSiteUntil, ID = id });
     }
 
-
     public static Employee? GetFromCardId(string cardID)
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
@@ -173,17 +172,18 @@ public class DatabaseHelper
 
         return (ArrivalTime, DepartureTime);
     }
-    
-    public static void DeleteFromDb(int Id)
+
+    public void DeleteFromDb(int ID)
     {
-        string deletionQuery = @"DELETE employee WHERE ID = @ID";
+        string deletionQuery = @"DELETE FROM employee WHERE ID = @ID";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
-        connection.Query(deletionQuery, Id);
+        connection.Execute(deletionQuery, new { ID });
     }
+
 
     //From Employee
 
@@ -284,6 +284,7 @@ public class DatabaseHelper
 
         return groups;
     }
+
     public static Group NewGroup(String name)
     {
         string insertQuery = @"INSERT INTO [group] (name) VALUES (@name)

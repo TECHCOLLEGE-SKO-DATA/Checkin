@@ -9,7 +9,7 @@ namespace CheckInSystem.Models;
 
 public class Employee : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper;
+    DatabaseHelper databaseHelper = new();
 
     public int ID { get; private set; }
     private string _cardID;
@@ -99,7 +99,7 @@ public class Employee : INotifyPropertyChanged
 
     public void DeleteFromDb()
     {
-        DatabaseHelper.DeleteFromDb(this.ID);
+        databaseHelper.DeleteFromDb(this.ID);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
