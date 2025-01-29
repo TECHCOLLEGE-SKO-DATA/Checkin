@@ -268,11 +268,15 @@ public class DatabaseHelper
 
         foreach (var group in groups)
         {
+            // If Members is null, initialize it using reflection
+            var membersProperty = typeof(Group).GetProperty(nameof(Group.Members));
+            if (membersProperty?.GetValue(group) == null)
+            {
+                membersProperty.SetValue(group, new ObservableCollection<Employee>());
+            }
+
             string formattedQuery = string.Format(selectQueryEmployeesInGroup, group.ID);
             var employeeIDs = connection.Query<int>(formattedQuery).ToList();
-
-            if (group.Members == null)
-                throw new Exception($"Group {group.ID} has an uninitialized Members collection!");
 
             group.Members.Clear();
             foreach (var employeeID in employeeIDs)
@@ -287,6 +291,7 @@ public class DatabaseHelper
 
         return groups;
     }
+
 
 
     public static Group NewGroup(string name)
