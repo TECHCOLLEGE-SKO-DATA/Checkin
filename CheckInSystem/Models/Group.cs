@@ -13,7 +13,7 @@ public class Group : INotifyPropertyChanged
 {
     DatabaseHelper databaseHelper = new();
 
-    public int ID { get; set; }
+    public int ID { get; private set; }
     
     private string _name;
     public string Name
@@ -29,7 +29,7 @@ public class Group : INotifyPropertyChanged
         set => SetProperty(ref _isvisible, value);
     }
     
-    public ObservableCollection<Employee> Members { get; set; }
+    public ObservableCollection<Employee> Members { get; private set; }
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {

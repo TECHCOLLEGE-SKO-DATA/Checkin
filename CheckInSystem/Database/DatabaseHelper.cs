@@ -270,11 +270,14 @@ public class DatabaseHelper
         {
             string formattedQuery = string.Format(selectQueryEmployeesInGroup, group.ID);
             var employeeIDs = connection.Query<int>(formattedQuery).ToList();
-            group.Members = new ObservableCollection<Employee>();
 
+            if (group.Members == null)
+                throw new Exception($"Group {group.ID} has an uninitialized Members collection!");
+
+            group.Members.Clear();
             foreach (var employeeID in employeeIDs)
             {
-                var temp = employees.Where(i => i.ID == employeeID).FirstOrDefault();
+                var temp = employees.FirstOrDefault(i => i.ID == employeeID);
                 if (temp != null)
                 {
                     group.Members.Add(temp);
@@ -285,24 +288,28 @@ public class DatabaseHelper
         return groups;
     }
 
-    public static Group NewGroup(String name)
+
+    public static Group NewGroup(string name)
     {
-        string insertQuery = @"INSERT INTO [group] (name) VALUES (@name)
-            SELECT SCOPE_IDENTITY();";
-        Group newGroup = new Group()
-        {
-            Name = name,
-            Members = new ObservableCollection<Employee>()
-        };
+        string insertQuery = @"INSERT INTO [group] (name) VALUES (@name);
+                           SELECT SCOPE_IDENTITY();";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
-        newGroup.ID = connection.QueryFirst<int>(insertQuery, new { name = name });
+        int newGroupId = connection.QueryFirst<int>(insertQuery, new { name });
+
+        var tempGroup = new { ID = newGroupId, Name = name, Members = new ObservableCollection<Employee>() };
+
+        var newGroup = new Group();
+        newGroup.UpdateName(tempGroup.Name);
+        newGroup.AddEmployee(new Employee()); 
 
         return newGroup;
     }
+
+
 
     //From Group
 
