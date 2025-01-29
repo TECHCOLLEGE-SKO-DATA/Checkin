@@ -210,5 +210,11 @@ public class Employee : INotifyPropertyChanged
         shortenName = shortenName.Trim();
         return shortenName;
     }
+    public Employee(int id, string firstName, bool isCheckedIn)
+    {
+        ID = id;
+        FirstName = firstName;
+        IsCheckedIn = isCheckedIn;
+    }
 }
 
