@@ -30,7 +30,7 @@ public class DatabaseHelper
     //From ACR122U CardScanned
 
     //From Admin User
-    public static void CreateUser(string username, string password)
+    public void CreateUser(string username, string password)
     {
         string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
 
@@ -44,7 +44,7 @@ public class DatabaseHelper
         connection.Query(insertQuery, new { username = username, passwordHash = passwordHash });
     }
 
-    public static AdminUser? Login(string username, string password)
+    public AdminUser? Login(string username, string password)
     {
         string passwordHashQuery = @"SELECT hashedPassword FROM adminUser WHERE username = @username";
         string selectQuery = @"SELECT ID, username FROM adminUser WHERE username = @username";
@@ -61,7 +61,7 @@ public class DatabaseHelper
         return adminUser;
     }
 
-    public static List<AdminUser> GetAdminUsers()
+    public List<AdminUser> GetAdminUsers()
     {
         string selectQuery = @"SELECT * FROM adminUser";
 
@@ -73,7 +73,7 @@ public class DatabaseHelper
         return adminUsers;
     }
 
-    public static void Delete(int ID)
+    public void Delete(int ID)
     {
         string deletionQuery = @"DELETE FROM adminUser WHERE ID = @id";
 

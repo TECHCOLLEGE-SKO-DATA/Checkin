@@ -9,25 +9,26 @@ using Database;
 
 public class AdminUser
 {
+    DatabaseHelper databasehelper;
     public int ID { get; private set; }
     public string Username { get; private set; }
 
-    public static void CreateUser(string username, string password)
+    public void CreateUser(string username, string password)
     {
-        DatabaseHelper.CreateUser(username, password);
+        databasehelper.CreateUser(username, password);
     }
 
-    public static AdminUser? Login(string username, string password)
+    public AdminUser? Login(string username, string password)
     {
-        return DatabaseHelper.Login(username, password);
+        return databasehelper.Login(username, password);
     }
 
-    public static List<AdminUser> GetAdminUsers()
+    public List<AdminUser> GetAdminUsers()
     {
-        return DatabaseHelper.GetAdminUsers();
+        return databasehelper.GetAdminUsers();
     }
     public void Delete(int ID)
     {
-        DatabaseHelper.Delete(ID);
+        databasehelper.Delete(ID);
     }
 }

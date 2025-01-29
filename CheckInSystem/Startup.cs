@@ -46,11 +46,12 @@ public class Startup
 
     private static void AddAdmin() //Needs to be updated at somepoint
     {
-        var admins = AdminUser.GetAdminUsers();
+        DatabaseHelper databaseHelper = new();
+        var admins = databaseHelper.GetAdminUsers();
         if (admins.Count == 0)
         {
 
-            AdminUser.CreateUser("sko", "test123");
+            databaseHelper.CreateUser("sko", "test123");
         }
     }
 
