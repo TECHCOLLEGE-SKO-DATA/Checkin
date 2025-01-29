@@ -9,7 +9,7 @@ namespace CheckInSystem.Models;
 
 public class Employee : INotifyPropertyChanged
 {
-    public int ID { get; set; }
+    public int ID { get; private set; }
     private string _cardID;
     public string CardID
     {
@@ -209,6 +209,12 @@ public class Employee : INotifyPropertyChanged
         }
         shortenName = shortenName.Trim();
         return shortenName;
+    }
+    public Employee(int id, string firstName, bool isCheckedIn)
+    {
+        ID = id;
+        FirstName = firstName;
+        IsCheckedIn = isCheckedIn;
     }
 }
 

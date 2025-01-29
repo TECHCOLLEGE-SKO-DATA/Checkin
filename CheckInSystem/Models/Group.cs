@@ -11,7 +11,7 @@ namespace CheckInSystem.Models;
 
 public class Group : INotifyPropertyChanged
 {
-    public int ID { get; set; }
+    public int ID { get; private set; }
     
     private string _name;
     public string Name
@@ -27,7 +27,7 @@ public class Group : INotifyPropertyChanged
         set => SetProperty(ref _isvisible, value);
     }
     
-    public ObservableCollection<Employee> Members { get; set; }
+    public ObservableCollection<Employee> Members { get; private set; }
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {
@@ -165,4 +165,19 @@ public class Group : INotifyPropertyChanged
             OnPropertyChanged(propertyName);
         }
     }
+    public Group(int id, string name)
+    {
+        ID = id;
+        Name = name;
+        Members = new ObservableCollection<Employee>();
+    }
+
+    public void InitializeMembers(IEnumerable<Employee> employees)
+    {
+        foreach (var emp in employees)
+            Members.Add(emp);
+    }
+    public Group()
+    { }
+
 }

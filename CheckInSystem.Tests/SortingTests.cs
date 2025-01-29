@@ -14,20 +14,20 @@ namespace CheckInSystem.Tests
         {
             return new List<Employee>
             {
-                new Employee { ID = 1, FirstName = "Alice", IsCheckedIn = true },
-                new Employee { ID = 2, FirstName = "Bob", IsCheckedIn = false },
-                new Employee { ID = 3, FirstName = "Charlie", IsCheckedIn = true },
-                new Employee { ID = 4, FirstName = "David", IsCheckedIn = false },
+                new Employee(1, "Alice", true),
+                new Employee(2, "Bob", false),
+                new Employee(3, "Charlie", true),
+                new Employee(4, "David", false),
             };
         }
 
         public static List<Group> GetMockGroups(List<Employee> employees)
         {
-            var group1 = new Group { ID = 1, Name = "Group 1" };
-            group1.Members = new ObservableCollection<Employee>(employees.Take(2)); // Alice, Bob
+            var group1 = new Group(1, "Group 1");
+            group1.InitializeMembers(employees.Take(2));
 
-            var group2 = new Group { ID = 2, Name = "Group 2" };
-            group2.Members = new ObservableCollection<Employee>(employees.Skip(2)); // Charlie, David
+            var group2 = new Group(2, "Group 2");
+            group2.InitializeMembers(employees.Skip(2));
 
             return new List<Group> { group1, group2 };
         }
@@ -55,12 +55,8 @@ namespace CheckInSystem.Tests
         {
             // Arrange
             var employees = GetMockEmployees();
-            var group = new Group
-            {
-                ID = 1,
-                Name = "Test Group",
-                Members = new ObservableCollection<Employee>(employees)
-            };
+            var group = new Group(1, "Test Group");
+            group.InitializeMembers(employees);
 
             // Act
             var view = CollectionViewSource.GetDefaultView(group.Members);
@@ -79,12 +75,8 @@ namespace CheckInSystem.Tests
         {
             // Arrange
             var employees = GetMockEmployees();
-            var group = new Group
-            {
-                ID = 1,
-                Name = "Test Group",
-                Members = new ObservableCollection<Employee>(employees)
-            };
+            var group = new Group(1, "Test Group");
+            group.InitializeMembers(employees);
 
             var view = CollectionViewSource.GetDefaultView(group.Members);
             view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending));
@@ -105,12 +97,8 @@ namespace CheckInSystem.Tests
         {
             // Arrange
             var employees = GetMockEmployees();
-            var group = new Group
-            {
-                ID = 1,
-                Name = "Test Group",
-                Members = new ObservableCollection<Employee>(employees)
-            };
+            var group = new Group(1, "Test Group");
+            group.InitializeMembers(employees);
 
             var view = CollectionViewSource.GetDefaultView(group.Members);
             view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending));
