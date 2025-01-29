@@ -44,7 +44,7 @@ public class Startup
         employeeOverview.Show();
     }
 
-    private static void AddAdmin()
+    private static void AddAdmin() //Needs to be updated at somepoint
     {
         var admins = AdminUser.GetAdminUsers();
         if (admins.Count == 0)
