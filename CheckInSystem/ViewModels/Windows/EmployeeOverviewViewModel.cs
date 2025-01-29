@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Data;
 using CheckInSystem.Models;
 using System.ComponentModel;
+using CheckInSystem.Database;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -115,7 +116,7 @@ namespace CheckInSystem.ViewModels.Windows
         private void LoadGroupsAndEmployees()
         {
             // Fetch employees from the database
-            var employees = Employee.GetAllEmployees();
+            var employees = DatabaseHelper.GetAllEmployees();
 
             // Fetch groups and assign employees
             Groups = new ObservableCollection<Group>(Group.GetAllGroups(employees));

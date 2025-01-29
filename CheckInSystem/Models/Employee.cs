@@ -143,5 +143,6 @@ public class Employee : INotifyPropertyChanged
         FirstName = firstName;
         IsCheckedIn = isCheckedIn;
     }
+    public Employee() { }
 }
 
