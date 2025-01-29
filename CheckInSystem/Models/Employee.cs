@@ -10,21 +10,29 @@ namespace CheckInSystem.Models;
 public class Employee : INotifyPropertyChanged
 {
     public int ID { get; private set; }
+    public Employee()
+    {
+
+    }
+    public Employee(int id)
+    {
+        ID = id;
+    }
     private string _cardID;
     public string CardID
     {
         get => _cardID;
         set => SetProperty(ref _cardID, value);
     }
-    
-    private string? _firstName;
+
+    private string? _firstName ="";
     public string? FirstName
     {
         get => _firstName;
         set => SetProperty(ref _firstName, value);
     }
 
-    private string? _middleName;
+    private string? _middleName = "";
     public string? MiddleName
     {
         get => _middleName;
@@ -34,21 +42,21 @@ public class Employee : INotifyPropertyChanged
     {
         get { return ShortenName(_middleName); }
     }
-    private string? _lastName;
+    private string? _lastName = "";
 
     public string? LastName
     {
         get => _lastName;
         set => SetProperty(ref _lastName, value);
     }
-    
+
     private bool _isOffSite;
     public bool IsOffSite
     {
         get => _isOffSite;
         set => SetProperty(ref _isOffSite, value);
     }
-    
+
     public DateTime? OffSiteUntil { get; set; }
 
     private bool _isCheckedIn;
@@ -71,7 +79,7 @@ public class Employee : INotifyPropertyChanged
         get => _departureTime;
         set => SetProperty(ref _departureTime, value);
     }
-    
+
     public void CardScanned(string cardID)
     {
         Employee? tempEmployee = GetFromCardId(cardID);
@@ -81,7 +89,7 @@ public class Employee : INotifyPropertyChanged
         SetProperty(ref _departureTime, tempEmployee.DepartureTime, nameof(DepartureTime));
         SetProperty(ref _isCheckedIn, tempEmployee.IsCheckedIn, nameof(IsCheckedIn));
     }
-    
+
     public static List<Employee> GetAllEmployees()
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
@@ -117,7 +125,7 @@ public class Employee : INotifyPropertyChanged
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
-        var employees = connection.Query<Employee>(selectQuery, new {cardID = cardID}).FirstOrDefault();
+        var employees = connection.Query<Employee>(selectQuery, new { cardID = cardID }).FirstOrDefault();
         return employees;
     }
 
@@ -132,7 +140,7 @@ public class Employee : INotifyPropertyChanged
             using var connection = Database.Database.GetConnection();
             if (connection == null)
                 throw new Exception("Could not establish database connection!");
-            
+
             var siteTime = connection.QuerySingle<OnSiteTime>(selectQuery, this);
 
             ArrivalTime = siteTime.ArrivalTime;
@@ -156,7 +164,7 @@ public class Employee : INotifyPropertyChanged
             isOffSite = @IsOffSite,
             offSiteUntil = @OffSiteUntil
             WHERE ID = @id";
-        
+
         using var connection = Database.Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
@@ -167,14 +175,14 @@ public class Employee : INotifyPropertyChanged
     public void DeleteFromDb()
     {
         string deletionQuery = @"DELETE employee WHERE ID = @ID";
-        
+
         using var connection = Database.Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
         connection.Query(deletionQuery, this);
     }
-    
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -193,7 +201,7 @@ public class Employee : INotifyPropertyChanged
             OnPropertyChanged(propertyName);
         }
     }
-   public string ShortenName(string middelname)
+    public string ShortenName(string middelname)
     {
         if (middelname == null)
         {

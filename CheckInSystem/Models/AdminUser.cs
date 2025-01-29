@@ -5,16 +5,30 @@ using System.Diagnostics;
 using CheckInSystem.Database;
 using Dapper;
 using BCrypt.Net;
+using System.Windows.Controls;
 
 public class AdminUser
 {
     public int ID { get; private set; }
     public string Username { get; private set; }
+    public AdminUser()
+    {
 
+    }
+    public AdminUser(string username)
+    {
+        Username = username;
+        
+    }
+    
     public static void CreateUser(string username, string password)
     {
         string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
-        
+        string error = Validator.IsAdminPasswordValid(password);
+        if (error != "")
+        {
+            throw new Exception(error);
+        }
         string passwordHash = BCrypt.EnhancedHashPassword(password);
         Debug.WriteLine(passwordHash);
 
