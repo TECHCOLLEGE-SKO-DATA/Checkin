@@ -14,9 +14,10 @@ public class Startup
 {
     public static bool Run()
     {
+        DatabaseHelper dbHelper = new DatabaseHelper();
         if (!EnsureDatabaseAvailable()) return false;
         ACR122U.StartReader();
-        ViewmodelBase.Employees = new ObservableCollection<Employee>(DatabaseHelper.GetAllEmployees());
+        ViewmodelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
         ViewmodelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
         OpenEmployeeOverview();

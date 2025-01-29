@@ -76,7 +76,7 @@ public class Employee : INotifyPropertyChanged
     
     public void CardScanned(string cardID)
     {
-        Employee? tempEmployee = DatabaseHelper.GetFromCardId(cardID);
+        Employee? tempEmployee = databaseHelper.GetFromCardId(cardID);
         if (tempEmployee == null) return;
 
         SetProperty(ref _arrivalTime, tempEmployee.ArrivalTime, nameof(ArrivalTime));

@@ -87,7 +87,7 @@ public class DatabaseHelper
     //From Admin User
 
     //From Employee
-    public static List<Employee> GetAllEmployees()
+    public List<Employee> GetAllEmployees()
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -125,7 +125,7 @@ public class DatabaseHelper
         connection.Query(updateQuery, new { CardID = cardID, FirstName = firstName, MiddleName = middleName, LastName = lastName, IsOffSite = isOffSite, OffSiteUntil = offSiteUntil, ID = id });
     }
 
-    public static Employee? GetFromCardId(string cardID)
+    public Employee? GetFromCardId(string cardID)
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -255,7 +255,7 @@ public class DatabaseHelper
         return true;
     }
 
-    public static List<Group> GetAllGroups(List<Employee> employees)
+    public List<Group> GetAllGroups(List<Employee> employees)
     {
         string selectQueryGroups = @"SELECT * FROM [group]";
         string selectQueryEmployeesInGroup = @"SELECT employeeID FROM employeeGroup WHERE groupID = {0}";
@@ -294,7 +294,7 @@ public class DatabaseHelper
 
 
 
-    public static Group NewGroup(string name)
+    public Group NewGroup(string name)
     {
         string insertQuery = @"INSERT INTO [group] (name) VALUES (@name);
                            SELECT SCOPE_IDENTITY();";
@@ -319,7 +319,7 @@ public class DatabaseHelper
     //From Group
 
     //From OnSiteTime
-    public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
+    public List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
     {
         string selectQuery = @"SELECT * FROM onSiteTime 
             where employeeID = @employeeID";
@@ -345,7 +345,7 @@ public class DatabaseHelper
         connection.Query(deletionQuery, new { id = Id });
     }
 
-    public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
+    public void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
         string UpdateQuery = @"UPDATE onSiteTime SET 
                       arrivalTime = @ArrivalTime,
@@ -359,7 +359,7 @@ public class DatabaseHelper
         connection.Execute(UpdateQuery, siteTimes);
     }
 
-    public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
+    public OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
         string insertQuery = @"INSERT INTO onSiteTime (employeeID, arrivalTime, departureTime)
                         VALUES (@employeeId, @arrivalTime, @departureTime)

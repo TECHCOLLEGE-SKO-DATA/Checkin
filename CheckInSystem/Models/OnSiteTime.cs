@@ -64,8 +64,9 @@ public class OnSiteTime : INotifyPropertyChanged
     }
 
     public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
-    {       
-        return DatabaseHelper.GetOnsiteTimesForEmployee(employee);
+    {     
+        DatabaseHelper databaseHelper = new ();
+        return databaseHelper.GetOnsiteTimesForEmployee(employee);
     }
 
     public bool IsChanged()
@@ -88,12 +89,14 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
-        DatabaseHelper.UpdateMutipleSiteTimes(siteTimes);
+        DatabaseHelper databaseHelper = new();
+        databaseHelper.UpdateMutipleSiteTimes(siteTimes);
     }
 
     public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
-        return DatabaseHelper.AddTimeToDb(employeeId, arrivalTime, departureTime);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.AddTimeToDb(employeeId, arrivalTime, departureTime);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

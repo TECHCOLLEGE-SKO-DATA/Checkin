@@ -126,6 +126,7 @@ public class ACR122U
 
     private static void UpdateEmployeeLocal(string cardID)
     {
+        DatabaseHelper databaseHelper = new();
         Employee? employee = ViewmodelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         if (employee != null)
         {
@@ -133,7 +134,7 @@ public class ACR122U
         }
         else
         {
-            var dbEmployee = DatabaseHelper.GetFromCardId(cardID);
+            var dbEmployee = databaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
                 Application.Current.Dispatcher.Invoke( () => {
