@@ -16,6 +16,7 @@ using Database;
 
 public class ACR122U
 {
+
     public static readonly Reader Reader = new Reader();
     
     [Flags]
@@ -117,13 +118,8 @@ public class ACR122U
             return;
         }
 
-        string insertQuery = "EXEC CardScanned @cardID";
-
-        using var connection = Database.GetConnection();
-        if (connection == null)
-            throw new Exception("Could not establish database connection!");
-
-        connection.Query(insertQuery, new {cardID = cardID});
+        DatabaseHelper databaseHelper = new();
+        databaseHelper.CardScanned(cardID);
 
         UpdateEmployeeLocal(cardID);
     }
@@ -137,7 +133,7 @@ public class ACR122U
         }
         else
         {
-            var dbEmployee = Employee.GetFromCardId(cardID);
+            var dbEmployee = DatabaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
                 Application.Current.Dispatcher.Invoke( () => {
