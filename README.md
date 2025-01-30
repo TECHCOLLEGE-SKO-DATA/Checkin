@@ -24,3 +24,12 @@ Features and fixes not done yet are tracked in [Todo.md](docs/Todo.md)
 
 [card-reader-docs]: https://www.acs.com.hk/download-manual/419/API-ACR122U-2.04.pdf
 
+## ⚠ Setting Up Your `app.config`
+1. Copy `app.config-example` to `app.config`.
+2. Open `app.config` and update:
+   - **SQL Server Name** (`SqlServiceName`)
+   - **Database Connection String** (`connectionString`)
+3. In **Visual Studio**, right-click `app.config` → Properties → Set **"Copy to Output Directory"** to **"Copy always"**.
+4. If using `dotnet build`, ensure `app.config` exists in `bin\Debug` and `bin\Release`.
+
+🚀 If you get a **missing database error**, check if `app.config` is copied correctly.
