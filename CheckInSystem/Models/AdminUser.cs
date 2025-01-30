@@ -12,7 +12,14 @@ public class AdminUser
     DatabaseHelper databasehelper;
     public int ID { get; private set; }
     public string Username { get; private set; }
-
+    public AdminUser()
+    {
+    }
+    public AdminUser(string username)
+    {
+        Username = username;
+    }
+    
     public void CreateUser(string username, string password)
     {
         databasehelper.CreateUser(username, password);
