@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.ViewModels.UserControls;
 
@@ -9,22 +8,27 @@ namespace CheckInSystem.Views.UserControls
     public partial class FakeNFCView : UserControl
     {
         private FakeNFCViewModel vm;
-        DatabaseHelper databaseHelper = new();
 
         public FakeNFCView()
         {
             InitializeComponent();
-            DataContext = new FakeNFCViewModel();
+            vm = new FakeNFCViewModel();
+            DataContext = vm;
         }
 
-        private void BtnAddEmployee(object sender, RoutedEventArgs e)
+        private void BtnAddAllTest(object sender, RoutedEventArgs e)
         {
-            
+            vm.AddTest();
         }
 
-        private void BtnRemoveEmployee(object sender, RoutedEventArgs e)
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            var selectedEmployee = (sender as ListBox)?.SelectedItem as Employee;
+
+            if (selectedEmployee != null)
+            {
+                vm.CheckIn(selectedEmployee);
+            }
         }
     }
 }

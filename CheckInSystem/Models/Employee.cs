@@ -144,5 +144,12 @@ public class Employee : INotifyPropertyChanged
         IsCheckedIn = isCheckedIn;
     }
     public Employee() { }
+    public Employee(string firstName, string middleName, string lastName, string cardID)
+    {
+        FirstName = firstName;
+        MiddleName = middleName;
+        LastName = lastName;
+        CardID = cardID;
+    }
 }
 

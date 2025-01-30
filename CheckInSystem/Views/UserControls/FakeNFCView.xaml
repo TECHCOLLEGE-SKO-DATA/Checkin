@@ -7,45 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding SelectedEmployeeGroup}" x:Name="IcSelectedGroup" AlternationCount="2">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <ItemContainerTemplate>
-                        <Border BorderThickness="0 0 0 2" BorderBrush="Black" x:Name="BSelectedGroup">
-                            <StackPanel Orientation="Horizontal" x:Name="SpSelectedGroup" Margin="0 2 0 2">
-                                <StackPanel Orientation="Horizontal" Width="500">
-                                    <TextBlock Text="{Binding Path=FirstName}" FontSize="30" Margin="0 0 7 0"/>
-                                    <TextBlock Text="{Binding Path=MiddleName}" FontSize="30" Margin="0 0 7 0">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <Trigger Property="Text" Value="">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding Path=LastName}" FontSize="30" Margin="0 0 0 0"/>
-                                </StackPanel>
-                                <Button Content="Add Employee" 
-                                        Click="BtnAddEmployee" 
-                                        FontSize="25"
-                                        Margin="5"/>
-                                <Button Content="Remove Employee" 
-                                        Click="BtnRemoveEmployee" 
-                                        FontSize="25"
-                                        Margin="5"/>
-                            </StackPanel>
-                        </Border>
-                    </ItemContainerTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <ListBox HorizontalAlignment="Left" Width="400" 
+                 ItemsSource="{Binding Employees}" 
+                 SelectionChanged="ListBox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FirstName}" Margin="5"/>
+                        <TextBlock Text="{Binding MiddleName}" Margin="5"/>
+                        <TextBlock Text="{Binding LastName}" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+            <CheckBox Content="Disable Add Data button" 
+             IsChecked="{Binding IsAddButtonDisabled}" />
+            <TextBlock FontSize="15" Text="This button is to add test data"/>
+            <TextBlock FontSize="15" Text="if database doesn't already have data"/>
+            <Button Width="150" FontSize="15" Height="50" Click="BtnAddAllTest">
+                Add All to database</Button>
+        </StackPanel>
     </Grid>
 </UserControl>
