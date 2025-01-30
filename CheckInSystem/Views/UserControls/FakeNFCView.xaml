@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="CheckInSystem.Views.UserControls.FakeNFCView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CheckInSystem.Views.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding SelectedEmployeeGroup}" x:Name="IcSelectedGroup" AlternationCount="2">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <Border BorderThickness="0 0 0 2" BorderBrush="Black" x:Name="BSelectedGroup">
+                            <StackPanel Orientation="Horizontal" x:Name="SpSelectedGroup" Margin="0 2 0 2">
+                                <StackPanel Orientation="Horizontal" Width="500">
+                                    <TextBlock Text="{Binding Path=FirstName}" FontSize="30" Margin="0 0 7 0"/>
+                                    <TextBlock Text="{Binding Path=MiddleName}" FontSize="30" Margin="0 0 7 0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Path=LastName}" FontSize="30" Margin="0 0 0 0"/>
+                                </StackPanel>
+                                <Button Content="Add Employee" 
+                                        Click="BtnAddEmployee" 
+                                        FontSize="25"
+                                        Margin="5"/>
+                                <Button Content="Remove Employee" 
+                                        Click="BtnRemoveEmployee" 
+                                        FontSize="25"
+                                        Margin="5"/>
+                            </StackPanel>
+                        </Border>
+                    </ItemContainerTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
