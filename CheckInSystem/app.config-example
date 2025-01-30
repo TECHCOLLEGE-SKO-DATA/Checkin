@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="SqlServiceName" value="YOUR_SQL_SERVICE_NAME"/>
+    <!-- Update this -->
+  </appSettings>
+
+  <connectionStrings>
+    <add name="CheckInSystemDb"
+         connectionString="Server=YOUR_SERVER_NAME;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;"
+         providerName="System.Data.SqlClient" />
+    <!--and update this-->
+  </connectionStrings>
+</configuration>

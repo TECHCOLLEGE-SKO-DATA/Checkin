@@ -20,6 +20,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="app.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
       <Page Update="Views\Windows\EmployeeOverview.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
