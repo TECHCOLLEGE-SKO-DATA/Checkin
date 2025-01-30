@@ -33,12 +33,14 @@ public class Group : INotifyPropertyChanged
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {
-        return DatabaseHelper.GetAllGroups(employees);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.GetAllGroups(employees);
     }
 
     public static Group NewGroup(String name)
     {
-        return DatabaseHelper.NewGroup(name);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.NewGroup(name);
     }
 
     public void RemoveGroupDb()

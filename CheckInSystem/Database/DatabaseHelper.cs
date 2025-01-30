@@ -30,7 +30,7 @@ public class DatabaseHelper
     //From ACR122U CardScanned
 
     //From Admin User
-    public static void CreateUser(string username, string password)
+    public void CreateUser(string username, string password)
     {
         string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
 
@@ -44,7 +44,7 @@ public class DatabaseHelper
         connection.Query(insertQuery, new { username = username, passwordHash = passwordHash });
     }
 
-    public static AdminUser? Login(string username, string password)
+    public AdminUser? Login(string username, string password)
     {
         string passwordHashQuery = @"SELECT hashedPassword FROM adminUser WHERE username = @username";
         string selectQuery = @"SELECT ID, username FROM adminUser WHERE username = @username";
@@ -61,7 +61,7 @@ public class DatabaseHelper
         return adminUser;
     }
 
-    public static List<AdminUser> GetAdminUsers()
+    public List<AdminUser> GetAdminUsers()
     {
         string selectQuery = @"SELECT * FROM adminUser";
 
@@ -73,7 +73,7 @@ public class DatabaseHelper
         return adminUsers;
     }
 
-    public static void Delete(int ID)
+    public void Delete(int ID)
     {
         string deletionQuery = @"DELETE FROM adminUser WHERE ID = @id";
 
@@ -87,7 +87,7 @@ public class DatabaseHelper
     //From Admin User
 
     //From Employee
-    public static List<Employee> GetAllEmployees()
+    public List<Employee> GetAllEmployees()
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -125,7 +125,7 @@ public class DatabaseHelper
         connection.Query(updateQuery, new { CardID = cardID, FirstName = firstName, MiddleName = middleName, LastName = lastName, IsOffSite = isOffSite, OffSiteUntil = offSiteUntil, ID = id });
     }
 
-    public static Employee? GetFromCardId(string cardID)
+    public Employee? GetFromCardId(string cardID)
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -255,7 +255,7 @@ public class DatabaseHelper
         return true;
     }
 
-    public static List<Group> GetAllGroups(List<Employee> employees)
+    public List<Group> GetAllGroups(List<Employee> employees)
     {
         string selectQueryGroups = @"SELECT * FROM [group]";
         string selectQueryEmployeesInGroup = @"SELECT employeeID FROM employeeGroup WHERE groupID = {0}";
@@ -294,7 +294,7 @@ public class DatabaseHelper
 
 
 
-    public static Group NewGroup(string name)
+    public Group NewGroup(string name)
     {
         string insertQuery = @"INSERT INTO [group] (name) VALUES (@name);
                            SELECT SCOPE_IDENTITY();";
@@ -319,7 +319,7 @@ public class DatabaseHelper
     //From Group
 
     //From OnSiteTime
-    public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
+    public List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
     {
         string selectQuery = @"SELECT * FROM onSiteTime 
             where employeeID = @employeeID";
@@ -345,7 +345,7 @@ public class DatabaseHelper
         connection.Query(deletionQuery, new { id = Id });
     }
 
-    public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
+    public void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
         string UpdateQuery = @"UPDATE onSiteTime SET 
                       arrivalTime = @ArrivalTime,
@@ -359,7 +359,7 @@ public class DatabaseHelper
         connection.Execute(UpdateQuery, siteTimes);
     }
 
-    public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
+    public OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
         string insertQuery = @"INSERT INTO onSiteTime (employeeID, arrivalTime, departureTime)
                         VALUES (@employeeId, @arrivalTime, @departureTime)
