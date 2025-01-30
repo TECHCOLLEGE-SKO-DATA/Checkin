@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 .idea
 /CheckInSystem/app.config
+
+.vscode
