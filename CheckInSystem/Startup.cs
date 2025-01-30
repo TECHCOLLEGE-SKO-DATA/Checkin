@@ -14,9 +14,10 @@ public class Startup
 {
     public static bool Run()
     {
+        DatabaseHelper dbHelper = new DatabaseHelper();
         if (!EnsureDatabaseAvailable()) return false;
         ACR122U.StartReader();
-        ViewModelBase.Employees = new ObservableCollection<Employee>(DatabaseHelper.GetAllEmployees());
+        ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
         ViewModelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
@@ -46,11 +47,12 @@ public class Startup
 
     private static void AddAdmin() //Needs to be updated at somepoint
     {
-        var admins = AdminUser.GetAdminUsers();
+        DatabaseHelper databaseHelper = new();
+        var admins = databaseHelper.GetAdminUsers();
         if (admins.Count == 0)
         {
 
-            AdminUser.CreateUser("sko", "test123");
+            databaseHelper.CreateUser("sko", "test123");
         }
     }
 
