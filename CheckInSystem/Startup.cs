@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using CheckInSystem.CardReader;
+using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.ViewModels;
 using CheckInSystem.Views;
@@ -15,7 +16,7 @@ public class Startup
     {
         if (!EnsureDatabaseAvailable()) return false;
         ACR122U.StartReader();
-        ViewmodelBase.Employees = new ObservableCollection<Employee>(Employee.GetAllEmployees());
+        ViewmodelBase.Employees = new ObservableCollection<Employee>(DatabaseHelper.GetAllEmployees());
         ViewmodelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
         OpenEmployeeOverview();
@@ -43,11 +44,12 @@ public class Startup
         employeeOverview.Show();
     }
 
-    private static void AddAdmin()
+    private static void AddAdmin() //Needs to be updated at somepoint
     {
         var admins = AdminUser.GetAdminUsers();
         if (admins.Count == 0)
         {
+
             AdminUser.CreateUser("sko", "test123");
         }
     }
