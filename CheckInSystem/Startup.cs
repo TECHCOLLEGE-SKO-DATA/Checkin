@@ -17,9 +17,9 @@ public class Startup
         DatabaseHelper dbHelper = new DatabaseHelper();
         if (!EnsureDatabaseAvailable()) return false;
         ACR122U.StartReader();
-        ViewmodelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
-        ViewmodelBase.Groups =
-            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
+        ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
+        ViewModelBase.Groups =
+            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();

@@ -5,7 +5,7 @@ using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class AdminPanelViewModel : ViewmodelBase
+public class AdminPanelViewModel : ViewModelBase
 {
     private ContentControl EmployeesControl { get; set; }
 

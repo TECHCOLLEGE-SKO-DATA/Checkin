@@ -6,6 +6,7 @@ using CheckInSystem.Database;
 using Dapper;
 using BCrypt.Net;
 using Database;
+using System.Windows.Controls;
 
 public class AdminUser
 {

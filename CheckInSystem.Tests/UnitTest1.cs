@@ -110,7 +110,6 @@ namespace CheckInSystem.Tests
 
         }
 
-        //[Fact]
-        //public void 
+       
     }
 }
