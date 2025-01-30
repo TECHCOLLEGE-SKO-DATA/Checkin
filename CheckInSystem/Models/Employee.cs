@@ -12,21 +12,29 @@ public class Employee : INotifyPropertyChanged
     DatabaseHelper databaseHelper = new();
 
     public int ID { get; private set; }
+    public Employee()
+    {
+
+    }
+    public Employee(int id)
+    {
+        ID = id;
+    }
     private string _cardID;
     public string CardID
     {
         get => _cardID;
         set => SetProperty(ref _cardID, value);
     }
-    
-    private string? _firstName;
+
+    private string? _firstName ="";
     public string? FirstName
     {
         get => _firstName;
         set => SetProperty(ref _firstName, value);
     }
 
-    private string? _middleName;
+    private string? _middleName = "";
     public string? MiddleName
     {
         get => _middleName;
@@ -36,21 +44,21 @@ public class Employee : INotifyPropertyChanged
     {
         get { return ShortenName(_middleName); }
     }
-    private string? _lastName;
+    private string? _lastName = "";
 
     public string? LastName
     {
         get => _lastName;
         set => SetProperty(ref _lastName, value);
     }
-    
+
     private bool _isOffSite;
     public bool IsOffSite
     {
         get => _isOffSite;
         set => SetProperty(ref _isOffSite, value);
     }
-    
+
     public DateTime? OffSiteUntil { get; set; }
 
     private bool _isCheckedIn;
@@ -73,7 +81,7 @@ public class Employee : INotifyPropertyChanged
         get => _departureTime;
         set => SetProperty(ref _departureTime, value);
     }
-    
+
     public void CardScanned(string cardID)
     {
         Employee? tempEmployee = DatabaseHelper.GetFromCardId(cardID);
@@ -120,7 +128,7 @@ public class Employee : INotifyPropertyChanged
             OnPropertyChanged(propertyName);
         }
     }
-   public string ShortenName(string middelname)
+    public string ShortenName(string middelname)
     {
         if (middelname == null)
         {

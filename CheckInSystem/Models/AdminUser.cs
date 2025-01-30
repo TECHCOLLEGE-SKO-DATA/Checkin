@@ -6,12 +6,22 @@ using CheckInSystem.Database;
 using Dapper;
 using BCrypt.Net;
 using Database;
+using System.Windows.Controls;
 
 public class AdminUser
 {
     public int ID { get; private set; }
     public string Username { get; private set; }
+    public AdminUser()
+    {
 
+    }
+    public AdminUser(string username)
+    {
+        Username = username;
+        
+    }
+    
     public static void CreateUser(string username, string password)
     {
         DatabaseHelper.CreateUser(username, password);
