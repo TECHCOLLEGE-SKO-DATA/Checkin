@@ -6,7 +6,7 @@ using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class LoginScreenViewModel : ViewmodelBase
+public class LoginScreenViewModel : ViewModelBase
 {
     private string _username = "";
 

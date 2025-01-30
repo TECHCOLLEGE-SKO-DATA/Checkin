@@ -8,7 +8,7 @@ using CheckInSystem.Database;
 
 namespace CheckInSystem.ViewModels.Windows
 {
-    public class EmployeeOverviewViewModel : ViewmodelBase
+    public class EmployeeOverviewViewModel : ViewModelBase
     {
         private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;

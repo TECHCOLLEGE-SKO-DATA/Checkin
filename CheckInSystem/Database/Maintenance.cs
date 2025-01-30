@@ -12,7 +12,7 @@ public class Maintenance
     public static void CheckOutEmployeesIfTheyForgot()
     {
         List<Employee> updatedEmployees = new List<Employee>();
-        foreach (var employee in ViewmodelBase.Employees)
+        foreach (var employee in ViewModelBase.Employees)
         {
             if (employee.ArrivalTime == null)
                 continue;
@@ -65,7 +65,7 @@ public class Maintenance
     {
         List<Employee> updatedEmployees = new List<Employee>();
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-        foreach (var employee in ViewmodelBase.Employees)
+        foreach (var employee in ViewModelBase.Employees)
         {
             if (employee.OffSiteUntil == null)
                 continue;
