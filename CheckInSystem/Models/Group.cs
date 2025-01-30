@@ -90,4 +90,19 @@ public class Group : INotifyPropertyChanged
             OnPropertyChanged(propertyName);
         }
     }
+    public Group(int id, string name)
+    {
+        ID = id;
+        Name = name;
+        Members = new ObservableCollection<Employee>();
+    }
+
+    public void InitializeMembers(IEnumerable<Employee> employees)
+    {
+        foreach (var emp in employees)
+            Members.Add(emp);
+    }
+    public Group()
+    { }
+
 }
