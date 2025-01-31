@@ -29,6 +29,14 @@
             <Button Width="150" FontSize="15" Height="50" Click="BtnAddAllTest" Margin="0,0,0,10">
                 Add All to database</Button>
             <Button Width="150" FontSize="15" Height="50" Margin="0,0,0,10" Click="BtnGetFromDatabase">Get data From DB</Button>
+            <TextBlock FontSize="15">Card ID length is 11 char</TextBlock>
+            <TextBox Height="50" Width="200" Margin="0,0,0,10" 
+         Text="{Binding NewCardId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         FontSize="15"
+         PreviewTextInput="TextBox_PreviewTextInput"
+         MaxLength="11"/>
+
+            <Button Width="150" FontSize="15" Height="50" Margin="0,0,0,10" Click="BtnScannewCard">Scan New Card</Button>
         </StackPanel>
     </Grid>
 </UserControl>

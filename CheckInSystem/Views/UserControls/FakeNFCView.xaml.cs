@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CheckInSystem.Models;
 using CheckInSystem.ViewModels.UserControls;
 
@@ -15,12 +16,25 @@ namespace CheckInSystem.Views.UserControls
             vm = new FakeNFCViewModel();
             DataContext = vm;
         }
+        public void BtnScannewCard(object sender, RoutedEventArgs e)
+        {
+            vm.ScanNewCard();
+        }
 
         public void BtnGetFromDatabase(object sender, RoutedEventArgs e)
         {
+            
             vm.GetDataFromDB();
         }
-        
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length >= 11)
+            {
+                e.Handled = true;
+            }
+        }
+
         private void BtnAddAllTest(object sender, RoutedEventArgs e)
         {
             vm.AddTest();

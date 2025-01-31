@@ -12,19 +12,18 @@ public class FakeNFCViewModel : ViewmodelBase
 
     public List<Employee> TestData { get; set; }
 
-    public List<Employee> Employees { get; set; }
+    public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
 
     public Employee SelectedEmployee { get; set; }
 
     public bool IsAddButtonDisabled { get; set; }
+    public string NewCardId { get; set; }
 
     public FakeNFCViewModel()
     {
-        
+        NewCardId = "";
 
         IsAddButtonDisabled = true;
-
-        Employees = dbHelper.GetAllEmployees();
 
         TestData = new List<Employee>
         {
@@ -35,6 +34,15 @@ public class FakeNFCViewModel : ViewmodelBase
         };
 
         
+    }
+
+    public void ScanNewCard()
+    {
+        if(NewCardId.Length == 11)
+        {
+            //Add the Actual method for scaning new car
+            dbHelper.CardScanned(NewCardId);
+        }
     }
 
     public void CheckIn(Employee employee)
@@ -56,12 +64,16 @@ public class FakeNFCViewModel : ViewmodelBase
         }
     }
 
-    public void GetDataFromDB()
+    public ObservableCollection<Employee> GetDataFromDB()
     {
         Employees.Clear();
-        Employees = dbHelper.GetAllEmployees();
-
+        foreach (var employee in dbHelper.GetAllEmployees())
+        {
+            Employees.Add(employee); 
+        }
+        return Employees;
     }
+
 
 
 }
