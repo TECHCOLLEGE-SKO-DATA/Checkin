@@ -21,6 +21,8 @@ namespace CheckInSystem.Tests
             Assert.Equal("K.", emp.MiddleNameShort);
             emp.MiddleName = "Testing Vervy Long Names";
             Assert.Equal("T. V. L. N.", emp.MiddleNameShort);
+            emp.MiddleName = "";
+            Assert.Equal("", emp.MiddleNameShort);
         }
         [Fact]
         public void ValidatorAdminUser_Tests()
