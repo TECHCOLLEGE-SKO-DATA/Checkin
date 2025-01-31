@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Dapper;
 using System.Data.SqlClient;
 using CheckInSystem.Database;
+using System.Windows;
 
 namespace CheckInSystem.Models;
 
@@ -144,6 +145,7 @@ public class Employee : INotifyPropertyChanged
         IsCheckedIn = isCheckedIn;
     }
     public Employee() { }
+    public FontWeight FontBoldNormal { get; set; } = FontWeights.Normal;
     public Employee(string firstName, string middleName, string lastName, string cardID)
     {
         FirstName = firstName;

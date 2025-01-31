@@ -21,7 +21,10 @@ public class Startup
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
-        OpenFakeNFCWindow();
+        if (Debugger.IsAttached)
+        {
+            OpenFakeNFCWindow();
+        }
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;

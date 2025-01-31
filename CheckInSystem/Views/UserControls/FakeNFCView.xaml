@@ -13,9 +13,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding FirstName}" Margin="5"/>
-                        <TextBlock Text="{Binding MiddleName}" Margin="5"/>
-                        <TextBlock Text="{Binding LastName}" Margin="5"/>
+                        <TextBlock Text="{Binding FirstName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+                        <TextBlock Text="{Binding MiddleName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+                        <TextBlock Text="{Binding LastName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -26,8 +26,9 @@
              IsChecked="{Binding IsAddButtonDisabled}" />
             <TextBlock FontSize="15" Text="This button is to add test data"/>
             <TextBlock FontSize="15" Text="if database doesn't already have data"/>
-            <Button Width="150" FontSize="15" Height="50" Click="BtnAddAllTest">
+            <Button Width="150" FontSize="15" Height="50" Click="BtnAddAllTest" Margin="0,0,0,10">
                 Add All to database</Button>
+            <Button Width="150" FontSize="15" Height="50" Margin="0,0,0,10" Click="BtnGetFromDatabase">Get data From DB</Button>
         </StackPanel>
     </Grid>
 </UserControl>
