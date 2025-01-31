@@ -24,7 +24,7 @@ public class FakeNFCViewModel : ViewmodelBase
 
         IsAddButtonDisabled = true;
 
-        Employees = DatabaseHelper.GetAllEmployees();
+        Employees = dbHelper.GetAllEmployees();
 
         TestData = new List<Employee>
         {
@@ -49,7 +49,7 @@ public class FakeNFCViewModel : ViewmodelBase
             foreach (Employee employee in TestData)
             {
                 dbHelper.CardScanned(employee.CardID);
-                Employee employeeForId = DatabaseHelper.GetFromCardId(employee.CardID);
+                Employee employeeForId = dbHelper.GetFromCardId(employee.CardID);
                 dbHelper.UpdateDb(employee.CardID, employee.FirstName, employee.MiddleName, 
                     employee.LastName, false, DateTime.Now, employeeForId.ID);
             }
@@ -59,7 +59,7 @@ public class FakeNFCViewModel : ViewmodelBase
     public void GetDataFromDB()
     {
         Employees.Clear();
-        Employees = DatabaseHelper.GetAllEmployees();
+        Employees = dbHelper.GetAllEmployees();
 
     }
 
