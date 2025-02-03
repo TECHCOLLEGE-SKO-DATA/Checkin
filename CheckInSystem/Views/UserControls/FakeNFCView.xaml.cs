@@ -8,23 +8,22 @@ namespace CheckInSystem.Views.UserControls
 {
     public partial class FakeNFCView : UserControl
     {
-        private FakeNFCViewModel vm;
+        private FakeNFCViewModel _vm;
 
-        public FakeNFCView()
+        public FakeNFCView(FakeNFCViewModel vm)
         {
             InitializeComponent();
-            vm = new FakeNFCViewModel();
-            DataContext = vm;
+            _vm = vm;
+            DataContext = _vm;
         }
         public void BtnScannewCard(object sender, RoutedEventArgs e)
         {
-            vm.ScanNewCard();
+            _vm.ScanNewCard();
         }
 
         public void BtnGetFromDatabase(object sender, RoutedEventArgs e)
         {
-            
-            vm.GetDataFromDB();
+            _vm.GetDataFromDB();
         }
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -37,7 +36,7 @@ namespace CheckInSystem.Views.UserControls
 
         private void BtnAddAllTest(object sender, RoutedEventArgs e)
         {
-            vm.AddTest();
+            _vm.AddTest();
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -57,9 +56,9 @@ namespace CheckInSystem.Views.UserControls
                 }
 
                 listBox.ItemsSource = null;
-                listBox.ItemsSource = vm.Employees;
+                listBox.ItemsSource = _vm.Employees;
 
-                vm.CheckIn(selectedEmployee);
+                _vm.CheckIn(selectedEmployee);
             }
         }
 

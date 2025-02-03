@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.Dialog;
@@ -10,7 +11,8 @@ namespace CheckInSystem.Views.UserControls;
 public partial class EmployeeTimeView : UserControl
 {
     public EmployeeTimeViewModel vm;
-    
+    private IPlatform _platform;
+
     public EmployeeTimeView(Employee employee)
     {
         vm = new(employee);
@@ -28,13 +30,13 @@ public partial class EmployeeTimeView : UserControl
     private void BtnCancel(object sender, RoutedEventArgs e)
     {
         vm.RevertSiteTimes();
-        ViewmodelBase.MainContentControl.Content = new AdminPanel();
+        ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
     }
 
     private void BtnSave(object sender, RoutedEventArgs e)
     {
         vm.SaveChanges();
-        ViewmodelBase.MainContentControl.Content = new AdminPanel();
+        ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
     }
 
     private void BtnAddTime(object sender, RoutedEventArgs e)

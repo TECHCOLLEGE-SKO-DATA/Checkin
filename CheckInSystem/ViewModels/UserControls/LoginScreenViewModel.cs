@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
@@ -24,7 +25,7 @@ public class LoginScreenViewModel : ViewmodelBase
         set => SetProperty(ref _password, value);
     }
 
-    public LoginScreenViewModel()
+    public LoginScreenViewModel(IPlatform platform) : base(platform)
     {
         
     }
@@ -39,7 +40,7 @@ public class LoginScreenViewModel : ViewmodelBase
         else
         {
             //Move to Adminpanel
-            MainContentControl.Content = new AdminPanel();
+            MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
         }
     }
     

@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CheckInSystem.Database;
 using System.Windows.Documents;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class FakeNFCViewModel : ViewmodelBase
+public class FakeNFCViewModel : ViewModelBase
 {
     DatabaseHelper dbHelper = new();
 
@@ -14,12 +15,11 @@ public class FakeNFCViewModel : ViewmodelBase
 
     public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
 
-    public Employee SelectedEmployee { get; set; }
-
     public bool IsAddButtonDisabled { get; set; }
+
     public string NewCardId { get; set; }
 
-    public FakeNFCViewModel()
+    public FakeNFCViewModel(IPlatform platform) : base(platform)
     {
         NewCardId = "";
 

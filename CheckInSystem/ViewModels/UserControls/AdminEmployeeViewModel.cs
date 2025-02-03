@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.Views.Windows;
 
 namespace CheckInSystem.ViewModels.UserControls;
@@ -9,7 +10,7 @@ public class AdminEmployeeViewModel : ViewmodelBase
     public ObservableCollection<Employee> SelectedEmployeeGroup { get; set; }
     public static ObservableCollection<Employee> SelectedEmployees { get; set; }
     
-    public AdminEmployeeViewModel(ObservableCollection<Employee> employees)
+    public AdminEmployeeViewModel(IPlatform platform,ObservableCollection <Employee> employees) : base(platform)
     {
         SelectedEmployeeGroup = employees;
         SelectedEmployees = new();

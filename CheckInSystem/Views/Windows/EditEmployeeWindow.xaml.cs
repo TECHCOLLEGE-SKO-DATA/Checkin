@@ -1,16 +1,20 @@
 ﻿using System.Windows;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
+using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.ViewModels.Windows;
 
 namespace CheckInSystem.Views.Windows;
 
 public partial class EditEmployeeWindow : Window
 {
-    public EditEmployeeViewModel vm;
-    public EditEmployeeWindow(EditEmployeeViewModel viewModel)
+    public EditEmployeeViewModel vm => (EditEmployeeViewModel)DataContext;
+    static IPlatform _platform;
+    public EditEmployeeWindow(IPlatform platform, EditEmployeeViewModel viewModel)
     {
-        vm = viewModel;
-        this.DataContext = vm;
+        //vm = viewModel;
+        //this.DataContext = vm;
+        _platform = platform;
         Closing += vm.OnWindowClosing;
         InitializeComponent();
         Topmost = true;
@@ -25,7 +29,7 @@ public partial class EditEmployeeWindow : Window
     public static void Open(Employee employee)
     {
         Application.Current.Dispatcher.Invoke( () => {
-            EditEmployeeWindow editWindow = new EditEmployeeWindow(new EditEmployeeViewModel(employee));
+            EditEmployeeWindow editWindow = new EditEmployeeWindow(_platform, new EditEmployeeViewModel(_platform, employee));
             editWindow.Show();
         });
     }
