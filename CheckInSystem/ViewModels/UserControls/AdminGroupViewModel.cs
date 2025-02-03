@@ -1,23 +1,24 @@
 ﻿using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class AdminGroupViewModel : ViewModelBase
 {
-    public AdminGroupViewModel()
+    public AdminGroupViewModel(IPlatform platform) : base(platform)
     {
         
     }
     
     public void Logout()
     {
-        MainContentControl.Content = new LoginScreen();
+        MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
     }
 
     public void SwtichToEmployees()
     {
-        MainContentControl.Content = new AdminPanel();
+        MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
     }
 
     public void AddNewGroup(string name)
