@@ -134,6 +134,10 @@ public class Employee : INotifyPropertyChanged
         {
             return "";
         }
+        if (middelname == "")
+        {
+            return "";
+        }
         string[] names = middelname.Split(" ");
         string shortenName = "";
         string seperate = ". ";
