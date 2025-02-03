@@ -1,23 +1,60 @@
 ﻿namespace CheckInSystem.Database;
 
+using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Data.SqlClient;
 using System.ServiceProcess;
+using System.Threading;
 using System.Windows;
 using Microsoft.Win32;
+using System.IO;
 
 public static class Database
 {
-    private const string SQL_SERVICE_NAME = "MSSQL$SQLEXPRESS";
+    
     private const int CONNECTION_TIMEOUT = 30;
     private const int RETRY_ATTEMPTS = 3;
     private const int RETRY_DELAY_MS = 1000;
 
-    public static string ConnectionString = $"Server=localhost\\SQLEXPRESS;Database=CheckInSystem;Trusted_Connection=True;Connect Timeout={CONNECTION_TIMEOUT};";
-    public static SqlConnection Connection = new SqlConnection(ConnectionString);
+    private static string? _connectionString;
+    private static string? _sqlServiceName;
+
+    public static string ConnectionString
+    {
+        get
+        {
+            if (_connectionString == null)
+            {
+                _connectionString = ConfigurationManager.ConnectionStrings["CheckInSystemDb"]?.ConnectionString;
+                if (string.IsNullOrEmpty(_connectionString))
+                {
+                    throw new Exception("Database connection string is missing in app.config.");
+                }
+            }
+            return _connectionString;
+        }
+    }
+
+    public static string SqlServiceName
+    {
+        get
+        {
+            if (_sqlServiceName == null)
+            {
+                _sqlServiceName = ConfigurationManager.AppSettings["SqlServiceName"];
+                if (string.IsNullOrEmpty(_sqlServiceName))
+                {
+                    throw new Exception("SQL service name is missing in app.config.");
+                }
+            }
+            return _sqlServiceName;
+        }
+    }
 
     public static bool EnsureDatabaseAvailable()
     {
+
         try
         {
             if (!IsSqlServerInstalled())
@@ -49,7 +86,7 @@ public static class Database
     public static SqlConnection GetConnection()
     {
         SqlConnection connection = new SqlConnection(ConnectionString);
-        
+
         for (int attempt = 1; attempt <= RETRY_ATTEMPTS; attempt++)
         {
             try
@@ -71,7 +108,7 @@ public static class Database
                 Thread.Sleep(RETRY_DELAY_MS);
             }
         }
-        
+
         return null;
     }
 
@@ -79,31 +116,30 @@ public static class Database
     {
         return ServiceController
             .GetServices()
-            .Any(sc => sc.ServiceName.Equals(SQL_SERVICE_NAME));
+            .Any(sc => sc.ServiceName.Equals(SqlServiceName));
     }
 
     private static bool EnsureSqlServiceRunning()
     {
         try
         {
-            using (ServiceController sc = new ServiceController(SQL_SERVICE_NAME))
+            using (ServiceController sc = new ServiceController(SqlServiceName))
             {
-                var isRunning = sc.Status == ServiceControllerStatus.Running;
-                if (isRunning) return true;
+                if (sc.Status == ServiceControllerStatus.Running)
+                    return true;
 
                 if (sc.Status == ServiceControllerStatus.Stopped)
                 {
-                   sc.Start();
-                   sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
+                    sc.Start();
+                    sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
                 }
 
-                return isRunning;
+                return sc.Status == ServiceControllerStatus.Running;
             }
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
-
             return false;
         }
     }
@@ -112,21 +148,19 @@ public static class Database
     {
         try
         {
-            using var connection = Database.GetConnection();
+            using var connection = GetConnection();
             if (connection == null) return false;
 
             // Execute a simple query to test the connection.
             using (var command = new SqlCommand("SELECT 1", connection))
             {
                 command.ExecuteScalar();
-
                 return true;
             }
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
-
             return false;
         }
     }

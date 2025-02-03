@@ -17,7 +17,11 @@ using Database;
 public class ACR122U
 {
 
+    /// <summary>
+    /// DEPRECATED: use _reader instead
+    /// </summary>
     public static readonly Reader Reader = new Reader();
+    Reader _reader = new();
     
     [Flags]
     public enum LedStateControl
@@ -32,6 +36,9 @@ public class ACR122U
         FinalStateRed = 0b0000_0001,
     }
     
+    /// <summary>
+    /// DEPRECATED use instance method Start() instead
+    /// </summary>
     public static void StartReader()
     {
         Reader.Connected += OnReaderConnected;
@@ -39,7 +46,16 @@ public class ACR122U
         Reader.Inserted += OnCardInserted;
         Reader.Removed += OnCardRemoved;
     }
+    public void Start()
+    {
+        _reader.Connected += OnReaderConnected;
+        _reader.Disconnected += OnReaderDisconnected;
+        _reader.Inserted += OnCardInserted;
+        _reader.Removed += OnCardRemoved;
+    }
     
+    
+
     private static void OnReaderConnected(string value)
     {
         Debug.WriteLine($"New reader connected : {value}");
@@ -126,18 +142,19 @@ public class ACR122U
 
     private static void UpdateEmployeeLocal(string cardID)
     {
-        Employee? employee = ViewmodelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+        DatabaseHelper databaseHelper = new();
+        Employee? employee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         if (employee != null)
         {
             employee.CardScanned(cardID);
         }
         else
         {
-            var dbEmployee = DatabaseHelper.GetFromCardId(cardID);
+            var dbEmployee = databaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
                 Application.Current.Dispatcher.Invoke( () => {
-                    ViewmodelBase.Employees.Add(dbEmployee);
+                    ViewModelBase.Employees.Add(dbEmployee);
                 });
             }
         }
@@ -146,11 +163,11 @@ public class ACR122U
     private static void UpdateNextEmployee(string cardID)
     {
         State.UpdateNextEmployee = false;
-        Employee? editEmployee = ViewmodelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+        Employee? editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         if (editEmployee == null)
         {
             CardScanned(cardID);
-            editEmployee = ViewmodelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+            editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         }
         if (Views.Dialog.WaitingForCardDialog.Instance != null) 
             Application.Current.Dispatcher.Invoke( () => {

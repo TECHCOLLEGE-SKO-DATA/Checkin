@@ -30,7 +30,7 @@ public partial class AdminPanel : UserControl
 
     private void BtnEditGroupsForEmployees(object sender, RoutedEventArgs e)
     {
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewmodelBase.Groups);
+        EditGroupsForEmployees editGroupsForEmployees = new (ViewModelBase.Groups);
         if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
         {
             if (editGroupsForEmployees.AddGroup) vm.AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);

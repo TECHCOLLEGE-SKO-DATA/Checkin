@@ -20,7 +20,7 @@ namespace CheckInSystem.Tests
         {
             databaseHelper.CardScanned("abc123die24");
 
-            Employee employee = DatabaseHelper.GetFromCardId("abc123die24");
+            Employee employee = databaseHelper.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
             databaseHelper.UpdateDb("abc123die24", "Jhon", "Simon", "Doe", false, DateTime.Now, employee.ID);
@@ -29,7 +29,7 @@ namespace CheckInSystem.Tests
         [Fact]
         public void Employee_Get() 
         {
-            Employee employee = DatabaseHelper.GetFromCardId("abc123die24");
+            Employee employee = databaseHelper.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
             Assert.Equal("Jhon", employee.FirstName);
@@ -37,7 +37,7 @@ namespace CheckInSystem.Tests
 
             databaseHelper.CardScanned(employee.CardID);
 
-            List<Employee> employees = DatabaseHelper.GetAllEmployees();
+            List<Employee> employees = databaseHelper.GetAllEmployees();
             Assert.Contains(employees, e => e.ID == employee.ID);
 
             var (arrivalTime, departureTime) = databaseHelper.GetUpdatedSiteTimes(employee.ID);
@@ -52,12 +52,12 @@ namespace CheckInSystem.Tests
         [Fact]
         public void Employee_Delete() 
         {
-            Employee employee = DatabaseHelper.GetFromCardId("abc123die24");
+            Employee employee = databaseHelper.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
             databaseHelper.DeleteFromDb(employee.ID);
 
-            List<Employee> employeesAfterDelete = DatabaseHelper.GetAllEmployees();
+            List<Employee> employeesAfterDelete = databaseHelper.GetAllEmployees();
             Assert.DoesNotContain(employeesAfterDelete, e => e.ID == employee.ID);
         }
     }

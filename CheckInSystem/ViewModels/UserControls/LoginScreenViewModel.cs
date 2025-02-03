@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class LoginScreenViewModel : ViewmodelBase
+public class LoginScreenViewModel : ViewModelBase
 {
     private string _username = "";
 
@@ -31,7 +32,8 @@ public class LoginScreenViewModel : ViewmodelBase
 
     public void AdminLogin()
     {
-        AdminUser? adminUser = AdminUser.Login(Username, Password);
+        DatabaseHelper databaseHelper = new ();
+        AdminUser? adminUser = databaseHelper.Login(Username, Password);
         if (adminUser == null)
         {
             MessageBox.Show("Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK, MessageBoxImage.Error);
