@@ -14,7 +14,6 @@ namespace CheckInSystem;
 
 public class Startup
 {
-    private static IPlatform _platform;
 
     public static bool Run()
     {
@@ -27,10 +26,9 @@ public class Startup
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
-        if (Debugger.IsAttached)
-        {
-            OpenFakeNFCWindow();
-        }
+#if DEBUG
+        OpenFakeNFCWindow();
+#endif
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;
@@ -70,6 +68,7 @@ public class Startup
         var screens = Screen.AllScreens.GetEnumerator();
         screens.MoveNext();
         Screen? screen = screens.Current;
+
 
         FakeNFCWindow fakeNFCWindow = new FakeNFCWindow();
 

@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.Views
 {
