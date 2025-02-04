@@ -19,18 +19,17 @@ public class Startup
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();
+        
         if (!EnsureDatabaseAvailable()) return false;
-
-        ACR122U.StartReader();
+        //ACR122U.StartReader();
         ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
         ViewModelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
-        if (Debugger.IsAttached)
-        {
-            OpenFakeNFCWindow();
-        }
+#if DEBUG
+        OpenFakeNFCWindow();
+#endif
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;
