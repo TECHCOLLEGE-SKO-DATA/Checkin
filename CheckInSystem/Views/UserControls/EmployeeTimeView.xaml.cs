@@ -10,13 +10,13 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class EmployeeTimeView : UserControl
 {
-    public EmployeeTimeViewModel vm;
+    public EmployeeTimeViewModel _vm => (EmployeeTimeViewModel) DataContext;
     private IPlatform _platform;
 
-    public EmployeeTimeView(Employee employee)
+    public EmployeeTimeView()
     {
-        vm = new(employee);
-        DataContext = vm;
+        //_vm = vm;
+        ///DataContext = vm;
         InitializeComponent();
     }
 
@@ -24,27 +24,29 @@ public partial class EmployeeTimeView : UserControl
     {
         Button button = (Button)sender;
         OnSiteTime siteTime = (OnSiteTime)button.DataContext;
-        vm.AppendSiteTimesToDelete(siteTime);
+        _vm.AppendSiteTimesToDelete(siteTime);
     }
 
     private void BtnCancel(object sender, RoutedEventArgs e)
     {
-        vm.RevertSiteTimes();
-        ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
+        _vm.RevertSiteTimes();
+        //ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     private void BtnSave(object sender, RoutedEventArgs e)
     {
-        vm.SaveChanges();
-        ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
+        _vm.SaveChanges();
+        //ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     private void BtnAddTime(object sender, RoutedEventArgs e)
     {
-        InputOnSiteTimeDialog siteTimeDialog = new InputOnSiteTimeDialog(vm.SelectedEmployee);
+        InputOnSiteTimeDialog siteTimeDialog = new InputOnSiteTimeDialog(_vm.SelectedEmployee);
         if (siteTimeDialog.ShowDialog() == true)
         {
-            vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
+            _vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
         }
     }
 }

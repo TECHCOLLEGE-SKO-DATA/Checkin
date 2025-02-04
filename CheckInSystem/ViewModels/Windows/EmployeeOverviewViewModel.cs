@@ -84,7 +84,11 @@ namespace CheckInSystem.ViewModels.Windows
             ConfigFilePath = filePath;
             ReadConfig();
 
-            LoadGroupsAndEmployees(); // Load groups and apply sorting
+            platform.DataLoaded += (sender, args) =>
+            {
+                LoadGroupsAndEmployees(); // Load groups and apply sorting
+
+            };
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
@@ -116,12 +120,12 @@ namespace CheckInSystem.ViewModels.Windows
         // New Method: Load groups and apply sorting
         private void LoadGroupsAndEmployees()
         {
-            DatabaseHelper databaseHelper = new ();
+            DatabaseHelper databaseHelper = new();
             // Fetch employees from the database
-            
 
             // Fetch groups and assign employees
-            Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
+            //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
+            Groups = _platform.MainWindowViewModel.Groups;
 
             // Apply sorting to each group's Members
             foreach (var group in Groups)

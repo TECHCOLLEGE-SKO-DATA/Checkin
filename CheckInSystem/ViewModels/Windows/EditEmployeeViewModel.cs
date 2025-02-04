@@ -22,7 +22,10 @@ public class EditEmployeeViewModel : ViewModelBase
     public EditEmployeeViewModel(IPlatform platform, Employee editEmployee) : base(platform)
     {
         EditEmployee = editEmployee;
-        EditEmployee.PropertyChanged += UpdateWaitingForCard;
+        if (EditEmployee != null)
+        { 
+            EditEmployee.PropertyChanged += UpdateWaitingForCard;
+        }
     }
     
     public void OnWindowClosing(object sender, CancelEventArgs e)

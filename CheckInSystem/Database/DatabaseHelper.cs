@@ -309,7 +309,7 @@ public class DatabaseHelper
 
         var newGroup = new Group();
         newGroup.UpdateName(tempGroup.Name);
-        newGroup.AddEmployee(new Employee()); 
+        //newGroup.AddEmployee(new Employee()); 
 
         return newGroup;
     }

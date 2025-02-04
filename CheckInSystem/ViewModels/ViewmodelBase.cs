@@ -9,10 +9,10 @@ namespace CheckInSystem.ViewModels;
 
 public class ViewModelBase : INotifyPropertyChanged
 {
-    public static ObservableCollection<Employee> Employees { get; set; }
-    public static ObservableCollection<Group> Groups { get; set; }
+    //public ObservableCollection<Employee> Employees => _platform.MainWindowViewModel.Employees;
+    //public static ObservableCollection<Group> Groups { get; set; }
     
-    public static ContentControl MainContentControl { get; set; }
+    //public static ContentControl MainContentControl { get; set; }
     
     public event PropertyChangedEventHandler? PropertyChanged;
     protected IPlatform _platform;

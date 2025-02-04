@@ -28,8 +28,8 @@ public class Group : INotifyPropertyChanged
         get => _isvisible;
         set => SetProperty(ref _isvisible, value);
     }
-    
-    public ObservableCollection<Employee> Members { get; private set; }
+
+    public ObservableCollection<Employee> Members { get; private set; } = new();
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {

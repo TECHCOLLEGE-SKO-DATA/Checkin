@@ -36,7 +36,8 @@
                 Margin="0 0 5 0"
                 FontSize="15"/>
         <!-- End of top bar -->
-        <ContentControl Grid.Row="1" x:Name="EmployeesControl"/>
+        <ContentControl Grid.Row="1" Content="{Binding AdminPanelContent}"/>
+        <!--<local:AdminEmployeesView DataContext="{Binding AdminPanelContent}"/>-->
         <!-- Bottom bar -->
         <StackPanel Grid.Row="2" Background="Gold" Orientation="Horizontal">
             <Button Content="Tilføj/Fjern valgte brugere fra gruppe"

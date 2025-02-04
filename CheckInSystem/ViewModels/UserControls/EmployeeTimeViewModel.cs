@@ -1,22 +1,32 @@
 ﻿using System.Collections.ObjectModel;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class EmployeeTimeViewModel
+public class EmployeeTimeViewModel : ViewModelBase
 {
     public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
     public List<OnSiteTime> SiteTimesToDelete { get; set; }
     public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
-    public Employee SelectedEmployee { get; set; }
+    //public Employee SelectedEmployee { get; set; }
 
-    public EmployeeTimeViewModel(Employee employee)
+    Employee _selectedEmployee = new();
+    public Employee SelectedEmployee
     {
-        SelectedEmployee = employee;
+        get => _selectedEmployee;
+        set
+        {
+            SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(value));
+            SetProperty(ref _selectedEmployee, value, nameof(Employee));
+        }
+    }
+
+    public EmployeeTimeViewModel(IPlatform platform) : base(platform)
+    {
+        //SelectedEmployee = employee;
         SiteTimesToDelete = new();
         SiteTimesToAddToDb = new();
-        
-        SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(employee));
     }
 
     public void AppendSiteTimesToDelete(OnSiteTime siteTime)

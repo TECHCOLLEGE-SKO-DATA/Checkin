@@ -23,18 +23,33 @@ public class Startup
         
         if (!EnsureDatabaseAvailable()) return false;
         //ACR122U.StartReader();
-        ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
-        ViewModelBase.Groups =
-            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
-        OpenEmployeeOverview();
+        //ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
+        //ViewModelBase.Groups =
+        //    new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
+        //OpenEmployeeOverview();
         AddAdmin();
 
-        Database.Maintenance.CheckOutEmployeesIfTheyForgot();
-        Database.Maintenance.CheckForEndedOffSiteTime();
-        return true;
+        return true;   
     }
 
-    private static void OpenEmployeeOverview()
+    //public static void OpenEmployeeOverview()
+    //{
+    //    var screens = Screen.AllScreens.GetEnumerator();
+    //    screens.MoveNext();
+    //    screens.MoveNext();
+    //    Screen? screen = screens.Current;
+    //    EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(new WPFPlatform()));
+
+    //    if (screen != null)
+    //    {
+    //        employeeOverview.Top = screen.Bounds.Top;
+    //        employeeOverview.Left = screen.Bounds.Left;
+    //        employeeOverview.Height = screen.Bounds.Height;
+    //        employeeOverview.Width = screen.Bounds.Width;
+    //    }
+    //    employeeOverview.Show();
+    //}
+    public static void OpenEmployeeOverview(IPlatform _platform)
     {
         var screens = Screen.AllScreens.GetEnumerator();
         screens.MoveNext();

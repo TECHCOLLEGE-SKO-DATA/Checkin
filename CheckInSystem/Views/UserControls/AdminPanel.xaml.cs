@@ -11,6 +11,7 @@ namespace CheckInSystem.Views.UserControls;
 public partial class AdminPanel : UserControl
 {
     private AdminPanelViewModel _vm;
+    
     public AdminPanel(AdminPanelViewModel vm)
     {
         InitializeComponent();
@@ -30,12 +31,7 @@ public partial class AdminPanel : UserControl
 
     private void BtnEditGroupsForEmployees(object sender, RoutedEventArgs e)
     {
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewModelBase.Groups);
-        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
-        {
-            if (editGroupsForEmployees.AddGroup) _vm.AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-            if (editGroupsForEmployees.RemoveGroup) _vm.RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-        }
+        _vm.EditGroupsForEmployees();
     }
 
     private void BtnEditOffsiteForEmployees(object sender, RoutedEventArgs e)
