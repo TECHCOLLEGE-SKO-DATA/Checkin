@@ -11,12 +11,19 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminEmployeeView : UserControl
 {
-    private AdminEmployeeViewModel vm;
-    
+    private AdminEmployeeViewModel _vm;
+    private ObservableCollection<Employee> employees;
+
+    public AdminEmployeeView(AdminEmployeeViewModel vm, ObservableCollection<Employee> employees)
+    {
+        _vm = vm;
+        DataContext = _vm;
+        InitializeComponent();
+    }
+
     public AdminEmployeeView(ObservableCollection<Employee> employees)
     {
-        vm = new AdminEmployeeViewModel(employees);
-        DataContext = vm;
+        this.employees = employees;
         InitializeComponent();
     }
 
@@ -24,7 +31,7 @@ public partial class AdminEmployeeView : UserControl
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        vm.EditEmployee(employee);
+        _vm.EditEmployee(employee);
     }
 
     private void BtnSeeEmployeeTime(object sender, RoutedEventArgs e)
@@ -76,7 +83,7 @@ public partial class AdminEmployeeView : UserControl
                 MessageBoxImage.Warning);
         if (result == MessageBoxResult.Yes)
         {
-            vm.DeleteEmployee(employee);
+            _vm.DeleteEmployee(employee);
         }
     }
 }

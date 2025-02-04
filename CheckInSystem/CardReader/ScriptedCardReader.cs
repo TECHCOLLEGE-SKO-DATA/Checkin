@@ -1,5 +1,6 @@
 
 
+using System.Diagnostics;
 using CheckInSystem.Platform;
 
 namespace CheckInSystem.CardReader;
@@ -11,6 +12,9 @@ public class ScriptedCardReader : ICardReader
     public event ReaderConnectedEventHandler? ReaderDisconnected;
     public event ReaderConnectedEventHandler? CardInserted;
     public event ReaderConnectedEventHandler? CardRemoved;
+    public ScriptedCardReader() {
+        Debug.WriteLine("Created instance of scripted card reader");
+    }
 
     public void TriggerReaderConnected(string value) 
     {

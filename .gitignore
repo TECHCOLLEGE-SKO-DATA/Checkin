@@ -397,6 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 .idea
-/CheckInSystem/app.config
-
 .vscode
+/CheckInSystem/app.config

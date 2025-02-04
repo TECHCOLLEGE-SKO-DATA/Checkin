@@ -4,7 +4,10 @@ using System.Windows;
 using CheckInSystem.CardReader;
 using CheckInSystem.Database;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
+using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using WpfScreenHelper;
 
@@ -12,16 +15,20 @@ namespace CheckInSystem;
 
 public class Startup
 {
+    private static IPlatform _platform;
+
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();
+        
         if (!EnsureDatabaseAvailable()) return false;
-        ACR122U.StartReader();
+        //ACR122U.StartReader();
         ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
         ViewModelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
+
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;
@@ -33,7 +40,7 @@ public class Startup
         screens.MoveNext();
         screens.MoveNext();
         Screen? screen = screens.Current;
-        EmployeeOverview employeeOverview = new EmployeeOverview();
+        EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(_platform));
 
         if (screen != null)
         {
@@ -55,6 +62,7 @@ public class Startup
             databaseHelper.CreateUser("sko", "test123");
         }
     }
+    
 
     private static bool EnsureDatabaseAvailable()
     {
