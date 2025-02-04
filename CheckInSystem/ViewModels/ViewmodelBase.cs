@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels;
 
@@ -14,7 +15,11 @@ public class ViewModelBase : INotifyPropertyChanged
     public static ContentControl MainContentControl { get; set; }
     
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    protected IPlatform _platform;
+    public ViewModelBase(IPlatform platform)
+    {
+        _platform = platform;
+    }
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         if (PropertyChanged != null)

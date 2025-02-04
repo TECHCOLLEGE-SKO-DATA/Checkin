@@ -8,13 +8,13 @@ namespace CheckInSystem.Views
 {
     public partial class EmployeeOverview : Window
     {
-        private EmployeeOverviewViewModel vm;
+        private EmployeeOverviewViewModel _vm;
         private BackgroundTimeService _timeService;
 
-        public EmployeeOverview()
+        public EmployeeOverview(EmployeeOverviewViewModel vm)
         {
-            vm = new EmployeeOverviewViewModel();
-            this.DataContext = vm;
+            _vm = vm;
+            this.DataContext = _vm;
             InitializeComponent();
 
             // Start the background time service when the window opens
@@ -40,19 +40,19 @@ namespace CheckInSystem.Views
 
         private void BtnZoomOut(object sender, RoutedEventArgs e)
         {
-            vm.ZoomOut();
-            vm.UpdateConfig();
+            _vm.ZoomOut();
+            _vm.UpdateConfig();
         }
 
         private void BtnZoomIn(object sender, RoutedEventArgs e)
         {
-            vm.ZoomIn();
-            vm.UpdateConfig();
+            _vm.ZoomIn();
+            _vm.UpdateConfig();
         }
 
         private void BtnFullScreenToggle(object sender, RoutedEventArgs e)
         {
-            vm.ToggleFullscreen();
+            _vm.ToggleFullscreen();
         }
 
         protected override void OnClosed(EventArgs e)

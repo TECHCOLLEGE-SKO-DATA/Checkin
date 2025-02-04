@@ -5,6 +5,7 @@ using System.Windows.Data;
 using CheckInSystem.Models;
 using System.ComponentModel;
 using CheckInSystem.Database;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -72,7 +73,7 @@ namespace CheckInSystem.ViewModels.Windows
             }
         }
 
-        public EmployeeOverviewViewModel()
+        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
             string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
             if (!Directory.Exists(filePath))

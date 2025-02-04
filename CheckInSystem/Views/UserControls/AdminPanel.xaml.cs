@@ -10,12 +10,12 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminPanel : UserControl
 {
-    private AdminPanelViewModel vm;
-    public AdminPanel()
+    private AdminPanelViewModel _vm;
+    public AdminPanel(AdminPanelViewModel vm)
     {
         InitializeComponent();
-        vm = new AdminPanelViewModel(EmployeesControl);
-        DataContext = vm;
+        _vm = vm;
+        DataContext = _vm;
     }
 
     private void BtnResetGroup(object sender, RoutedEventArgs e)
@@ -25,7 +25,7 @@ public partial class AdminPanel : UserControl
 
     private void BtnLogOut(object sender, RoutedEventArgs e)
     {
-        vm.Logout();
+        _vm.Logout();
     }
 
     private void BtnEditGroupsForEmployees(object sender, RoutedEventArgs e)
@@ -33,8 +33,8 @@ public partial class AdminPanel : UserControl
         EditGroupsForEmployees editGroupsForEmployees = new (ViewModelBase.Groups);
         if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
         {
-            if (editGroupsForEmployees.AddGroup) vm.AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-            if (editGroupsForEmployees.RemoveGroup) vm.RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+            if (editGroupsForEmployees.AddGroup) _vm.AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+            if (editGroupsForEmployees.RemoveGroup) _vm.RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
         }
     }
 
@@ -43,7 +43,7 @@ public partial class AdminPanel : UserControl
         EditOffsiteDialog editOffsite = new EditOffsiteDialog();
         if (editOffsite.ShowDialog() == true)
         {
-            vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, editOffsite.Isoffsite, editOffsite.OffsiteUntil);
+            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, editOffsite.Isoffsite, editOffsite.OffsiteUntil);
         }
     }
 
@@ -52,18 +52,18 @@ public partial class AdminPanel : UserControl
         MessageBoxResult messageBoxResult = MessageBox.Show("Er du sikker på at du vil slette de valgte brugere.", "Sletning", MessageBoxButton.OKCancel);
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            vm.DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
+            _vm.DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
             AdminEmployeeViewModel.SelectedEmployees.Clear();
         }
     }
 
     private void BtnSwitchToGroups(object sender, RoutedEventArgs e)
     {
-        vm.SwitchToGroups();
+        _vm.SwitchToGroups();
     }
 
     private void BtnEditScannedCard(object sender, RoutedEventArgs e)
     {
-        vm.EditNextScannedCard();
+        _vm.EditNextScannedCard();
     }
 }

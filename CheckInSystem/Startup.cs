@@ -4,7 +4,9 @@ using System.Windows;
 using CheckInSystem.CardReader;
 using CheckInSystem.Database;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
+using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using WpfScreenHelper;
 
@@ -12,16 +14,23 @@ namespace CheckInSystem;
 
 public class Startup
 {
+    private static IPlatform _platform;
+
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();
         if (!EnsureDatabaseAvailable()) return false;
+
         ACR122U.StartReader();
         ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
         ViewModelBase.Groups =
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
+        if (Debugger.IsAttached)
+        {
+            OpenFakeNFCWindow();
+        }
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;
@@ -33,7 +42,7 @@ public class Startup
         screens.MoveNext();
         screens.MoveNext();
         Screen? screen = screens.Current;
-        EmployeeOverview employeeOverview = new EmployeeOverview();
+        EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(_platform));
 
         if (screen != null)
         {
@@ -54,6 +63,25 @@ public class Startup
 
             databaseHelper.CreateUser("sko", "test123");
         }
+    }
+    private static void OpenFakeNFCWindow()
+    {
+
+        var screens = Screen.AllScreens.GetEnumerator();
+        screens.MoveNext();
+        Screen? screen = screens.Current;
+
+        FakeNFCWindow fakeNFCWindow = new FakeNFCWindow();
+
+        if (screen != null)
+        {
+            fakeNFCWindow.Top = screen.Bounds.Top;
+            fakeNFCWindow.Left = screen.Bounds.Left;
+            fakeNFCWindow.Height = 450;
+            fakeNFCWindow.Width = 800;
+        }
+
+        fakeNFCWindow.Show();
     }
 
     private static bool EnsureDatabaseAvailable()

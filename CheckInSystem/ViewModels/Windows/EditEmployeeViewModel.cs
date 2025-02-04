@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using CheckInSystem.CardReader;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.Windows;
 
@@ -17,8 +18,8 @@ public class EditEmployeeViewModel : ViewModelBase
     }
 
     public TextBlock? UpdateCardMessage { get; set; }
-
-    public EditEmployeeViewModel(Employee editEmployee)
+    
+    public EditEmployeeViewModel(IPlatform platform, Employee editEmployee) : base(platform)
     {
         EditEmployee = editEmployee;
         EditEmployee.PropertyChanged += UpdateWaitingForCard;

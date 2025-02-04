@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
@@ -24,7 +25,7 @@ public class AdminPanelViewModel : ViewModelBase
         }
     }
     
-    public AdminPanelViewModel(ContentControl contentControl)
+    public AdminPanelViewModel(IPlatform platform, ContentControl contentControl) : base(platform)
     {
         EmployeesControl = contentControl;
         EmployeesControl.Content = new AdminEmployeeView(Employees);
@@ -32,7 +33,7 @@ public class AdminPanelViewModel : ViewModelBase
 
     public void Logout()
     {
-        MainContentControl.Content = new LoginScreen();
+        MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
     }
 
     public void EditNextScannedCard()
@@ -43,7 +44,7 @@ public class AdminPanelViewModel : ViewModelBase
 
     public void SwitchToGroups()
     {
-        MainContentControl.Content = new AdminGroupView();
+        MainContentControl.Content = new AdminGroupView(new AdminGroupViewModel(_platform));
     }
 
     public void DeleteEmployee(Employee employee)
