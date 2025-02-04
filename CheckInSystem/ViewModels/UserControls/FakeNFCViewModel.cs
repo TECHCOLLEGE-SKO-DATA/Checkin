@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CheckInSystem.Database;
 using System.Windows.Documents;
 using CheckInSystem.Platform;
+using CheckInSystem.CardReader;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
@@ -18,6 +19,8 @@ public class FakeNFCViewModel : ViewModelBase
     public bool IsAddButtonDisabled { get; set; }
 
     public string NewCardId { get; set; }
+
+    ScriptedCardReader _cardReader => (ScriptedCardReader) _platform.CardReader;
 
     public FakeNFCViewModel(IPlatform platform) : base(platform)
     {
@@ -41,14 +44,16 @@ public class FakeNFCViewModel : ViewModelBase
         if(NewCardId.Length == 11)
         {
             //Add the Actual method for scaning new car
-            dbHelper.CardScanned(NewCardId);
+            _cardReader.TriggerCardInserted(NewCardId);
         }
     }
 
     public void CheckIn(Employee employee)
     {
         //Add the Actual method for checkin/out 
-        dbHelper.CardScanned(employee.CardID);   
+        //dbHelper.CardScanned(employee.CardID);   
+        
+        _cardReader.TriggerCardInserted(employee.CardID);
     }
     public void AddTest()
     {

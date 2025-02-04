@@ -24,6 +24,7 @@ public partial class AdminEmployeeView : UserControl
     public AdminEmployeeView(ObservableCollection<Employee> employees)
     {
         this.employees = employees;
+        InitializeComponent();
     }
 
     private void BtnOpenEmployeeEdit(object sender, RoutedEventArgs e)

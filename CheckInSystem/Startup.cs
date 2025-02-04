@@ -6,6 +6,7 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
+using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using WpfScreenHelper;
@@ -27,9 +28,7 @@ public class Startup
             new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
         OpenEmployeeOverview();
         AddAdmin();
-#if DEBUG
-        OpenFakeNFCWindow();
-#endif
+
         Database.Maintenance.CheckOutEmployeesIfTheyForgot();
         Database.Maintenance.CheckForEndedOffSiteTime();
         return true;
@@ -63,25 +62,7 @@ public class Startup
             databaseHelper.CreateUser("sko", "test123");
         }
     }
-    private static void OpenFakeNFCWindow()
-    {
-
-        var screens = Screen.AllScreens.GetEnumerator();
-        screens.MoveNext();
-        Screen? screen = screens.Current;
-
-        FakeNFCWindow fakeNFCWindow = new FakeNFCWindow();
-
-        if (screen != null)
-        {
-            fakeNFCWindow.Top = screen.Bounds.Top;
-            fakeNFCWindow.Left = screen.Bounds.Left;
-            fakeNFCWindow.Height = 450;
-            fakeNFCWindow.Width = 800;
-        }
-
-        fakeNFCWindow.Show();
-    }
+    
 
     private static bool EnsureDatabaseAvailable()
     {

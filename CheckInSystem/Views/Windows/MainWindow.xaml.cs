@@ -5,10 +5,12 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
+using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.UserControls;
+using CheckInSystem.Views;
 using CheckInSystem.Views.Windows;
-
+using WpfScreenHelper;
 namespace CheckInSystem;
 
 /// <summary>
@@ -16,19 +18,48 @@ namespace CheckInSystem;
 /// </summary>
 public partial class MainWindow : Window
 {
-    WPFPlatform platform = new WPFPlatform();
+    static readonly WPFPlatform platform = new WPFPlatform();
+    MainWindowViewModel _vm { get => (MainWindowViewModel) DataContext; set => DataContext = value; }
+    public MainWindowViewModel MainWindowViewModel { get => _vm; set => _vm = value; }
     public MainWindow()
     {
         InitializeComponent();
+        _vm = new MainWindowViewModel(platform);
         Closing += OnWindowClosing;
         ViewModelBase.MainContentControl = MainContent;
         MainContent.Content = new LoginScreen(new LoginScreenViewModel(platform));
+
+#if DEBUG
+        OpenFakeNFCWindow();
+#endif
     }
     
     public void OnWindowClosing(object sender, CancelEventArgs e)
     {
         System.Windows.Application.Current.Shutdown();
     }
+
+    private static void OpenFakeNFCWindow()
+    {
+
+        var screens = Screen.AllScreens.GetEnumerator();
+        screens.MoveNext();
+        Screen? screen = screens.Current;
+
+        FakeNFCWindow fakeNFCWindow = new FakeNFCWindow();
+        fakeNFCWindow.DataContext = new FakeNFCWindowViewModel(platform);
+
+        if (screen != null)
+        {
+            fakeNFCWindow.Top = screen.Bounds.Top;
+            fakeNFCWindow.Left = screen.Bounds.Left;
+            fakeNFCWindow.Height = 450;
+            fakeNFCWindow.Width = 800;
+        }
+
+        fakeNFCWindow.Show();
+    }
+
     #region HOMELESS METHODS
     private static void CardScanned(string cardID)
     {

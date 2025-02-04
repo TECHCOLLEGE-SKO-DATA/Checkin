@@ -7,6 +7,6 @@
     mc:Ignorable="d"
         Title="FakeNFCWindow" Height="450" Width="800">
     <Grid>
-        <local:FakeNFCView />
+        <local:FakeNFCView DataContext="{Binding FakeNFCViewModel}" />
     </Grid>
 </Window>

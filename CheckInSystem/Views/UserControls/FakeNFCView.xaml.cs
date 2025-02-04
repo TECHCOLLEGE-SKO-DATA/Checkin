@@ -8,13 +8,11 @@ namespace CheckInSystem.Views.UserControls
 {
     public partial class FakeNFCView : UserControl
     {
-        private FakeNFCViewModel _vm;
-
-        public FakeNFCView(FakeNFCViewModel vm)
+        public FakeNFCViewModel _vm  { get => (FakeNFCViewModel) DataContext; set => DataContext = value; }
+        public FakeNFCViewModel FakeNFCViewModel  { get => _vm; set => _vm = value; }
+        public FakeNFCView()
         {
             InitializeComponent();
-            _vm = vm;
-            DataContext = _vm;
         }
         public void BtnScannewCard(object sender, RoutedEventArgs e)
         {

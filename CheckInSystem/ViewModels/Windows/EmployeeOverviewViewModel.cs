@@ -118,10 +118,10 @@ namespace CheckInSystem.ViewModels.Windows
         {
             DatabaseHelper databaseHelper = new ();
             // Fetch employees from the database
-            var employees = databaseHelper.GetAllEmployees();
+            
 
             // Fetch groups and assign employees
-            Groups = new ObservableCollection<Group>(Group.GetAllGroups(employees));
+            Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
 
             // Apply sorting to each group's Members
             foreach (var group in Groups)
