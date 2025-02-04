@@ -14,6 +14,7 @@ namespace CheckInSystem;
 
 public class Startup
 {
+    private static IPlatform _platform;
 
     public static bool Run()
     {
@@ -68,7 +69,6 @@ public class Startup
         var screens = Screen.AllScreens.GetEnumerator();
         screens.MoveNext();
         Screen? screen = screens.Current;
-
 
         FakeNFCWindow fakeNFCWindow = new FakeNFCWindow();
 

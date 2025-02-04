@@ -9,7 +9,6 @@ public class AdminEmployeeViewModel : ViewModelBase
 {
     public ObservableCollection<Employee> SelectedEmployeeGroup { get; set; }
     public static ObservableCollection<Employee> SelectedEmployees { get; set; }
-
     public AdminEmployeeViewModel(IPlatform platform, ObservableCollection<Employee> employees) : base(platform)
     {
         SelectedEmployeeGroup = employees;
