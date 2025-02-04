@@ -5,7 +5,7 @@ using CheckInSystem.Views.Windows;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class AdminEmployeeViewModel : ViewmodelBase
+public class AdminEmployeeViewModel : ViewModelBase
 {
     public ObservableCollection<Employee> SelectedEmployeeGroup { get; set; }
     public static ObservableCollection<Employee> SelectedEmployees { get; set; }

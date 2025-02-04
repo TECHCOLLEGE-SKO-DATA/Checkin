@@ -7,7 +7,7 @@ using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels;
 
-public class ViewmodelBase : INotifyPropertyChanged
+public class ViewModelBase : INotifyPropertyChanged
 {
     public static ObservableCollection<Employee> Employees { get; set; }
     public static ObservableCollection<Group> Groups { get; set; }

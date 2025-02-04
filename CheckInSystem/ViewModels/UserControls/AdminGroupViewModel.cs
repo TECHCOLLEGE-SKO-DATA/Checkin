@@ -4,7 +4,7 @@ using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class AdminGroupViewModel : ViewmodelBase
+public class AdminGroupViewModel : ViewModelBase
 {
     public AdminGroupViewModel(IPlatform platform) : base(platform)
     {

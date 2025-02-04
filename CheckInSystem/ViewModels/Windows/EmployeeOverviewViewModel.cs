@@ -9,7 +9,7 @@ using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.Windows
 {
-    public class EmployeeOverviewViewModel : ViewmodelBase
+    public class EmployeeOverviewViewModel : ViewModelBase
     {
         private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
@@ -116,8 +116,9 @@ namespace CheckInSystem.ViewModels.Windows
         // New Method: Load groups and apply sorting
         private void LoadGroupsAndEmployees()
         {
+            DatabaseHelper databaseHelper = new ();
             // Fetch employees from the database
-            var employees = DatabaseHelper.GetAllEmployees();
+            var employees = databaseHelper.GetAllEmployees();
 
             // Fetch groups and assign employees
             Groups = new ObservableCollection<Group>(Group.GetAllGroups(employees));
