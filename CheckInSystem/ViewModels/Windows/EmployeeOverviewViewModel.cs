@@ -5,6 +5,7 @@ using System.Windows.Data;
 using CheckInSystem.Models;
 using System.ComponentModel;
 using CheckInSystem.Database;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -72,7 +73,7 @@ namespace CheckInSystem.ViewModels.Windows
             }
         }
 
-        public EmployeeOverviewViewModel()
+        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
             string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
             if (!Directory.Exists(filePath))
@@ -117,10 +118,10 @@ namespace CheckInSystem.ViewModels.Windows
         {
             DatabaseHelper databaseHelper = new ();
             // Fetch employees from the database
-            var employees = databaseHelper.GetAllEmployees();
+            
 
             // Fetch groups and assign employees
-            Groups = new ObservableCollection<Group>(Group.GetAllGroups(employees));
+            Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
 
             // Apply sorting to each group's Members
             foreach (var group in Groups)

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.Dialog;
 
@@ -8,22 +9,22 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminGroupView : UserControl
 {
-    private AdminGroupViewModel vm;
-    public AdminGroupView()
+    private AdminGroupViewModel _vm;
+    public AdminGroupView(AdminGroupViewModel vm)
     {
-        vm = new AdminGroupViewModel();
-        DataContext = vm;
+        _vm = vm;
+        DataContext = _vm;
         InitializeComponent();
     }
 
     private void BtnLogOut(object sender, RoutedEventArgs e)
     {
-        vm.Logout();
+        _vm.Logout();
     }
 
     private void BtnSwitchToGroups(object sender, RoutedEventArgs e)
     {
-        vm.SwtichToEmployees();
+        _vm.SwtichToEmployees();
     }
 
     private void BtnEditName(object sender, RoutedEventArgs e)
@@ -35,7 +36,7 @@ public partial class AdminGroupView : UserControl
         {
             if (input.Answer != "")
             {
-                vm.EditGroupName(group, input.Answer);
+                _vm.EditGroupName(group, input.Answer);
             }
         }
     }
@@ -44,7 +45,7 @@ public partial class AdminGroupView : UserControl
     {
         Button checkBox = (Button)sender;
         Group group = (Group)checkBox.DataContext;
-        vm.DeleteGroup(group);
+        _vm.DeleteGroup(group);
     }
 
     private void BtnCreateGroup(object sender, RoutedEventArgs e)
@@ -54,7 +55,7 @@ public partial class AdminGroupView : UserControl
         {
             if (input.Answer != "")
             {
-                vm.AddNewGroup(input.Answer);
+                _vm.AddNewGroup(input.Answer);
             }
         }
     }

@@ -17,7 +17,11 @@ using Database;
 public class ACR122U
 {
 
+    /// <summary>
+    /// DEPRECATED: use _reader instead
+    /// </summary>
     public static readonly Reader Reader = new Reader();
+    Reader _reader = new();
     
     [Flags]
     public enum LedStateControl
@@ -32,6 +36,9 @@ public class ACR122U
         FinalStateRed = 0b0000_0001,
     }
     
+    /// <summary>
+    /// DEPRECATED use instance method Start() instead
+    /// </summary>
     public static void StartReader()
     {
         Reader.Connected += OnReaderConnected;
@@ -39,7 +46,16 @@ public class ACR122U
         Reader.Inserted += OnCardInserted;
         Reader.Removed += OnCardRemoved;
     }
+    public void Start()
+    {
+        _reader.Connected += OnReaderConnected;
+        _reader.Disconnected += OnReaderDisconnected;
+        _reader.Inserted += OnCardInserted;
+        _reader.Removed += OnCardRemoved;
+    }
     
+    
+
     private static void OnReaderConnected(string value)
     {
         Debug.WriteLine($"New reader connected : {value}");
