@@ -87,7 +87,12 @@ namespace CheckInSystem.ViewModels.Windows
             platform.DataLoaded += (sender, args) =>
             {
                 LoadGroupsAndEmployees(); // Load groups and apply sorting
-
+                SortEmployees();
+            };
+            platform.CardReader.CardScanned += (sender, args) =>
+            {
+                //Sort again
+                SortEmployees();
             };
         }
 
@@ -127,6 +132,11 @@ namespace CheckInSystem.ViewModels.Windows
             //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
             Groups = _platform.MainWindowViewModel.Groups;
 
+            
+        }
+
+        private void SortEmployees()
+        {
             // Apply sorting to each group's Members
             foreach (var group in Groups)
             {
