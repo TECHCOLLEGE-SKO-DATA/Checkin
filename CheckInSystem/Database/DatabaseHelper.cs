@@ -12,7 +12,7 @@ using BCrypt.Net;
 using System.Collections.ObjectModel;
 using CheckInSystem.CardReader;
 
-public class DatabaseHelper
+public class DatabaseHelper : IDatabaseHelper
 {
     //From ACR122U CardScanned
 
