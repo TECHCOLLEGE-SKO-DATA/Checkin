@@ -142,7 +142,11 @@ public class MainWindowViewModel : ViewModelBase
         if (editEmployee == null)
         {
             databaseHelper.CardScanned(cardID);
-            editEmployee = Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+            editEmployee = databaseHelper.GetFromCardId(cardID);
+            if (editEmployee == null) {
+                throw new Exception("Failed saving employee");
+            }
+            Employees.Add(editEmployee);
         }
         if (Views.Dialog.WaitingForCardDialog.Instance != null) 
             Application.Current.Dispatcher.Invoke( () => {
