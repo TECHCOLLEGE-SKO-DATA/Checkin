@@ -5,6 +5,7 @@ using CheckInSystem.Database;
 using System.Windows.Documents;
 using CheckInSystem.Platform;
 using CheckInSystem.CardReader;
+using System.Windows;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
@@ -28,6 +29,8 @@ public class FakeNFCViewModel : ViewModelBase
 
         IsAddButtonDisabled = true;
 
+        Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
+
         TestData = new List<Employee>
         {
             new Employee("Konrad", "Denis", "Jensen", "abc123die20"),
@@ -35,8 +38,6 @@ public class FakeNFCViewModel : ViewModelBase
             new Employee("Konrad", "Carmin", "Johnson", "abc123die22"),
             new Employee("Emil", "Joseph", "Nilsen", "Abv123die21")
         };
-
-        
     }
 
     public void ScanNewCard()
@@ -45,6 +46,11 @@ public class FakeNFCViewModel : ViewModelBase
         {
             //Add the Actual method for scaning new car
             _cardReader.TriggerCardInserted(NewCardId);
+        }
+        Employees.Clear();
+        foreach (var employee in dbHelper.GetAllEmployees())
+        {
+            Employees.Add(employee);
         }
     }
 

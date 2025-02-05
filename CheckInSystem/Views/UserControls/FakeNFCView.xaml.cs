@@ -37,28 +37,28 @@ namespace CheckInSystem.Views.UserControls
             _vm.AddTest();
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as ListBox;
             var selectedEmployee = listBox?.SelectedItem as Employee;
 
             if (selectedEmployee != null)
             {
-                if (selectedEmployee.FontBoldNormal == FontWeights.Bold)
-                {
-                    selectedEmployee.FontBoldNormal = FontWeights.Normal;
-                }
-                else 
-                {
-                    selectedEmployee.FontBoldNormal = FontWeights.Bold;
-                }
+                selectedEmployee.FontBoldNormal = FontWeights.Bold;
 
                 listBox.ItemsSource = null;
                 listBox.ItemsSource = _vm.Employees;
 
                 _vm.CheckIn(selectedEmployee);
+
+                //3 sec befor turning it back to normal font
+                await Task.Delay(3000);
+
+                selectedEmployee.FontBoldNormal = FontWeights.Normal;
+
+                listBox.ItemsSource = null;
+                listBox.ItemsSource = _vm.Employees;
             }
         }
-
     }
 }
