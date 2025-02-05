@@ -15,6 +15,8 @@
       <PackageReference Include="FrApp42.ACR122U" Version="1.0.0" />
       <PackageReference Include="LambdaConverters" Version="4.0.0" />
       <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+      <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
       <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.0" />
       <PackageReference Include="WpfScreenHelper" Version="2.1.1" />
     </ItemGroup>
