@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CheckInSystem.Models;
@@ -8,6 +10,7 @@ namespace CheckInSystem.Views.UserControls
 {
     public partial class FakeNFCView : UserControl
     {
+        
         public FakeNFCViewModel _vm  { get => (FakeNFCViewModel) DataContext; set => DataContext = value; }
         public FakeNFCViewModel FakeNFCViewModel  { get => _vm; set => _vm = value; }
         public FakeNFCView()
@@ -59,6 +62,6 @@ namespace CheckInSystem.Views.UserControls
                 listBox.ItemsSource = null;
                 listBox.ItemsSource = _vm.Employees;
             }
-        }
-    }
+        }        
+    }  
 }

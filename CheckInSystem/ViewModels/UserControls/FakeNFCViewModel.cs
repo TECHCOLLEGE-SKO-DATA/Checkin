@@ -6,12 +6,16 @@ using System.Windows.Documents;
 using CheckInSystem.Platform;
 using CheckInSystem.CardReader;
 using System.Windows;
+using System.Text;
+using System;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class FakeNFCViewModel : ViewModelBase
 {
     DatabaseHelper dbHelper = new();
+
+    private static Random random = new Random();
 
     public List<Employee> TestData { get; set; }
 
@@ -46,6 +50,17 @@ public class FakeNFCViewModel : ViewModelBase
         {
             //Add the Actual method for scaning new car
             _cardReader.TriggerCardInserted(NewCardId);
+        }
+        else
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i < 11; i++)
+            {
+                result.Append(chars[random.Next(chars.Length)]);
+            }
+            _cardReader.TriggerCardInserted(result.ToString());
         }
         Employees.Clear();
         foreach (var employee in dbHelper.GetAllEmployees())
