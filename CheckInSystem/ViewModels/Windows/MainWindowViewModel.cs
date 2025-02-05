@@ -36,7 +36,13 @@ public class MainWindowViewModel : ViewModelBase
     public EmployeeTimeViewModel EmployeeTimeViewModel
     {
         get => _employeeTimeViewModel;
-        set => SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+        set {
+            if (_employeeTimeView != null)
+            {
+                _employeeTimeView.DataContext = value;
+            }
+            SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+        }
     }
 
     public ObservableCollection<Employee> Employees { get; private set; } = new();
@@ -67,7 +73,7 @@ public class MainWindowViewModel : ViewModelBase
         _loginScreen = new(LoginScreenViewModel);
         _adminPanel = new(AdminPanelViewModel);
         _adminGroupView = new(AdminGroupViewModel);
-        //_employeeTimeView = new(EmployeeTimeViewModel);
+        _employeeTimeView = new(EmployeeTimeViewModel);
 
         MainContentControl = _loginScreen; //Set startup content
         
@@ -112,6 +118,7 @@ public class MainWindowViewModel : ViewModelBase
             throw new InvalidOperationException($"Cannot switch to unknown view {view}");
         }
     }
+    
     public void RequestView(UserControl control)
     {
         MainContentControl = control;
