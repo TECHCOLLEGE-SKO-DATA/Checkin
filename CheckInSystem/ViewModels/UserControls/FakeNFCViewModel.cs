@@ -29,7 +29,14 @@ public class FakeNFCViewModel : ViewModelBase
 
     public FakeNFCViewModel(IPlatform platform) : base(platform)
     {
-        NewCardId = "";
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < 11; i++)
+        {
+            result.Append(chars[random.Next(chars.Length)]);
+        }
+        NewCardId = result.ToString();
 
         IsAddButtonDisabled = true;
 
