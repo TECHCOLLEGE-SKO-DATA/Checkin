@@ -1,0 +1,45 @@
+-- Create the database (not needed in SQLite, just open the file)
+PRAGMA foreign_keys = ON;
+
+-- Employee Table
+CREATE TABLE employee (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    cardID CHAR(11) UNIQUE,
+    firstName TEXT,
+    middleName TEXT,
+    lastName TEXT,
+    isOffSite INTEGER NOT NULL DEFAULT 0,
+    offSiteUntil DATE
+);
+
+-- Group Table
+CREATE TABLE [group] (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    isvisible INTEGER NOT NULL DEFAULT 0
+);
+
+-- Employee-Group Relationship Table
+CREATE TABLE employeeGroup (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    employeeID INTEGER NOT NULL,
+    groupID INTEGER NOT NULL,
+    FOREIGN KEY (employeeID) REFERENCES employee(ID) ON DELETE CASCADE,
+    FOREIGN KEY (groupID) REFERENCES [group](ID) ON DELETE CASCADE
+);
+
+-- On-Site Time Table
+CREATE TABLE onSiteTime (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    employeeID INTEGER NOT NULL,
+    arrivalTime DATETIME NOT NULL,
+    departureTime DATETIME,
+    FOREIGN KEY (employeeID) REFERENCES employee(ID) ON DELETE CASCADE
+);
+
+-- Admin User Table
+CREATE TABLE adminUser (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    hashedPassword TEXT NOT NULL
+);
