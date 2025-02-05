@@ -42,7 +42,8 @@ public class LoginScreenViewModel : ViewModelBase
         else
         {
             //Move to Adminpanel
-            MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
+            //MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
+            _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
         }
     }
     

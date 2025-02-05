@@ -23,7 +23,7 @@ public partial class App : Application
             {
                 Current.Shutdown();
             }
-            loadingStartup.Close();
+            //loadingStartup.Close();
         }
         catch (Exception exception)
         {

@@ -12,18 +12,11 @@ namespace CheckInSystem.Views.UserControls;
 public partial class AdminEmployeeView : UserControl
 {
     private AdminEmployeeViewModel _vm;
-    private ObservableCollection<Employee> employees;
-
-    public AdminEmployeeView(AdminEmployeeViewModel vm, ObservableCollection<Employee> employees)
+    
+    public AdminEmployeeView(AdminEmployeeViewModel vm)
     {
         _vm = vm;
         DataContext = _vm;
-        InitializeComponent();
-    }
-
-    public AdminEmployeeView(ObservableCollection<Employee> employees)
-    {
-        this.employees = employees;
         InitializeComponent();
     }
 
@@ -38,21 +31,15 @@ public partial class AdminEmployeeView : UserControl
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        EmployeeTimeView timeView = new EmployeeTimeView(employee);
-        ViewModelBase.MainContentControl.Content = timeView;
+        _vm.SeeEmployeeTime(employee);
     }
 
     private void BtnEditEmployeeGroup(object sender, RoutedEventArgs e)
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewModelBase.Groups);
-        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
-        {
-            if (editGroupsForEmployees.AddGroup) editGroupsForEmployees.SelectedGroup.AddEmployee(employee);
-            if (editGroupsForEmployees.RemoveGroup) editGroupsForEmployees.SelectedGroup.RemoveEmployee(employee);
-        }
+
+        _vm.EditEmployeeGroup(employee);
     }
 
     private void CbSelected(object sender, RoutedEventArgs e)

@@ -11,6 +11,7 @@ using CheckInSystem.Views.UserControls;
 using CheckInSystem.Views;
 using CheckInSystem.Views.Windows;
 using WpfScreenHelper;
+using CheckInSystem.Views.Dialog;
 namespace CheckInSystem;
 
 /// <summary>
@@ -18,16 +19,19 @@ namespace CheckInSystem;
 /// </summary>
 public partial class MainWindow : Window
 {
-    static readonly WPFPlatform platform = new WPFPlatform();
+    static readonly WPFPlatform platform = new();
     MainWindowViewModel _vm { get => (MainWindowViewModel) DataContext; set => DataContext = value; }
     public MainWindowViewModel MainWindowViewModel { get => _vm; set => _vm = value; }
     public MainWindow()
     {
+        platform.Start();
         InitializeComponent();
-        _vm = new MainWindowViewModel(platform);
+        _vm = platform.MainWindowViewModel;
+        
         Closing += OnWindowClosing;
-        ViewModelBase.MainContentControl = MainContent;
-        MainContent.Content = new LoginScreen(new LoginScreenViewModel(platform));
+        LoadingStartup.Instance?.Close();
+        //ViewModelBase.MainContentControl = MainContent;
+        //MainContent.Content = new LoginScreen(new LoginScreenViewModel(platform));
 
 #if DEBUG
         OpenFakeNFCWindow();
@@ -61,66 +65,66 @@ public partial class MainWindow : Window
     }
 
     #region HOMELESS METHODS
-    private static void CardScanned(string cardID)
-    {
-        if (State.UpdateNextEmployee)
-        {
-           UpdateNextEmployee(cardID);
-           return;
-        }
+    //private static void CardScanned(string cardID)
+    //{
+    //    if (State.UpdateNextEmployee)
+    //    {
+    //       UpdateNextEmployee(cardID);
+    //       return;
+    //    }
 
-        if (State.UpdateCardId)
-        {
-            UpdateCardId(cardID);
-            return;
-        }
+    //    if (State.UpdateCardId)
+    //    {
+    //        UpdateCardId(cardID);
+    //        return;
+    //    }
 
-        DatabaseHelper databaseHelper = new();
-        databaseHelper.CardScanned(cardID);
+    //    DatabaseHelper databaseHelper = new();
+    //    databaseHelper.CardScanned(cardID);
 
-        UpdateEmployeeLocal(cardID);
-    }
+    //    UpdateEmployeeLocal(cardID);
+    //}
 
-    private static void UpdateEmployeeLocal(string cardID)
-    {
-        DatabaseHelper databaseHelper = new();
-        Employee? employee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
-        if (employee != null)
-        {
-            employee.CardScanned(cardID);
-        }
-        else
-        {
-            var dbEmployee = databaseHelper.GetFromCardId(cardID);
-            if (dbEmployee != null)
-            {
-                Application.Current.Dispatcher.Invoke( () => {
-                    ViewModelBase.Employees.Add(dbEmployee);
-                });
-            }
-        }
-    }
+    //private static void UpdateEmployeeLocal(string cardID)
+    //{
+    //    DatabaseHelper databaseHelper = new();
+    //    Employee? employee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+    //    if (employee != null)
+    //    {
+    //        employee.CardScanned(cardID);
+    //    }
+    //    else
+    //    {
+    //        var dbEmployee = databaseHelper.GetFromCardId(cardID);
+    //        if (dbEmployee != null)
+    //        {
+    //            Application.Current.Dispatcher.Invoke( () => {
+    //                ViewModelBase.Employees.Add(dbEmployee);
+    //            });
+    //        }
+    //    }
+    //}
 
-    private static void UpdateNextEmployee(string cardID)
-    {
-        State.UpdateNextEmployee = false;
-        Employee? editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
-        if (editEmployee == null)
-        {
-            CardScanned(cardID);
-            editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
-        }
-        if (Views.Dialog.WaitingForCardDialog.Instance != null) 
-            Application.Current.Dispatcher.Invoke( () => {
-                Views.Dialog.WaitingForCardDialog.Instance.Close();
-            });
+    //private static void UpdateNextEmployee(string cardID)
+    //{
+    //    State.UpdateNextEmployee = false;
+    //    Employee? editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+    //    if (editEmployee == null)
+    //    {
+    //        CardScanned(cardID);
+    //        editEmployee = ViewModelBase.Employees.Where(e => e.CardID == cardID).FirstOrDefault();
+    //    }
+    //    if (Views.Dialog.WaitingForCardDialog.Instance != null) 
+    //        Application.Current.Dispatcher.Invoke( () => {
+    //            Views.Dialog.WaitingForCardDialog.Instance.Close();
+    //        });
         
-        EditEmployeeWindow.Open(editEmployee);
-    }
+    //    EditEmployeeWindow.Open(editEmployee);
+    //}
 
-    private static void UpdateCardId(string cardID)
-    {
-        State.UpdateCard(cardID);
-    }
+    //private static void UpdateCardId(string cardID)
+    //{
+    //    State.UpdateCard(cardID);
+    //}
 #endregion
 }

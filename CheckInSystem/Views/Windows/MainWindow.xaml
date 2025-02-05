@@ -10,6 +10,6 @@
         MinWidth="630"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <ContentControl x:Name="MainContent"/>
+        <ContentControl Content="{Binding MainContentControl}"/>
     </Grid>
 </Window>

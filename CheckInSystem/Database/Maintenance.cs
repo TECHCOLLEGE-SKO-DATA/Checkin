@@ -9,10 +9,10 @@ namespace CheckInSystem.Database;
 
 public class Maintenance
 {
-    public static void CheckOutEmployeesIfTheyForgot()
+    public static void CheckOutEmployeesIfTheyForgot(List<Employee> list)
     {
         List<Employee> updatedEmployees = new List<Employee>();
-        foreach (var employee in ViewModelBase.Employees)
+        foreach (var employee in list)
         {
             if (employee.ArrivalTime == null)
                 continue;
@@ -61,11 +61,11 @@ public class Maintenance
         }
     }
 
-    public static void CheckForEndedOffSiteTime()
+    public static void CheckForEndedOffSiteTime(List<Employee> list)
     {
         List<Employee> updatedEmployees = new List<Employee>();
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-        foreach (var employee in ViewModelBase.Employees)
+        foreach (var employee in list)
         {
             if (employee.OffSiteUntil == null)
                 continue;

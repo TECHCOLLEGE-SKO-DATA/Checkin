@@ -1,20 +1,36 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
+using CheckInSystem.Views.UserControls;
 using CheckInSystem.Views.Windows;
+using PCSC.Interop;
+using CheckInSystem.Views.Dialog;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class AdminEmployeeViewModel : ViewModelBase
 {
-    public ObservableCollection<Employee> SelectedEmployeeGroup { get; set; }
-    public static ObservableCollection<Employee> SelectedEmployees { get; set; }
-    public ObservableCollection<Employee> AllEmployees { get; set; }
-    public AdminEmployeeViewModel(IPlatform platform, ObservableCollection<Employee> employees) : base(platform)
+    ObservableCollection<Employee> _selectedEmployeeGroup;
+    public ObservableCollection<Employee> SelectedEmployeeGroup
     {
-        SelectedEmployeeGroup = employees;
+        get => _selectedEmployeeGroup;
+        set => SetProperty(ref _selectedEmployeeGroup, value, nameof(SelectedEmployeeGroup));
+    }
+    public static ObservableCollection<Employee> SelectedEmployees { get; set; }
+    
+    public AdminEmployeeViewModel(IPlatform platform) : base(platform)
+    {
+        platform.DataLoaded += (sender, args) =>
+        {
+            SelectedEmployeeGroup = platform.MainWindowViewModel.Employees;
+            //foreach (var employee in platform.MainWindowViewModel.Employees)
+            //{
+            //    SelectedEmployeeGroup.Add(employee);
+            //}
+        };
         SelectedEmployees = new();
-        Employees = new();
     }
 
     public void EditEmployee(Employee employee)
@@ -25,10 +41,29 @@ public class AdminEmployeeViewModel : ViewModelBase
     public void DeleteEmployee(Employee employee)
     {
         employee.DeleteFromDb();
-        foreach (var group in Groups)
+        foreach (var group in _platform.MainWindowViewModel.Groups)
         {
             group.Members.Remove(employee);
         }
-        Employees.Remove(employee);
+        _platform.MainWindowViewModel.Employees.Remove(employee);
+    }
+
+    public void SeeEmployeeTime(Employee employee)
+    {
+        //EmployeeTimeView timeView = new EmployeeTimeView(employee);
+        EmployeeTimeViewModel vm = new(_platform);
+        vm.SelectedEmployee = employee;
+        
+        //_platform.MainWindowViewModel.RequestView(new EmployeeTimeView(vm));
+    }
+
+    public void EditEmployeeGroup(Employee employee)
+    {
+        EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
+        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+        {
+            if (editGroupsForEmployees.AddGroup) editGroupsForEmployees.SelectedGroup.AddEmployee(employee);
+            if (editGroupsForEmployees.RemoveGroup) editGroupsForEmployees.SelectedGroup.RemoveEmployee(employee);
+        }
     }
 }

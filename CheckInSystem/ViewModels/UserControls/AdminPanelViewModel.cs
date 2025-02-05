@@ -1,16 +1,36 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
+using CheckInSystem.Views.Dialog;
 using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class AdminPanelViewModel : ViewModelBase
 {
-    private ContentControl EmployeesControl { get; set; }
+    //public ContentControl EmployeesControl { get; set; } = new();
+    ObservableCollection<Group> _groups = new();
+    public ObservableCollection<Group> Groups
+    {
+        get => _groups;
+        set => SetProperty(ref _groups, value, nameof(Groups));
+    }
+    Control _adminPanelContent;
+    public Control AdminPanelContent
+    {
+        get => _adminPanelContent;
+        set => SetProperty(ref _adminPanelContent, value, nameof(AdminPanelContent));
+    }
+    AdminEmployeeViewModel _adminEmployeeViewModel;
+    public AdminEmployeeViewModel AdminEmployeeViewModel 
+    {
+        get => _adminEmployeeViewModel;
+        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
+    }
 
-    public Group? UpdateEmployeesControl
+    /*public Group? UpdateEmployeesControl
     {
         set
         {
@@ -23,17 +43,24 @@ public class AdminPanelViewModel : ViewModelBase
                 EmployeesControl.Content = new AdminEmployeeView(value.Members);
             }
         }
-    }
+    }*/
     
-    public AdminPanelViewModel(IPlatform platform, ContentControl contentControl) : base(platform)
+    public AdminPanelViewModel(IPlatform platform) : base(platform)
     {
-        EmployeesControl = contentControl;
-        EmployeesControl.Content = new AdminEmployeeView(Employees);
+        AdminEmployeeViewModel = new(platform);
+       
+        AdminPanelContent = new AdminEmployeeView(AdminEmployeeViewModel);
+
+        platform.DataLoaded += (sender, args) =>
+        {
+            Groups = platform.MainWindowViewModel.Groups;
+        };
     }
 
     public void Logout()
     {
-        MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
+        //MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
+        _platform.MainWindowViewModel.RequestView(typeof(LoginScreen));
     }
 
     public void EditNextScannedCard()
@@ -44,17 +71,18 @@ public class AdminPanelViewModel : ViewModelBase
 
     public void SwitchToGroups()
     {
-        MainContentControl.Content = new AdminGroupView(new AdminGroupViewModel(_platform));
+        //MainContentControl.Content = new AdminGroupView(new AdminGroupViewModel(_platform));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminGroupView));
     }
 
     public void DeleteEmployee(Employee employee)
     {
         employee.DeleteFromDb();
-        foreach (Group group in Groups)
+        foreach (Group group in _platform.MainWindowViewModel.Groups)
         {
             group.Members.Remove(employee);
         }
-        Employees.Remove(employee);
+        _platform.MainWindowViewModel.Employees.Remove(employee);
     }
 
     public void DeleteEmployee(ObservableCollection<Employee> employees)
@@ -92,6 +120,17 @@ public class AdminPanelViewModel : ViewModelBase
         foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
         {
             group.RemoveEmployee(employee);
+        }
+    }
+
+    public void EditGroupsForEmployees()
+    {
+        EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
+
+        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+        {
+            if (editGroupsForEmployees.AddGroup) AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+            if (editGroupsForEmployees.RemoveGroup) RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
         }
     }
 }
