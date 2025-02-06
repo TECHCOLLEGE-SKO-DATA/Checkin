@@ -29,14 +29,8 @@ public class FakeNFCViewModel : ViewModelBase
 
     public FakeNFCViewModel(IPlatform platform) : base(platform)
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < 11; i++)
-        {
-            result.Append(chars[random.Next(chars.Length)]);
-        }
-        NewCardId = result.ToString();
+        NewCardId = RandomCardGen();
 
         IsAddButtonDisabled = true;
 
@@ -60,14 +54,8 @@ public class FakeNFCViewModel : ViewModelBase
         }
         else
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            StringBuilder result = new StringBuilder();
-
-            for (int i = 0; i < 11; i++)
-            {
-                result.Append(chars[random.Next(chars.Length)]);
-            }
-            _cardReader.TriggerCardInserted(result.ToString());
+            
+            _cardReader.TriggerCardInserted(RandomCardGen());
         }
         Employees.Clear();
         foreach (var employee in dbHelper.GetAllEmployees())
@@ -107,6 +95,16 @@ public class FakeNFCViewModel : ViewModelBase
         return Employees;
     }
 
+    public string RandomCardGen()
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < 11; i++)
+        {
+            result.Append(chars[random.Next(chars.Length)]);
+        }
+        return result.ToString();
+    }
 
 }
