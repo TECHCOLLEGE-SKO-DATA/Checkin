@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
+using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
@@ -18,7 +19,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         set
         {
             SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(value));
-            SetProperty(ref _selectedEmployee, value, nameof(Employee));
+            SetProperty(ref _selectedEmployee, value, nameof(SiteTimes));
         }
     }
 
@@ -48,6 +49,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         {
             siteTime.RevertTopreviousTime();
         }
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     public void SaveChanges()
@@ -56,6 +58,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         DeleteSiteTimes();
         AddSiteTimes();
         SelectedEmployee.GetUpdatedSiteTimes();
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     private void UpdateSiteTimes()

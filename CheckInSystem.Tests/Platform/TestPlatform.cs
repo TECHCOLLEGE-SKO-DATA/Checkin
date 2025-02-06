@@ -11,6 +11,10 @@ public class TestPlatform : IPlatform
     public ScriptedCardReader ScriptedCardReader => _cardReader;
 
     MainWindowViewModel _mainWindowViewModel;
+
+    public event DataLoadedEventHandler? DataLoaded;
+
+
     public MainWindowViewModel MainWindowViewModel => _mainWindowViewModel;
     public TestPlatform()
     {

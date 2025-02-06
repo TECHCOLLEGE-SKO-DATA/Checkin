@@ -13,10 +13,10 @@ public partial class EmployeeTimeView : UserControl
     public EmployeeTimeViewModel _vm => (EmployeeTimeViewModel) DataContext;
     private IPlatform _platform;
 
-    public EmployeeTimeView()
+    public EmployeeTimeView(EmployeeTimeViewModel vm)
     {
         //_vm = vm;
-        ///DataContext = vm;
+        DataContext = vm;
         InitializeComponent();
     }
 
@@ -30,15 +30,11 @@ public partial class EmployeeTimeView : UserControl
     private void BtnCancel(object sender, RoutedEventArgs e)
     {
         _vm.RevertSiteTimes();
-        //ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     private void BtnSave(object sender, RoutedEventArgs e)
     {
         _vm.SaveChanges();
-        //ViewModelBase.MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform, new()));
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
 
     private void BtnAddTime(object sender, RoutedEventArgs e)

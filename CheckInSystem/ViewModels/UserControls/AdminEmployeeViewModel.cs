@@ -50,11 +50,10 @@ public class AdminEmployeeViewModel : ViewModelBase
 
     public void SeeEmployeeTime(Employee employee)
     {
-        //EmployeeTimeView timeView = new EmployeeTimeView(employee);
-        EmployeeTimeViewModel vm = new(_platform);
-        vm.SelectedEmployee = employee;
-        
-        //_platform.MainWindowViewModel.RequestView(new EmployeeTimeView(vm));
+        _platform.MainWindowViewModel.EmployeeTimeViewModel = new(_platform) {
+            SelectedEmployee = employee
+        };
+        _platform.MainWindowViewModel.RequestView(typeof(EmployeeTimeView));
     }
 
     public void EditEmployeeGroup(Employee employee)
