@@ -5,6 +5,9 @@ using CheckInSystem.Database;
 using System.Windows.Documents;
 using CheckInSystem.Platform;
 using CheckInSystem.CardReader;
+using System.Windows;
+using System.Text;
+using System;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
@@ -12,11 +15,9 @@ public class FakeNFCViewModel : ViewModelBase
 {
     DatabaseHelper dbHelper = new();
 
-    public List<Employee> TestData { get; set; }
+    private static Random random = new Random();
 
     public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
-
-    public bool IsAddButtonDisabled { get; set; }
 
     public string NewCardId { get; set; }
 
@@ -24,19 +25,10 @@ public class FakeNFCViewModel : ViewModelBase
 
     public FakeNFCViewModel(IPlatform platform) : base(platform)
     {
-        NewCardId = "";
 
-        IsAddButtonDisabled = true;
+        NewCardId = RandomCardGen();
 
-        TestData = new List<Employee>
-        {
-            new Employee("Konrad", "Denis", "Jensen", "abc123die20"),
-            new Employee("Jhon", "Hoxer", "Test", "abc123die23"),
-            new Employee("Konrad", "Carmin", "Johnson", "abc123die22"),
-            new Employee("Emil", "Joseph", "Nilsen", "Abv123die21")
-        };
-
-        
+        Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
     }
 
     public void ScanNewCard()
@@ -46,6 +38,16 @@ public class FakeNFCViewModel : ViewModelBase
             //Add the Actual method for scaning new car
             _cardReader.TriggerCardInserted(NewCardId);
         }
+        else
+        {
+            
+            _cardReader.TriggerCardInserted(RandomCardGen());
+        }
+        Employees.Clear();
+        foreach (var employee in dbHelper.GetAllEmployees())
+        {
+            Employees.Add(employee);
+        }
     }
 
     public void CheckIn(Employee employee)
@@ -54,19 +56,6 @@ public class FakeNFCViewModel : ViewModelBase
         //dbHelper.CardScanned(employee.CardID);   
         
         _cardReader.TriggerCardInserted(employee.CardID);
-    }
-    public void AddTest()
-    {
-        if (IsAddButtonDisabled == false)
-        {
-            foreach (Employee employee in TestData)
-            {
-                dbHelper.CardScanned(employee.CardID);
-                Employee employeeForId = dbHelper.GetFromCardId(employee.CardID);
-                dbHelper.UpdateDb(employee.CardID, employee.FirstName, employee.MiddleName, 
-                    employee.LastName, false, DateTime.Now, employeeForId.ID);
-            }
-        }
     }
 
     public ObservableCollection<Employee> GetDataFromDB()
@@ -79,6 +68,16 @@ public class FakeNFCViewModel : ViewModelBase
         return Employees;
     }
 
+    public string RandomCardGen()
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < 11; i++)
+        {
+            result.Append(chars[random.Next(chars.Length)]);
+        }
+        return result.ToString();
+    }
 
 }

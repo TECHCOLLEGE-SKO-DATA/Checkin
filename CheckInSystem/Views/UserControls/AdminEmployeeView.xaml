@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CheckInSystem.Views.UserControls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="630">
-    <StackPanel>
+    <DockPanel>
         <ScrollViewer>
             <!-- list of Employees -->
             <ItemsControl ItemsSource="{Binding SelectedEmployeeGroup}" x:Name="IcSelectedGroup" AlternationCount="2">
@@ -77,5 +77,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-    </StackPanel>
+    </DockPanel>
 </UserControl>
