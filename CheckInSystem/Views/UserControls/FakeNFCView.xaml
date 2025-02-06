@@ -7,9 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox HorizontalAlignment="Left" Width="400" 
-                 ItemsSource="{Binding Employees}" 
-                 SelectionChanged="ListBox_SelectionChanged">
+        <ListBox HorizontalAlignment="Left" Width="400" MinHeight="200"
+         ItemsSource="{Binding Employees}" 
+         SelectionChanged="ListBox_SelectionChanged"
+         ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -20,7 +21,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
             <CheckBox Content="Disable Add Data button" 
              IsChecked="{Binding IsAddButtonDisabled}" />
