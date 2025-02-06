@@ -35,11 +35,6 @@ namespace CheckInSystem.Views.UserControls
             }
         }
 
-        private void BtnAddAllTest(object sender, RoutedEventArgs e)
-        {
-            _vm.AddTest();
-        }
-
         private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as ListBox;
