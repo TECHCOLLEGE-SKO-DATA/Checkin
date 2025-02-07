@@ -14,7 +14,7 @@ namespace CheckInSystem.Tests
         DatabaseHelper databaseHelper = new();
         Group groupModel = new();
         ObservableCollection<Employee>Members {  get; set; }
-
+        
         [Fact]
         public void Employee_Creat_Update()
         {
