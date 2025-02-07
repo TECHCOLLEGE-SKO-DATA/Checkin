@@ -55,13 +55,14 @@ public class Startup
         int screenIndex = settings.GetEmployeeOverViewSettings();
 
         var screens = Screen.AllScreens.GetEnumerator();
-        int selectedScreen = 0;
-        while(selectedScreen != screenIndex)
+        screens.MoveNext();
+        int selectedScreen = 1;
+        while (selectedScreen != screenIndex && selectedScreen <= screenIndex)
         {
             screens.MoveNext();
             selectedScreen++;
         }
-        
+
         Screen? screen = screens.Current;
         EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(_platform));
 
