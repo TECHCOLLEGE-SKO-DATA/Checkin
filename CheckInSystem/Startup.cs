@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using CheckInSystem.CardReader;
 using CheckInSystem.Database;
+using CheckInSystem.Settings;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
@@ -16,11 +17,10 @@ namespace CheckInSystem;
 public class Startup
 {
     private static IPlatform _platform;
-
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();
-        
+
         if (!EnsureDatabaseAvailable()) return false;
         //ACR122U.StartReader();
         //ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
@@ -51,9 +51,17 @@ public class Startup
     //}
     public static void OpenEmployeeOverview(IPlatform _platform)
     {
+        SettingsInteractions settings = new SettingsInteractions();
+        int screenIndex = settings.GetEmployeeOverViewSettings();
+
         var screens = Screen.AllScreens.GetEnumerator();
-        screens.MoveNext();
-        screens.MoveNext();
+        int selectedScreen = 0;
+        while(selectedScreen != screenIndex)
+        {
+            screens.MoveNext();
+            selectedScreen++;
+        }
+        
         Screen? screen = screens.Current;
         EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(_platform));
 
