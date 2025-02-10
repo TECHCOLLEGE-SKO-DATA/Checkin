@@ -314,8 +314,6 @@ public class DatabaseHelper
         return newGroup;
     }
 
-
-
     //From Group
 
     //From OnSiteTime

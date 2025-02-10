@@ -17,11 +17,11 @@ using CheckInSystem.Settings;
 */
 namespace CheckInSystem.Settings
 {
-    public class SettingsInteractions
+    public partial class SettingsControl
     {
         private readonly string _filePath;
 
-        public SettingsInteractions()
+        public SettingsControl()
         {
             string projectRoot = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName);
 
@@ -30,23 +30,5 @@ namespace CheckInSystem.Settings
             if (!File.Exists(_filePath))
                 throw new FileNotFoundException("Settings file not found.");
         }
-
-        public int GetEmployeeOverViewSettings()
-        {
-            XDocument xmlDoc = XDocument.Load(_filePath);
-            XElement? setting = xmlDoc.Descendants("EmployeeOverviewScreenShow").FirstOrDefault();
-
-            if (setting != null && setting.Attribute("value") != null)
-            {
-                if (int.TryParse(setting.Attribute("value")?.Value, out int result))
-                {
-                    return result;
-                }
-            }
-
-            throw new Exception("Invalid or missing setting value.");
-        }
-
-
     }
 }

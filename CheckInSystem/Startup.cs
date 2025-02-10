@@ -51,7 +51,7 @@ public class Startup
     //}
     public static void OpenEmployeeOverview(IPlatform _platform)
     {
-        SettingsInteractions settings = new SettingsInteractions();
+        SettingsControl settings = new SettingsControl();
         int screenIndex = settings.GetEmployeeOverViewSettings();
 
         var screens = Screen.AllScreens.GetEnumerator();
