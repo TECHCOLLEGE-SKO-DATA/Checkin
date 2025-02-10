@@ -21,5 +21,18 @@ namespace CheckInSystem.Settings
 
             throw new Exception("Invalid or missing setting value.");
         }
+
+        public void SetEmployeeOverViewSettings(int value) 
+        {
+            XDocument xmlDoc = XDocument.Load(_filePath);
+            XElement? setting = xmlDoc.Descendants("EmployeeOverviewScreenShow").FirstOrDefault();
+
+            try{ setting.SetAttributeValue("value", value);}
+            catch
+            {
+                throw new Exception("Invalid or missing setting value.");
+            }
+            xmlDoc.Save(_filePath);
+        }
     }
 }
