@@ -15,7 +15,7 @@ namespace CheckInSystem.Settings
     {
         private readonly string _filePath;
 
-        public string _DefaultSetting {  get; private set; }
+        private string _DefaultSetting;
 
         public SettingsControl()
         {
