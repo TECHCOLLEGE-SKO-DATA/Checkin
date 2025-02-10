@@ -21,7 +21,7 @@ namespace CheckInSystem.Settings
         {
             DefaultSettingsxml();
 
-            _filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
+            _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (!Directory.Exists(_filePath))
             {
                 Directory.CreateDirectory(_filePath);
