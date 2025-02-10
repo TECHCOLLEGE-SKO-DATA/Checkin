@@ -32,6 +32,7 @@ namespace CheckInSystem.Settings
             {
                 File.WriteAllText(_filePath, _DefaultSetting);
             }
+            
         }
         
         public void DefaultSettingsxml()
@@ -40,7 +41,7 @@ namespace CheckInSystem.Settings
                 @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <settings>
                     <screen name=""Screen Settings"">
-                        <EmployeeOverviewScreenShow name=""Show Checked in screen"" type=""int"" value=""2""/>
+                        <EmployeeOverviewScreenShow name=""Screen to show checkedin"" type=""int"" value=""2""/>
                     </screen>
                 </settings>";
         }
