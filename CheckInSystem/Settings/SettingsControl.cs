@@ -21,14 +21,49 @@ namespace CheckInSystem.Settings
     {
         private readonly string _filePath;
 
+        public string _DefaultSetting {  get; private set; }
+
         public SettingsControl()
         {
-            string projectRoot = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName);
+            DefaultSettingsxml();
 
-            _filePath = Path.Combine(projectRoot, "CheckInSystem", "Settings", "Settings.xml");
+            //string projectRoot = Path.GetFullPath("Settings\\Settings.xml");
+            //_filePath = projectRoot.Replace("\\bin\\Debug\\net8.0-windows", "");
+
+            //if (!File.Exists(_filePath))
+            //    throw new FileNotFoundException("Settings file not found.");
+
+            _filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
+            if (!Directory.Exists(_filePath))
+            {
+                Directory.CreateDirectory(_filePath);
+            }
+            _filePath += @"\Settings.xml";
 
             if (!File.Exists(_filePath))
-                throw new FileNotFoundException("Settings file not found.");
+            {
+                File.WriteAllText(_filePath, _DefaultSetting);
+            }
+        }
+
+        public void DefaultSettingsxml()
+        {
+            _DefaultSetting =
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <settings>
+                    <screen name=""Screen Settings"">
+                        <EmployeeOverviewScreenShow name=""Show Checked in screen"" type=""int"" value=""2""/>
+                    </screen>
+
+                    <TimeArival name=""Arrival time"" type=""Time"" value=""08:15:00""/>
+
+                    <absence name=""Legal Reason for absence"">
+                    </absence>
+
+                    <MISC name=""Miscellaneous"">
+                        <ShortName name=""ShortName On/Off"" Type=""bool"" value=""true""/>
+                    </MISC>
+                </settings>";
         }
     }
 }
