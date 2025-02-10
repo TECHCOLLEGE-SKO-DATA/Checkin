@@ -14,12 +14,9 @@ namespace CheckInSystem.Settings
             XDocument xmlDoc = XDocument.Load(_filePath);
             XElement? setting = xmlDoc.Descendants("EmployeeOverviewScreenShow").FirstOrDefault();
 
-            if (setting != null && setting.Attribute("value") != null)
+            if (int.TryParse(setting!.Attribute("value")?.Value, out int result))
             {
-                if (int.TryParse(setting.Attribute("value")?.Value, out int result))
-                {
-                    return result;
-                }
+                return result;
             }
 
             throw new Exception("Invalid or missing setting value.");
