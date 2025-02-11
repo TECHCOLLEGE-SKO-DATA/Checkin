@@ -21,7 +21,7 @@ namespace CheckInSystem.Database
 
         private SQLiteConnection GetConnection()
         {
-            return new SQLiteConnection(_connectionString);
+            return new SQLiteConnection(_connectionString); 
         }
 
         private void Execute(string sql, object parameters = null)
@@ -176,7 +176,7 @@ namespace CheckInSystem.Database
             return name;
         }
 
-        public void Updatevisibility(bool visibility, bool Isvisible, int ID)
+        public void UpdateVisibility(bool visibility, bool Isvisible, int ID)
         {
             string query = "UPDATE [group] SET isvisible = @isvisible WHERE ID = @ID";
             Execute(query, new { isvisible = Isvisible, ID });

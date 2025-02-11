@@ -8,7 +8,7 @@
     <!-- - "MSSQLSERVER" (for a standard SQL Server installation) -->
     <!-- - "MyCustomInstance" (for named instances) -->
     <!-- - (Not used for SQLite) -->
-    <add key="SqlServiceName" value="MSSQLSERVER"/>
+    <add key="SqlServiceName" value="MSSQL$SQLEXPRESS"/>
   </appSettings>
 
   <connectionStrings>
@@ -21,7 +21,7 @@
     <!-- Trusted_Connection=True - Uses Windows Authentication -->
     <!-- Connect Timeout=30 - Times out if no connection is established in 30 seconds -->
     <add name="CheckInSystemDb"
-         connectionString="Server=LAPTOP-AM56ATJL;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;"
+         connectionString="Server=localhost\SQLEXPRESS;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;"
          providerName="System.Data.SqlClient" />
 
     <!-- 🔹 Alternative Examples: -->
