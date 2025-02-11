@@ -21,7 +21,7 @@ namespace CheckInSystem.Settings
         {
             DefaultSettingsxml();
 
-            _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "checkInSystem");
             if (!Directory.Exists(_filePath))
             {
                 Directory.CreateDirectory(_filePath);
@@ -40,9 +40,7 @@ namespace CheckInSystem.Settings
             _DefaultSetting =
                 @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <settings>
-                    <screen name=""Screen Settings"">
-                        <EmployeeOverviewScreenShow name=""Screen to show checkedin"" type=""int"" value=""2""/>
-                    </screen>
+                    <screen>2</screen>
                 </settings>";
         }
     }

@@ -12,9 +12,9 @@ namespace CheckInSystem.Settings
         public int GetEmployeeOverViewSettings()
         {
             XDocument xmlDoc = XDocument.Load(_filePath);
-            XElement? setting = xmlDoc.Descendants("EmployeeOverviewScreenShow").FirstOrDefault();
+            XElement? setting = xmlDoc.Descendants("screen").FirstOrDefault();
 
-            if (int.TryParse(setting!.Attribute("value")?.Value, out int result))
+            if (setting != null && int.TryParse(setting.Value, out int result))
             {
                 return result;
             }
