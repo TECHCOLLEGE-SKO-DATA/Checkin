@@ -29,6 +29,12 @@ public class AdminPanelViewModel : ViewModelBase
         get => _adminEmployeeViewModel;
         set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
     }
+    EmployeeTimeViewModel _employeeTimeViewModel;
+    public EmployeeTimeViewModel EmployeeTimeViewModel
+    {
+        get => _employeeTimeViewModel;
+        set => SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+    }
 
     /*public Group? UpdateEmployeesControl
     {

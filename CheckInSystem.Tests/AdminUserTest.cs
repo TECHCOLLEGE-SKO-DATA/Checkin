@@ -30,7 +30,7 @@ namespace CheckInSystem.Tests
             Assert.NotNull(loggedInUser);
 
             // Step 4: Delete user by ID
-            createdUser?.Delete(createdUser.ID);
+            dbHelper.Delete(createdUser.ID);
 
             // Step 5: Verify user is deleted (i.e., not present in the list anymore)
             var usersAfterDeletion = dbHelper.GetAdminUsers();
