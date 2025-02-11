@@ -25,9 +25,9 @@ namespace CheckInSystem.Settings
         public void SetEmployeeOverViewSettings(int value) 
         {
             XDocument xmlDoc = XDocument.Load(_filePath);
-            XElement? setting = xmlDoc.Descendants("EmployeeOverviewScreenShow").FirstOrDefault();
+            XElement? setting = xmlDoc.Descendants("screen").FirstOrDefault();
 
-            try{ setting.SetAttributeValue("value", value);}
+            try { setting.Value=value.ToString();}
             catch
             {
                 throw new Exception("Invalid or missing setting value.");
