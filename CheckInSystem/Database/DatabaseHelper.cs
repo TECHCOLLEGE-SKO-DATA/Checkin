@@ -375,4 +375,32 @@ public class DatabaseHelper
     }
 
     //From OnSiteTime
+
+    //From Absence
+    public void InsertAbsence(DateTime _fromDate, DateTime _toDate, string _note)
+    {
+        string inserQuery = @"INSERT INTO Absence (fromDate, toDate, note)
+                            VALUES (@fromDate, @toDate, @note)
+                            SELECT SCOPE:IDENTITY()";
+        
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish databas connection!");
+
+
+    }
+
+    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note)
+    {
+
+    }
+
+    public void DeleteAbsence(int _id)
+    {
+
+    }
+    public void GetAllAbsence(int _id)
+    {
+
+    }
 }

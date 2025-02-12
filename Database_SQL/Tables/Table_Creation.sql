@@ -49,3 +49,14 @@ CREATE TABLE adminUser(
     username VARCHAR(20) NOT NULL UNIQUE,
     hashedPassword VARCHAR(60) NOT NULL,
 );
+
+USE CheckInSystem
+GO
+CREATE TABLE Absence (
+    ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    employeeId INT NOT NULL,
+    fromDate DATETIME NOT NULL,
+    toDate DATETIME NOT NULL,
+    note TEXT,
+    FOREIGN KEY (employeeId) REFERENCES employee(ID) ON DELETE CASCADE
+);
