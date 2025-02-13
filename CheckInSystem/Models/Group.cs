@@ -55,7 +55,7 @@ public class Group : INotifyPropertyChanged
 
     public void Updatevisibility(bool visibility)
     {
-        databaseHelper.Updatevisibility(visibility,Isvisible,ID);
+        databaseHelper.UpdateVisibility(visibility,Isvisible,ID);
     }
     
     public void AddEmployee(Employee employee)
