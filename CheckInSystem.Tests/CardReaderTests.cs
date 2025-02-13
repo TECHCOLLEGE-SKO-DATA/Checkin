@@ -17,6 +17,7 @@ public class CardReaderTests
         _platform.CardReader.CardInserted += (sender, args) => {
             success = true;
             triggerCounter++;
+      
         };
         _platform.ScriptedCardReader.TriggerCardInserted(CARD1);
         Assert.True(success);
