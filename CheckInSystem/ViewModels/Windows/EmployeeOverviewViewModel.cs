@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Data;
 using CheckInSystem.Models;
 using System.ComponentModel;
+using System.Reflection;
 using CheckInSystem.Database;
 using CheckInSystem.Platform;
 
@@ -17,6 +18,18 @@ namespace CheckInSystem.ViewModels.Windows
         private WindowStyle _windowStyle = WindowStyle.None;
         WindowState _windowState;
 
+        public string AppVersion
+        {
+            get
+            {
+                string? version = Assembly.GetExecutingAssembly()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                    .InformationalVersion;
+
+                // Remove anything after '+' to keep it clean
+                return "v" + (version?.Split('+')[0] ?? "Unknown");
+            }
+        }
         // Add Groups property
         private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
         public ObservableCollection<Group> Groups

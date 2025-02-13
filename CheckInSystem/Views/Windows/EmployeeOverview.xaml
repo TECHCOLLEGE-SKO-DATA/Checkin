@@ -6,16 +6,19 @@
         xmlns:local="clr-namespace:CheckInSystem.Views"
         xmlns:checkInSystem="clr-namespace:CheckInSystem"
         mc:Ignorable="d"
-        Title="Oversigt Check In System"
+        Title="{Binding AppVersion, StringFormat=Oversigt Check In System ({0})}"
         WindowStartupLocation="Manual"
         WindowStyle="{Binding WindowStyle}"
         ResizeMode="{Binding ResizeMode}"
         WindowState="{Binding WindowState}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+
+        <!-- Existing ItemsControl for Groups -->
         <ItemsControl ItemsSource="{Binding Groups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -35,7 +38,7 @@
                                         <StackPanel Margin="5"
                                             Background="#d55e00"
                                             x:Name="MemberPanel"
-                                                Visibility="{Binding Path=IsOffSite, Converter={x:Static checkInSystem:Converters.VisibleIfFalse}}">
+                                            Visibility="{Binding Path=IsOffSite, Converter={x:Static checkInSystem:Converters.VisibleIfFalse}}">
                                             <StackPanel Orientation="Horizontal" Margin="10">
                                                 <TextBlock Text="{Binding Path=FirstName}" FontSize="70" Margin="0 0 20 0"/>
                                                 <TextBlock Text="{Binding Path=MiddleNameShort}" FontSize="70" Margin="0 0 20 0">
@@ -56,8 +59,7 @@
                                             <DataTrigger 
                                                  Binding="{Binding Path=IsCheckedIn}"
                                                  Value="True">
-                                                <Setter Property="Background" TargetName="MemberPanel" Value="#009e73">
-                                                </Setter>
+                                                <Setter Property="Background" TargetName="MemberPanel" Value="#009e73"/>
                                             </DataTrigger>
                                         </ItemContainerTemplate.Triggers>
                                     </ItemContainerTemplate>
@@ -72,6 +74,15 @@
             </ItemsControl.LayoutTransform>
         </ItemsControl>
 
+        <!-- Version Number in Bottom Left Corner -->
+        <TextBlock Text="{Binding AppVersion, StringFormat=Version: {0}}" 
+                   HorizontalAlignment="Left" 
+                   VerticalAlignment="Bottom" 
+                   Margin="10" 
+                   FontSize="14"
+                   Foreground="Gray"/>
+
+        <!-- Control Buttons -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBlock Text="⌕" FontSize="30"/>
             <Button Content="-" Width="30" FontSize="40" Padding="0 -10 0 0" Click="BtnZoomOut"/>
