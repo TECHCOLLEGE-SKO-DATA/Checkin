@@ -377,12 +377,25 @@ public class DatabaseHelper
     //From OnSiteTime
 
     //From Absence
-    public void InsertAbsence(DateTime _fromDate, DateTime _toDate, string _note)
+    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
     {
-        string inserQuery = @"INSERT INTO Absence (fromDate, toDate, note)
-                            VALUES (@fromDate, @toDate, @note)
+        string insertQuery = @"INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
+                            VALUES (@employeeId, @fromDate, @toDate, @note, @reason)
                             SELECT SCOPE:IDENTITY()";
         
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish databas connection!");
+
+        var AbsenceId = connection.ExecuteScalar<int>(insertQuery, new { _employeeId, _fromDate, _toDate, _note, _reason });
+
+        return new Absence(AbsenceId, _employeeId, _fromDate, _toDate, _note, _reason);
+    }
+
+    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
+    {
+        string editQuery = @"";
+
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish databas connection!");
@@ -390,17 +403,25 @@ public class DatabaseHelper
 
     }
 
-    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note)
-    {
-
-    }
-
     public void DeleteAbsence(int _id)
     {
+        string deletQuery = @"";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish databas connection!");
+
 
     }
-    public void GetAllAbsence(int _id)
+
+    public void GetAllAbsence(int _employeeId)
     {
+        string getQuery = @"";
+        
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish databas connection!");
+
 
     }
 }
