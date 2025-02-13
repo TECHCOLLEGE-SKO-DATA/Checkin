@@ -62,4 +62,10 @@ public partial class AdminPanel : UserControl
     {
         _vm.EditNextScannedCard();
     }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
+    private void BtnSetScreen(object sender, RoutedEventArgs e)
+    {
+        _vm.setscreen();
+    }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
 }

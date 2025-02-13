@@ -68,6 +68,7 @@ namespace CheckInSystem.ViewModels.Windows
         public void ZoomOut()
         {
             ScaleSize -= 0.1M;
+            if (ScaleSize < 0.1M) ScaleSize = 0.1M;
         }
 
         public void ToggleFullscreen()
