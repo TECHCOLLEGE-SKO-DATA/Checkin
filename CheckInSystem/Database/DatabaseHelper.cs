@@ -214,7 +214,7 @@ public class DatabaseHelper : IDatabaseHelper
         return name;
     }
 
-    public void Updatevisibility(bool visibility, bool Isvisible, int ID)
+    public void UpdateVisibility(bool visibility, bool Isvisible, int ID)
     {
         string updateQuery = @"UPDATE [group] 
             SET isvisible = @isvisible

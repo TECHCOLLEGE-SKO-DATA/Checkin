@@ -33,7 +33,7 @@ namespace CheckInSystem.Database
         List<Group> GetAllGroups(List<Employee> employees);
         void RemoveGroupDb(int ID);
         string UpdateName(string name, int ID);
-        void Updatevisibility(bool visibility, bool Isvisible, int ID);
+        void UpdateVisibility(bool visibility, bool Isvisible, int ID);
         bool AddEmployee(Employee employee, ObservableCollection<Employee> Members, int ID);
         bool RemoveEmployee(Employee employee, ObservableCollection<Employee> Members, int ID);
         Group NewGroup(string name);
