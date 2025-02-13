@@ -28,6 +28,15 @@
                     Click="BtnEditScannedCard"
                     Margin="10 0 0 0"
                     FontSize="15"/>
+            <!--TEST FOR CHANGING WHAT SCREEN EmployeeOverview-->
+            <Button Content="screen change" 
+                    Click="BtnSetScreen"
+                    Margin="10 0 0 0"
+                    FontSize="15"/>
+            <TextBox Width="40"
+                     FontSize="15"
+                     Text="{Binding Screen}"/>
+            <!--TEST FOR CHANGING WHAT SCREEN EmployeeOverview-->
         </StackPanel>
         <Button Content="Log ud" 
                 Click="BtnLogOut"

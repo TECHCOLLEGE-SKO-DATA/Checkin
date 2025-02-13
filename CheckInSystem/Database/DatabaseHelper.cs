@@ -12,7 +12,7 @@ using BCrypt.Net;
 using System.Collections.ObjectModel;
 using CheckInSystem.CardReader;
 
-public class DatabaseHelper
+public class DatabaseHelper : IDatabaseHelper
 {
     //From ACR122U CardScanned
 
@@ -214,7 +214,7 @@ public class DatabaseHelper
         return name;
     }
 
-    public void Updatevisibility(bool visibility, bool Isvisible, int ID)
+    public void UpdateVisibility(bool visibility, bool Isvisible, int ID)
     {
         string updateQuery = @"UPDATE [group] 
             SET isvisible = @isvisible
@@ -313,8 +313,6 @@ public class DatabaseHelper
 
         return newGroup;
     }
-
-
 
     //From Group
 

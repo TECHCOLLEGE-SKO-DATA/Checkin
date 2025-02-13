@@ -5,6 +5,10 @@ using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.Views.Dialog;
 using CheckInSystem.Views.UserControls;
+using static Dapper.SqlMapper;
+using WpfScreenHelper;
+using CheckInSystem.Settings;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
@@ -61,6 +65,8 @@ public class AdminPanelViewModel : ViewModelBase
         {
             Groups = platform.MainWindowViewModel.Groups;
         };
+
+        Screen = settings.GetEmployeeOverViewSettings();
     }
 
     public void Logout()
@@ -139,4 +145,13 @@ public class AdminPanelViewModel : ViewModelBase
             if (editGroupsForEmployees.RemoveGroup) RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
         }
     }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
+    public int Screen { get; set; }
+    SettingsControl settings = new();
+
+    public void setscreen()
+    {
+        settings.SetEmployeeOverViewSettings(Screen);
+    }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
 }
