@@ -5,10 +5,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:CheckInSystem.Views.Windows"
         mc:Ignorable="d"
-        Title="Ændre orlov" Height="250" Width="300"
+        Title="Fravær" Height="250" Width="300"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="På orlov"/>
                 <CheckBox x:Name="CbIsOffsite" Margin="5 0 0 0"/>
@@ -28,6 +33,28 @@
             <StackPanel.LayoutTransform>
                 <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
             </StackPanel.LayoutTransform>
+        </StackPanel>
+
+        <Border Background="DarkBlue">
+            
+        </Border>
+        <StackPanel Grid.Row="1">
+            <StackPanel Margin="20,10,0,0" HorizontalAlignment="Left">
+                <ComboBox SelectedIndex="0" Width="100">
+                    <ComboBoxItem Content="Orlov"/>
+                    <ComboBoxItem Content="Skole"/>
+                </ComboBox>
+            </StackPanel>
+            <DockPanel Margin="20,10,0,0">
+                <TextBlock Margin="5">Fra:</TextBlock>
+                <DatePicker Width="105"></DatePicker>
+                <TextBlock Margin="5">Til:</TextBlock>
+                <DatePicker Width="105"></DatePicker>
+            </DockPanel>
+            <DockPanel Margin="20">
+                <Button Width="100" Content="Gem"/>
+                <Button Width="100" Content="Annuller"/>
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

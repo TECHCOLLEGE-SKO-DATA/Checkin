@@ -4,6 +4,7 @@ namespace CheckInSystem.Views.Dialog;
 
 public partial class EditOffsiteDialog : Window
 {
+    
     public EditOffsiteDialog(bool isOffsite = false, DateTime? offsiteUntil = null)
     {
         InitializeComponent();
@@ -25,4 +26,5 @@ public partial class EditOffsiteDialog : Window
     {
         this.DialogResult = true;
     }
+    
 }

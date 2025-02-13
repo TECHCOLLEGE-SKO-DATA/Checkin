@@ -11,6 +11,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Background="Blue"></StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Path=SiteTimes}" 
@@ -32,12 +34,19 @@
                 <ScaleTransform ScaleX="2" ScaleY="2"/>
             </DataGrid.LayoutTransform>
         </DataGrid>
-        <StackPanel Grid.Row="2" Background="Gold" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Annuler" Click="BtnCancel" FontSize="15"/>
-            <Button Content="Gem" Click="BtnSave" FontSize="15"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Content="Tilføj ny tid" Click="BtnAddTime" FontSize="15"/>
-        </StackPanel>
+        <Border Grid.Row="2" Background="DarkBlue">
+            <DockPanel Margin="0,0,0,3">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Tilføj ny tid" Click="BtnAddTime" FontSize="15"/>
+                </StackPanel>
+                <StackPanel Background="Gold" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Annuler" Click="BtnCancel" FontSize="15"/>
+                    <Button Content="Gem" Click="BtnSave" FontSize="15"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        <DataGrid Grid.Row="3">
+            
+        </DataGrid>
     </Grid>
 </UserControl>
