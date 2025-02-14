@@ -37,10 +37,10 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _employeeTimeViewModel;
         set {
-            if (_employeeTimeView != null)
-            {
-                _employeeTimeView.DataContext = value;
-            }
+            // if (_employeeTimeView != null)
+            // {
+            //     _employeeTimeView.DataContext = value;
+            // }
             SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
         }
     }
@@ -48,11 +48,18 @@ public class MainWindowViewModel : ViewModelBase
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
 
+    int _selectedTab = 0;
+    public int SelectedTab
+    {
+        get => _selectedTab;
+        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
+    }
+
     #region Views
-    AdminPanel _adminPanel;
-    AdminGroupView _adminGroupView;
     LoginScreen _loginScreen;
-    EmployeeTimeView _employeeTimeView;
+    AdminPanel _adminPanel;
+    // AdminGroupView _adminGroupView;
+    // EmployeeTimeView _employeeTimeView;
     #endregion
     ContentControl _mainContentControl;
     public ContentControl MainContentControl
@@ -70,10 +77,10 @@ public class MainWindowViewModel : ViewModelBase
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
-        _loginScreen = new(LoginScreenViewModel);
-        _adminPanel = new(AdminPanelViewModel);
-        _adminGroupView = new(AdminGroupViewModel);
-        _employeeTimeView = new(EmployeeTimeViewModel);
+        //_loginScreen = new();
+        //_adminPanel = new();
+        // _adminGroupView = new(AdminGroupViewModel);
+        // _employeeTimeView = new(EmployeeTimeViewModel);
 
         MainContentControl = _loginScreen; //Set startup content
         
@@ -100,19 +107,21 @@ public class MainWindowViewModel : ViewModelBase
         if (view == typeof(LoginScreen))
         {
             MainContentControl = _loginScreen;
+            SelectedTab = 0;
         }
         else if (view == typeof(AdminPanel))
         {
             MainContentControl = _adminPanel;
+            SelectedTab = 1;
         } 
-        else if (view == typeof(AdminGroupView))
-        {
-            MainContentControl = _adminGroupView;
-        }
-        else if (view == typeof(EmployeeTimeView))
-        {
-            MainContentControl = _employeeTimeView;
-        }
+        // else if (view == typeof(AdminGroupView))
+        // {
+        //     MainContentControl = _adminGroupView;
+        // }
+        // else if (view == typeof(EmployeeTimeView))
+        // {
+        //     MainContentControl = _employeeTimeView;
+        // }
         else
         {
             throw new InvalidOperationException($"Cannot switch to unknown view {view}");

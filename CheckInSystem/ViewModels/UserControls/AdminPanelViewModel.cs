@@ -40,6 +40,13 @@ public class AdminPanelViewModel : ViewModelBase
         set => SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
     }
 
+    int _selectedTab = 0;
+    public int SelectedTab
+    {
+        get => _selectedTab;
+        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
+    }
+
     /*public Group? UpdateEmployeesControl
     {
         set
@@ -59,7 +66,7 @@ public class AdminPanelViewModel : ViewModelBase
     {
         AdminEmployeeViewModel = new(platform);
        
-        AdminPanelContent = new AdminEmployeeView(AdminEmployeeViewModel);
+        //AdminPanelContent = new AdminEmployeeView(AdminEmployeeViewModel);
 
         platform.DataLoaded += (sender, args) =>
         {

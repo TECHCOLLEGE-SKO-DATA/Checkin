@@ -7,13 +7,11 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class LoginScreen : UserControl
 {
-    private LoginScreenViewModel _vm;
-    public LoginScreen(LoginScreenViewModel vm)
+    public LoginScreenViewModel _vm => (LoginScreenViewModel) DataContext;
+    public LoginScreen()
     {
-        _vm = vm;
-        DataContext = _vm;
         InitializeComponent();
-        KeyDown += _vm.LoginKeyPressed;
+        //KeyDown += _vm.LoginKeyPressed;
     }
     
     private void Login_clicked(object sender, RoutedEventArgs e)

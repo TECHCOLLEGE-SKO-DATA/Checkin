@@ -9,11 +9,10 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminGroupView : UserControl
 {
-    private AdminGroupViewModel _vm;
-    public AdminGroupView(AdminGroupViewModel vm)
+    public AdminGroupViewModel _vm => (AdminGroupViewModel) DataContext;
+    
+    public AdminGroupView()
     {
-        _vm = vm;
-        DataContext = _vm;
         InitializeComponent();
     }
 
