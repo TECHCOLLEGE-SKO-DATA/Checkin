@@ -16,45 +16,72 @@ namespace CheckInSystem.Models
             Vacation
         }
 
-        DatabaseHelper dbHelper;
+        private DatabaseHelper dbHelper;
 
+        // Original (backup) state
+        private DateTime _oldFromDate;
+        private DateTime _oldToDate;
+        private string _oldNote;
+        private AbsenceReason _oldReason;
+
+        // Current state properties
         public int _id { get; private set; }
         public int _employeeId { get; private set; }
         public DateTime _fromDate { get; private set; }
         public DateTime _toDate { get; private set; }
         public string _note { get; private set; }
-        public AbsenceReason _reason { get; private set; }
+        public AbsenceReason _reason { get; set; }
 
         public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
         {
             _id = id;
             _employeeId = employeeId;
+
+            // Initialize both the current and backup states
+            _fromDate = _oldFromDate = fromDate;
+            _toDate = _oldToDate = toDate;
+            _note = _oldNote = note;
+            _reason = _oldReason = reason;
+        }
+
+        public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
+        {
+            return dbHelper.InsertAbsence(employeeId, fromDate, toDate, note, reason);
+        }
+
+        public void EditAbsence(DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
+        {
+            // Update the current state
             _fromDate = fromDate;
             _toDate = toDate;
             _note = note;
             _reason = reason;
+
+            // Persist changes in the database
+            dbHelper.EditAbsence(fromDate, toDate, note, reason);
         }
 
-        public Absence InsertAbsence(int _employeeId ,DateTime _fromDate,DateTime _toDate, string _note , AbsenceReason _reason)
+        public void DeleteAbsence(int id)
         {
-            return dbHelper.InsertAbsence(_employeeId, _fromDate, _toDate, _note, _reason);
+            dbHelper.DeleteAbsence(id);
         }
-        public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, AbsenceReason _reason)
+
+        public void GetAllAbsence(int employeeId)
         {
-            dbHelper.EditAbsence(_fromDate, _toDate, _note, _reason);
+            dbHelper.GetAllAbsence(employeeId);
         }
-        public void DeleteAbsence(int _id) 
+
+        // New method: Revert to previous state
+        public void RevertToPreviousState()
         {
-            dbHelper.DeleteAbsence(_id);
-        }
-        public void GetAllAbsence(int _employeeId)
-        {
-            dbHelper.GetAllAbsence(_employeeId);
+            _fromDate = _oldFromDate;
+            _toDate = _oldToDate;
+            _note = _oldNote;
+            _reason = _oldReason;
         }
 
         public Absence()
         {
-
         }
     }
 }

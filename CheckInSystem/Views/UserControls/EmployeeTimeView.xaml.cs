@@ -48,16 +48,17 @@ public partial class EmployeeTimeView : UserControl
 
     private void BtnAddAbsence(object sender, RoutedEventArgs e)
     {
-        _vm.AddAbsence();
+        var newAbsence = new Absence(0, _vm.SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", Absence.AbsenceReason.Sick);
+
+        _vm.AppendAbsenceToAddToDb(newAbsence);
     }
 
-    private void BtnDeleteAbsence(object sender, RoutedEventArgs e) 
+    private void BtnDeleteAbsence(object sender, RoutedEventArgs e)
     {
-        _vm.RemoveAbsence();
+        Button button = (Button)sender;
+        Absence absence = (Absence)button.DataContext;
+
+        _vm.AppendAbsenceToDelete(absence);
     }
 
-    private void BtnSaveAbsence(object sender, RoutedEventArgs e)
-    {
-        _vm.SaveAbsence();
-    }
 }

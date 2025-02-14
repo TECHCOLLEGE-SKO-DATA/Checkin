@@ -8,8 +8,12 @@ namespace CheckInSystem.ViewModels.UserControls;
 
 public class EmployeeTimeViewModel : ViewModelBase
 {
-    Absence Absence;
-    public ObservableCollection<Absence> Absencelist { get; set; }
+    Absence absence;
+    public List<Absence.AbsenceReason> absencesOptions { get; set; }
+    public ObservableCollection<Absence> Absences { get; set; }
+    public List<Absence> AbsencesToAddToDb { get; set; }
+    public List<Absence> AbsencesToDelete { get; set; }
+
     public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
     public List<OnSiteTime> SiteTimesToDelete { get; set; }
     public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
@@ -32,6 +36,11 @@ public class EmployeeTimeViewModel : ViewModelBase
         //SelectedEmployee = employee;
         SiteTimesToDelete = new();
         SiteTimesToAddToDb = new();
+
+        Absences = new();
+        AbsencesToAddToDb = new();
+        AbsencesToDelete = new();
+        absencesOptions = new List<Absence.AbsenceReason>(Enum.GetValues(typeof(Absence.AbsenceReason)).Cast<Absence.AbsenceReason>());
     }
 
     public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -61,6 +70,9 @@ public class EmployeeTimeViewModel : ViewModelBase
         UpdateSiteTimes();
         DeleteSiteTimes();
         AddSiteTimes();
+
+        DeleteAbsences();
+        AddAbsences();
         SelectedEmployee.GetUpdatedSiteTimes();
         _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }
@@ -101,20 +113,43 @@ public class EmployeeTimeViewModel : ViewModelBase
         }
         SiteTimesToAddToDb.Clear();
     }
-    public void AddAbsence()
+    public void AppendAbsenceToAddToDb(Absence absence)
     {
-        Absence.InsertAbsence(SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", Absence.AbsenceReason.Sick); 
+        Absences.Add(absence);
+        AbsencesToAddToDb.Add(absence);
+
     }
-    public void RemoveAbsence() 
+
+    public void AppendAbsenceToDelete(Absence absence)
     {
-        //edit later
-        //Absence.DeleteAbsence();
-        //edit later
+        AbsencesToDelete.Add(absence);
+        Absences.Remove(absence);
+        AbsencesToAddToDb.Remove(absence); 
     }
-    public void SaveAbsence()
+
+    public void RevertAbsences()
     {
-        //edit later
-        //Absence.EditAbsence();
-        //edit later
+        foreach (var absence in Absences)
+        {
+            absence.RevertToPreviousState(); 
+        }
+    }
+
+    private void AddAbsences()
+    {
+        foreach (var absence in AbsencesToAddToDb)
+        {
+            absence.InsertAbsence(absence._employeeId, absence._fromDate, absence._toDate, absence._note, absence._reason);
+        }
+        AbsencesToAddToDb.Clear();
+    }
+
+    private void DeleteAbsences()
+    {
+        foreach (var absence in AbsencesToDelete)
+        {
+            absence.DeleteAbsence(absence._id);
+        }
+        AbsencesToDelete.Clear();
     }
 }
