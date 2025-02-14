@@ -45,4 +45,19 @@ public partial class EmployeeTimeView : UserControl
             _vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
         }
     }
+
+    private void BtnAddAbsence(object sender, RoutedEventArgs e)
+    {
+        _vm.AddAbsence();
+    }
+
+    private void BtnDeleteAbsence(object sender, RoutedEventArgs e) 
+    {
+        _vm.RemoveAbsence();
+    }
+
+    private void BtnSaveAbsence(object sender, RoutedEventArgs e)
+    {
+        _vm.SaveAbsence();
+    }
 }

@@ -41,6 +41,11 @@ namespace CheckInSystem.Settings
                 @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <settings>
                     <screen>2</screen>
+                    <absence>
+                    Sick,
+                    Skole,
+                    Orlov
+                    </absence>
                 </settings>";
         }
     }

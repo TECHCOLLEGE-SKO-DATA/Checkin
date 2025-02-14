@@ -25,10 +25,6 @@ namespace CheckInSystem.Models
         public string _note { get; private set; }
         public AbsenceReason _reason { get; private set; }
 
-        public Absence()
-        {
-
-        }
         public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
         {
             _id = id;
@@ -54,6 +50,11 @@ namespace CheckInSystem.Models
         public void GetAllAbsence(int _employeeId)
         {
             dbHelper.GetAllAbsence(_employeeId);
+        }
+
+        public Absence()
+        {
+
         }
     }
 }

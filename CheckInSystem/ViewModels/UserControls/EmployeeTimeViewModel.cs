@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
@@ -7,9 +8,12 @@ namespace CheckInSystem.ViewModels.UserControls;
 
 public class EmployeeTimeViewModel : ViewModelBase
 {
+    Absence Absence;
+    public ObservableCollection<Absence> Absencelist { get; set; }
     public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
     public List<OnSiteTime> SiteTimesToDelete { get; set; }
     public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
+
     //public Employee SelectedEmployee { get; set; }
 
     Employee _selectedEmployee = new();
@@ -96,5 +100,21 @@ public class EmployeeTimeViewModel : ViewModelBase
             }
         }
         SiteTimesToAddToDb.Clear();
+    }
+    public void AddAbsence()
+    {
+        Absence.InsertAbsence(SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", Absence.AbsenceReason.Sick); 
+    }
+    public void RemoveAbsence() 
+    {
+        //edit later
+        //Absence.DeleteAbsence();
+        //edit later
+    }
+    public void SaveAbsence()
+    {
+        //edit later
+        //Absence.EditAbsence();
+        //edit later
     }
 }
