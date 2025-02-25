@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using CheckInSystem.Models;
+using System.Windows;
+using static CheckInSystem.Models.Absence;
 
 namespace CheckInSystem.Views.Dialog;
 
@@ -10,6 +12,8 @@ public partial class EditOffsiteDialog : Window
         InitializeComponent();
         CbIsOffsite.IsChecked = isOffsite;
         DpOffsiteUntil.SelectedDate = offsiteUntil;
+
+        ComboBoxAbsenceReason.ItemsSource = Enum.GetValues(typeof(AbsenceReason)).Cast<AbsenceReason>();
     }
 
     public bool Isoffsite

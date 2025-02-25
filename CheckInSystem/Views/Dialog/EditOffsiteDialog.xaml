@@ -40,8 +40,7 @@
         </Border>
         <StackPanel Grid.Row="1">
             <StackPanel Margin="20,10,0,0" HorizontalAlignment="Left">
-                <ComboBox SelectedIndex="0" Width="100" ItemsSource="{Binding}">
-                </ComboBox>
+                <ComboBox x:Name="ComboBoxAbsenceReason" SelectedIndex="0" Width="100"></ComboBox>
             </StackPanel>
             <DockPanel Margin="20,10,0,0">
                 <TextBlock Margin="5">Fra:</TextBlock>

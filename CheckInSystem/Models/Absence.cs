@@ -16,28 +16,37 @@ namespace CheckInSystem.Models
             Vacation
         }
 
-        private DatabaseHelper dbHelper;
+        private DatabaseHelper dbHelper = new();
 
-        // Original (backup) state
+        
         private DateTime _oldFromDate;
         private DateTime _oldToDate;
         private string _oldNote;
         private AbsenceReason _oldReason;
 
-        // Current state properties
+        
         public int _id { get; private set; }
         public int _employeeId { get; private set; }
-        public DateTime _fromDate { get; private set; }
-        public DateTime _toDate { get; private set; }
-        public string _note { get; private set; }
+        public DateTime _fromDate { get; set; }
+        public DateTime _toDate { get; set; }
+        public string _note { get; set; }
         public AbsenceReason _reason { get; set; }
 
+        public Absence(Absence absence)
+        {
+            _id = absence._id;
+            _employeeId = absence._employeeId;
+
+            _fromDate = _oldFromDate = absence._fromDate;
+            _toDate = _oldToDate = absence._toDate;
+            _note = _oldNote = absence._note;
+            _reason = _oldReason = absence._reason;
+        }
         public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
         {
             _id = id;
             _employeeId = employeeId;
 
-            // Initialize both the current and backup states
             _fromDate = _oldFromDate = fromDate;
             _toDate = _oldToDate = toDate;
             _note = _oldNote = note;
@@ -51,13 +60,11 @@ namespace CheckInSystem.Models
 
         public void EditAbsence(DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
         {
-            // Update the current state
             _fromDate = fromDate;
             _toDate = toDate;
             _note = note;
             _reason = reason;
 
-            // Persist changes in the database
             dbHelper.EditAbsence(fromDate, toDate, note, reason);
         }
 
@@ -66,12 +73,13 @@ namespace CheckInSystem.Models
             dbHelper.DeleteAbsence(id);
         }
 
-        public void GetAllAbsence(int employeeId)
+        public static List<Absence> GetAllAbsence(Employee employee)
         {
-            dbHelper.GetAllAbsence(employeeId);
+            DatabaseHelper databHelper = new ();
+
+            return databHelper.GetAllAbsence(employee.ID);
         }
 
-        // New method: Revert to previous state
         public void RevertToPreviousState()
         {
             _fromDate = _oldFromDate;

@@ -3,13 +3,12 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
+using static CheckInSystem.Models.Absence;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class EmployeeTimeViewModel : ViewModelBase
 {
-    Absence absence;
-    public List<Absence.AbsenceReason> absencesOptions { get; set; }
     public ObservableCollection<Absence> Absences { get; set; }
     public List<Absence> AbsencesToAddToDb { get; set; }
     public List<Absence> AbsencesToDelete { get; set; }
@@ -26,8 +25,13 @@ public class EmployeeTimeViewModel : ViewModelBase
         get => _selectedEmployee;
         set
         {
-            SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(value));
-            SetProperty(ref _selectedEmployee, value, nameof(SiteTimes));
+            SetProperty(ref _selectedEmployee, value, nameof(SelectedEmployee));
+
+            if (_selectedEmployee != null)
+            {
+                Absences = new ObservableCollection<Absence>(Absence.GetAllAbsence(_selectedEmployee));
+                SiteTimes = new ObservableCollection<OnSiteTime>(OnSiteTime.GetOnsiteTimesForEmployee(_selectedEmployee)); 
+            }
         }
     }
 
@@ -37,10 +41,9 @@ public class EmployeeTimeViewModel : ViewModelBase
         SiteTimesToDelete = new();
         SiteTimesToAddToDb = new();
 
-        Absences = new();
+        
         AbsencesToAddToDb = new();
         AbsencesToDelete = new();
-        absencesOptions = new List<Absence.AbsenceReason>(Enum.GetValues(typeof(Absence.AbsenceReason)).Cast<Absence.AbsenceReason>());
     }
 
     public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -117,7 +120,6 @@ public class EmployeeTimeViewModel : ViewModelBase
     {
         Absences.Add(absence);
         AbsencesToAddToDb.Add(absence);
-
     }
 
     public void AppendAbsenceToDelete(Absence absence)

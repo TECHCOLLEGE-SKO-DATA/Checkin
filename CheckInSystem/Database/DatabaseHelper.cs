@@ -378,16 +378,24 @@ public class DatabaseHelper : IDatabaseHelper
     public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
     {
         string insertQuery = @"INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
-                            VALUES (@employeeId, @fromDate, @toDate, @note, @reason)
-                            SELECT SCOPE:IDENTITY()";
-        
+                           VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
+                           SELECT SCOPE_IDENTITY();";  // Corrected syntax
+
         using var connection = Database.GetConnection();
         if (connection == null)
-            throw new Exception("Could not establish databas connection!");
+            throw new Exception("Could not establish database connection!");
 
-        var AbsenceId = connection.ExecuteScalar<int>(insertQuery, new { _employeeId, _fromDate, _toDate, _note, _reason });
+        var absenceId = connection.ExecuteScalar<int>(insertQuery, new
+        {
+            employeeId = _employeeId,
+            fromDate = _fromDate,
+            toDate = _toDate,
+            note = _note,
+            reason = _reason.ToString()
+        });
 
-        return new Absence(AbsenceId, _employeeId, _fromDate, _toDate, _note, _reason);
+
+        return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
     }
 
     public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
@@ -412,14 +420,18 @@ public class DatabaseHelper : IDatabaseHelper
 
     }
 
-    public void GetAllAbsence(int _employeeId)
+    public List<Absence> GetAllAbsence(int _employeeId)
     {
-        string getQuery = @"";
-        
+        string selectQuery = @"SELECT * FROM Absence
+                               WHERE employeeId = @employeeId";
+
         using var connection = Database.GetConnection();
         if (connection == null)
-            throw new Exception("Could not establish databas connection!");
+            throw new Exception("Could not establish database connection!");
 
+        var absences = connection.Query<Absence>(selectQuery, new { employeeId = _employeeId })
+            .Select(t => new Absence(t)).ToList();
 
+        return absences;
     }
 }

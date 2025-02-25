@@ -3,9 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:CheckInSystem.Views.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:models="clr-namespace:CheckInSystem.Models"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="630">
+
+    <UserControl.Resources>
+        <!-- Provides the Enum values for Absence.AbsenceReason -->
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="AbsenceReasonProvider">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:Absence+AbsenceReason"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -14,26 +27,30 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
+
         <StackPanel Grid.Row="0" Background="Blue"></StackPanel>
+
+        <!-- Site Times DataGrid -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Path=SiteTimes}" 
                   AutoGenerateColumns="False" 
-                  CanUserAddRows="False" >
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Dato" Binding="{Binding ArrivalTime, StringFormat=\{0:dd.MM.yy\}}"/>
                 <DataGridTextColumn Header="Ankomsttid" Binding="{Binding ArrivalTime, StringFormat=\{0:HH:mm:ss\}}"/>
                 <DataGridTextColumn Header="Afgangstid" Binding="{Binding DepartureTime, StringFormat=\{0:HH:mm:ss\}}"/>
                 <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate> 
+                    <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="X" Click="BtnDelete"/>
-                        </DataTemplate> 
-                    </DataGridTemplateColumn.CellTemplate> 
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.LayoutTransform>
                 <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
             </DataGrid.LayoutTransform>
         </DataGrid>
+
         <Border Grid.Row="2" Background="Blue">
             <DockPanel Margin="0,0,0,3">
                 <StackPanel Orientation="Horizontal">
@@ -41,9 +58,11 @@
                 </StackPanel>
             </DockPanel>
         </Border>
+
+        <!-- Absences DataGrid -->
         <DataGrid Grid.Row="3" ItemsSource="{Binding Path=Absences}"
-          AutoGenerateColumns="False" 
-          CanUserAddRows="False">
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Starts Dato" Binding="{Binding _fromDate, StringFormat=\{0:dd.MM.yy\}}" />
                 <DataGridTextColumn Header="Starts Tid" Binding="{Binding _fromDate, StringFormat=\{0:HH:mm:ss\}}" />
@@ -56,13 +75,17 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn Header="Fravær">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding AbsenceOption}" SelectedItem="{Binding _reason}" />
+                            <ComboBox ItemsSource="{Binding Source={StaticResource AbsenceReasonProvider}}" 
+                                      SelectedItem="{Binding _reason, Mode=TwoWay}"
+                                      Width="100"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Note" Binding="{Binding _note}" />
             </DataGrid.Columns>
 
@@ -70,6 +93,7 @@
                 <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
             </DataGrid.LayoutTransform>
         </DataGrid>
+
         <Border Grid.Row="4" Background="Blue">
             <DockPanel>
                 <Button Content="Tilføj ny Fravær/Orlov"
