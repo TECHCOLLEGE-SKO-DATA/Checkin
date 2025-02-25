@@ -13,7 +13,7 @@ public partial class EditOffsiteDialog : Window
         CbIsOffsite.IsChecked = isOffsite;
         DpOffsiteUntil.SelectedDate = offsiteUntil;
 
-        ComboBoxAbsenceReason.ItemsSource = Enum.GetValues(typeof(AbsenceReason)).Cast<AbsenceReason>();
+        ComboBoxAbsenceReason.ItemsSource = Enum.GetValues(typeof(absenceReason)).Cast<absenceReason>();
     }
 
     public bool Isoffsite

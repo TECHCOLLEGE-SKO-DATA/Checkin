@@ -141,7 +141,7 @@ public class EmployeeTimeViewModel : ViewModelBase
     {
         foreach (var absence in AbsencesToAddToDb)
         {
-            absence.InsertAbsence(absence._employeeId, absence._fromDate, absence._toDate, absence._note, absence._reason);
+            absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
         }
         AbsencesToAddToDb.Clear();
     }
@@ -150,7 +150,7 @@ public class EmployeeTimeViewModel : ViewModelBase
     {
         foreach (var absence in AbsencesToDelete)
         {
-            absence.DeleteAbsence(absence._id);
+            absence.DeleteAbsence(absence.ID);
         }
         AbsencesToDelete.Clear();
     }

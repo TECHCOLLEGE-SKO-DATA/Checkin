@@ -14,7 +14,7 @@
                             ObjectType="{x:Type sys:Enum}"
                             x:Key="AbsenceReasonProvider">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:Absence+AbsenceReason"/>
+                <x:Type TypeName="models:Absence+absenceReason"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
@@ -64,10 +64,10 @@
                   AutoGenerateColumns="False" 
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Starts Dato" Binding="{Binding _fromDate, StringFormat=\{0:dd.MM.yy\}}" />
-                <DataGridTextColumn Header="Starts Tid" Binding="{Binding _fromDate, StringFormat=\{0:HH:mm:ss\}}" />
-                <DataGridTextColumn Header="Sluts Dato" Binding="{Binding _toDate, StringFormat=\{0:dd.MM.yy\}}" />
-                <DataGridTextColumn Header="Sluts Tid" Binding="{Binding _toDate, StringFormat=\{0:HH:mm:ss\}}" />
+                <DataGridTextColumn Header="Starts Dato" Binding="{Binding FromDate, StringFormat=\{0:dd.MM.yy\}}" />
+                <DataGridTextColumn Header="Starts Tid" Binding="{Binding FromDate, StringFormat=\{0:HH:mm:ss\}}" />
+                <DataGridTextColumn Header="Sluts Dato" Binding="{Binding ToDate, StringFormat=\{0:dd.MM.yy\}}" />
+                <DataGridTextColumn Header="Sluts Tid" Binding="{Binding ToDate, StringFormat=\{0:HH:mm:ss\}}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -80,13 +80,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding Source={StaticResource AbsenceReasonProvider}}" 
-                                      SelectedItem="{Binding _reason, Mode=TwoWay}"
+                                      SelectedItem="{Binding AbsenceReason, Mode=TwoWay}"
                                       Width="100"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Note" Binding="{Binding _note}" />
+                <DataGridTextColumn Header="Note" Binding="{Binding Note}" />
             </DataGrid.Columns>
 
             <DataGrid.LayoutTransform>

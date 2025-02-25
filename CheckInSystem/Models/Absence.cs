@@ -9,7 +9,7 @@ namespace CheckInSystem.Models
 {
     public class Absence
     {
-        public enum AbsenceReason
+        public enum absenceReason
         {
             Sick,
             School,
@@ -22,48 +22,47 @@ namespace CheckInSystem.Models
         private DateTime _oldFromDate;
         private DateTime _oldToDate;
         private string _oldNote;
-        private AbsenceReason _oldReason;
+        private absenceReason _oldReason;
 
-        
-        public int _id { get; private set; }
-        public int _employeeId { get; private set; }
-        public DateTime _fromDate { get; set; }
-        public DateTime _toDate { get; set; }
-        public string _note { get; set; }
-        public AbsenceReason _reason { get; set; }
+        public int ID { get; set; }
+        public int EmployeeId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public absenceReason AbsenceReason { get; set; } 
+        public string? Note { get; set; } 
+
 
         public Absence(Absence absence)
         {
-            _id = absence._id;
-            _employeeId = absence._employeeId;
-
-            _fromDate = _oldFromDate = absence._fromDate;
-            _toDate = _oldToDate = absence._toDate;
-            _note = _oldNote = absence._note;
-            _reason = _oldReason = absence._reason;
+            ID = absence.ID;
+            EmployeeId = absence.EmployeeId;
+            _oldFromDate = FromDate = absence.FromDate;
+            _oldToDate = ToDate = absence.ToDate;
+            _oldNote = Note = absence.Note;
+            _oldReason = AbsenceReason = absence.AbsenceReason;
         }
-        public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
+        public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
-            _id = id;
-            _employeeId = employeeId;
+            ID = id;
+            EmployeeId = employeeId;
 
-            _fromDate = _oldFromDate = fromDate;
-            _toDate = _oldToDate = toDate;
-            _note = _oldNote = note;
-            _reason = _oldReason = reason;
+            FromDate = _oldFromDate = fromDate;
+            ToDate = _oldToDate = toDate;
+            Note = _oldNote = note;
+            AbsenceReason = _oldReason = reason;
         }
 
-        public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
+        public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
             return dbHelper.InsertAbsence(employeeId, fromDate, toDate, note, reason);
         }
 
-        public void EditAbsence(DateTime fromDate, DateTime toDate, string note, AbsenceReason reason)
+        public void EditAbsence(DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
-            _fromDate = fromDate;
-            _toDate = toDate;
-            _note = note;
-            _reason = reason;
+            FromDate = fromDate;
+            ToDate = toDate;
+            Note = note;
+            AbsenceReason = reason;
 
             dbHelper.EditAbsence(fromDate, toDate, note, reason);
         }
@@ -77,15 +76,15 @@ namespace CheckInSystem.Models
         {
             DatabaseHelper databHelper = new ();
 
-            return databHelper.GetAllAbsence(employee.ID);
+            return databHelper.GetAllAbsence(employee);
         }
 
         public void RevertToPreviousState()
         {
-            _fromDate = _oldFromDate;
-            _toDate = _oldToDate;
-            _note = _oldNote;
-            _reason = _oldReason;
+            FromDate = _oldFromDate;
+            ToDate = _oldToDate;
+            Note = _oldNote;
+            AbsenceReason = _oldReason;
         }
 
         public Absence()

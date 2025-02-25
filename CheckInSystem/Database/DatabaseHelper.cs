@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
 using CheckInSystem.CardReader;
+using static CheckInSystem.Models.Absence;
 
 public class DatabaseHelper : IDatabaseHelper
 {
@@ -375,11 +376,12 @@ public class DatabaseHelper : IDatabaseHelper
     //From OnSiteTime
 
     //From Absence
-    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
+    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, absenceReason _reason)
     {
-        string insertQuery = @"INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
-                           VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
-                           SELECT SCOPE_IDENTITY();";  // Corrected syntax
+        string insertQuery = @"
+        INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
+        VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
+        SELECT SCOPE_IDENTITY();";
 
         using var connection = Database.GetConnection();
         if (connection == null)
@@ -391,14 +393,14 @@ public class DatabaseHelper : IDatabaseHelper
             fromDate = _fromDate,
             toDate = _toDate,
             note = _note,
-            reason = _reason.ToString()
+            reason = (int)_reason
         });
-
 
         return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
     }
 
-    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.AbsenceReason _reason)
+
+    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.absenceReason _reason)
     {
         string editQuery = @"";
 
@@ -420,17 +422,23 @@ public class DatabaseHelper : IDatabaseHelper
 
     }
 
-    public List<Absence> GetAllAbsence(int _employeeId)
+    public List<Absence> GetAllAbsence(Employee employee)
     {
         string selectQuery = @"SELECT * FROM Absence
-                               WHERE employeeId = @employeeId";
+                           WHERE employeeId = @employeeId";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
-        var absences = connection.Query<Absence>(selectQuery, new { employeeId = _employeeId })
-            .Select(t => new Absence(t)).ToList();
+        var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
+    .Select(t =>
+    {
+        t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Sick; 
+        return t;
+    })
+    .ToList();
+
 
         return absences;
     }

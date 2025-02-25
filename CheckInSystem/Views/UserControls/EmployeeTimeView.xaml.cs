@@ -48,7 +48,7 @@ public partial class EmployeeTimeView : UserControl
 
     private void BtnAddAbsence(object sender, RoutedEventArgs e)
     {
-        var newAbsence = new Absence(0, _vm.SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", Absence.AbsenceReason.Sick);
+        var newAbsence = new Absence(0, _vm.SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", Absence.absenceReason.Sick);
 
         _vm.AppendAbsenceToAddToDb(newAbsence);
     }
