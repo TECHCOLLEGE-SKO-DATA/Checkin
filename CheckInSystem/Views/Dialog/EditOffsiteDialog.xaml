@@ -42,10 +42,10 @@
             <StackPanel Margin="20,10,0,0" HorizontalAlignment="Left">
                 <ComboBox x:Name="ComboBoxAbsenceReason" SelectedIndex="0" Width="100"></ComboBox>
             </StackPanel>
-            <DockPanel Margin="20,10,0,0">
-                <TextBlock Margin="5">Fra:</TextBlock>
+            <DockPanel Margin="0,10,0,0">
+                <TextBlock Margin="0,5,0,0">Fra:</TextBlock>
                 <DatePicker Width="105"></DatePicker>
-                <TextBlock Margin="5">Til:</TextBlock>
+                <TextBlock Margin="5">Til og med:</TextBlock>
                 <DatePicker Width="105"></DatePicker>
             </DockPanel>
             <DockPanel Margin="20">

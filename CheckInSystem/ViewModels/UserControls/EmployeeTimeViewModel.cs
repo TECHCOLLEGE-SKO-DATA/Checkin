@@ -3,12 +3,13 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.Views.UserControls;
-using static CheckInSystem.Models.Absence;
+
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class EmployeeTimeViewModel : ViewModelBase
 {
+    Absence absenc = new();
     public ObservableCollection<Absence> Absences { get; set; }
     public List<Absence> AbsencesToAddToDb { get; set; }
     public List<Absence> AbsencesToDelete { get; set; }
@@ -16,8 +17,6 @@ public class EmployeeTimeViewModel : ViewModelBase
     public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
     public List<OnSiteTime> SiteTimesToDelete { get; set; }
     public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
-
-    //public Employee SelectedEmployee { get; set; }
 
     Employee _selectedEmployee = new();
     public Employee SelectedEmployee
@@ -74,6 +73,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         DeleteSiteTimes();
         AddSiteTimes();
 
+        UpdateAbsenceTimes();
         DeleteAbsences();
         AddAbsences();
 
@@ -154,5 +154,21 @@ public class EmployeeTimeViewModel : ViewModelBase
             absence.DeleteAbsence(absence.ID);
         }
         AbsencesToDelete.Clear();
+    }
+    private void UpdateAbsenceTimes()
+    {
+        List<Absence> changedAbsence = new List<Absence>();
+        foreach (var absence in Absences)
+        {
+            absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
+
+            absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
+            
+            changedAbsence.Add(absence);
+        }
+        if (Absences.Count > 0)
+        {
+            absenc.EditAbsence(changedAbsence);
+        }
     }
 }

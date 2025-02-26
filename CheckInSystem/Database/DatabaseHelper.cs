@@ -399,17 +399,20 @@ public class DatabaseHelper : IDatabaseHelper
         return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
     }
 
-
-    public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.absenceReason _reason)
+    public void EditAbsence(List<Absence> absences)
     {
-        string editQuery = @"UPDATE Absence 
-                             SET ";
+        string editQuery = @"UPDATE Absence SET 
+        fromDate = @FromDate, 
+        toDate = @ToDate, 
+        note = @Note, 
+        AbsenceReason = @AbsenceReason
+        WHERE ID = @ID";
 
         using var connection = Database.GetConnection();
         if (connection == null)
-            throw new Exception("Could not establish databas connection!");
+            throw new Exception("Could not establish database connection!");
 
-
+        connection.Execute(editQuery, absences);
     }
 
     public void DeleteAbsence(int _id)

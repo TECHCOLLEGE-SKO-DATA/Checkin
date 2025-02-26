@@ -38,24 +38,33 @@ namespace CheckInSystem.Models
         {
             ID = absence.ID;
             EmployeeId = absence.EmployeeId;
-            _oldFromDate = FromDate = absence.FromDate;
-            _oldToDate = ToDate = absence.ToDate;
-            _oldNote = Note = absence.Note;
-            _oldReason = AbsenceReason = absence.AbsenceReason;
+            FromDate = absence.FromDate;
+            ToDate = absence.ToDate;
+            Note = absence.Note;
+            AbsenceReason = absence.AbsenceReason;
+            
+            _oldFromDate = absence.FromDate;
+            _oldToDate = absence.ToDate;
+            _oldNote = absence.Note;
+            _oldReason = absence.AbsenceReason;
         }
         public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
             ID = id;
             EmployeeId = employeeId;
 
-            FromDate = _oldFromDate = fromDate;
-            ToDate = _oldToDate = toDate;
+            FromDate = fromDate;
+            ToDate = toDate;
+            Note = note;
+            AbsenceReason = reason;
 
             FromTime = TimeOnly.FromDateTime(fromDate);
             ToTime = TimeOnly.FromDateTime(toDate);
 
-            Note = _oldNote = note;
-            AbsenceReason = _oldReason = reason;
+            _oldFromDate = fromDate;
+            _oldToDate = toDate;
+            _oldNote = note;
+            _oldReason = reason;
         }
 
         public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
@@ -67,14 +76,9 @@ namespace CheckInSystem.Models
             return dbHelper.InsertAbsence(employeeId, fromDateWithTime, toDateWithTime, note, reason);
         }
 
-        public void EditAbsence(DateTime fromDate, DateTime toDate, string note, absenceReason reason)
+        public void EditAbsence(List<Absence> absence)
         {
-            FromDate = fromDate;
-            ToDate = toDate;
-            Note = note;
-            AbsenceReason = reason;
-            
-            dbHelper.EditAbsence(fromDate, toDate, note, reason);
+            dbHelper.EditAbsence(absence);
         }
 
         public void DeleteAbsence(int id)
@@ -96,7 +100,6 @@ namespace CheckInSystem.Models
             Note = _oldNote;
             AbsenceReason = _oldReason;
         }
-
         public Absence()
         {
         }
