@@ -402,7 +402,8 @@ public class DatabaseHelper : IDatabaseHelper
 
     public void EditAbsence(DateTime _fromDate, DateTime _toDate, string _note, Absence.absenceReason _reason)
     {
-        string editQuery = @"";
+        string editQuery = @"UPDATE Absence 
+                             SET ";
 
         using var connection = Database.GetConnection();
         if (connection == null)
@@ -413,32 +414,42 @@ public class DatabaseHelper : IDatabaseHelper
 
     public void DeleteAbsence(int _id)
     {
-        string deletQuery = @"";
+        string deletQuery = @"DELETE FROM Absence WHERE ID = @id";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish databas connection!");
 
-
+        connection.Query(deletQuery, new { id = _id });
     }
 
     public List<Absence> GetAllAbsence(Employee employee)
     {
         string selectQuery = @"SELECT * FROM Absence
-                           WHERE employeeId = @employeeId";
+                       WHERE employeeId = @employeeId";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
         var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
-    .Select(t =>
-    {
-        t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Sick; 
-        return t;
-    })
-    .ToList();
+        .Select(t =>
+        {
+            t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Sick;
 
+            // Ensure that FromTime and ToTime are populated based on FromDate and ToDate
+            if (t.FromDate != null)
+            {
+                t.FromTime = TimeOnly.FromDateTime(t.FromDate);
+            }
+            if (t.ToDate != null)
+            {
+                t.ToTime = TimeOnly.FromDateTime(t.ToDate);
+            }
+
+            return t;
+        })
+        .ToList();
 
         return absences;
     }

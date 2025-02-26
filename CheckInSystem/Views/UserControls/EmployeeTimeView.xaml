@@ -61,13 +61,29 @@
 
         <!-- Absences DataGrid -->
         <DataGrid Grid.Row="3" ItemsSource="{Binding Path=Absences}"
-                  AutoGenerateColumns="False" 
-                  CanUserAddRows="False">
+          AutoGenerateColumns="False" 
+          CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Starts Dato" Binding="{Binding FromDate, StringFormat=\{0:dd.MM.yy\}}" />
-                <DataGridTextColumn Header="Starts Tid" Binding="{Binding FromDate, StringFormat=\{0:HH:mm:ss\}}" />
-                <DataGridTextColumn Header="Sluts Dato" Binding="{Binding ToDate, StringFormat=\{0:dd.MM.yy\}}" />
-                <DataGridTextColumn Header="Sluts Tid" Binding="{Binding ToDate, StringFormat=\{0:HH:mm:ss\}}" />
+                <DataGridTemplateColumn Header="Starts Dato">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding FromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Starts Tid" Binding="{Binding FromTime, StringFormat=\{0:HH:mm\}}" />
+
+                <DataGridTemplateColumn Header="Sluts Dato">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding ToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Sluts Tid" Binding="{Binding ToTime, StringFormat=\{0:HH:mm\}}" />
+                
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -80,19 +96,21 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding Source={StaticResource AbsenceReasonProvider}}" 
-                                      SelectedItem="{Binding AbsenceReason, Mode=TwoWay}"
-                                      Width="100"/>
+                              SelectedItem="{Binding AbsenceReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Width="100"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Note" Binding="{Binding Note}" />
+                <DataGridTextColumn Header="Note"
+                            Binding="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
 
             <DataGrid.LayoutTransform>
                 <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
             </DataGrid.LayoutTransform>
         </DataGrid>
+
 
         <Border Grid.Row="4" Background="Blue">
             <DockPanel>

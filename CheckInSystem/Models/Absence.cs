@@ -18,11 +18,13 @@ namespace CheckInSystem.Models
 
         private DatabaseHelper dbHelper = new();
 
-        
         private DateTime _oldFromDate;
         private DateTime _oldToDate;
         private string _oldNote;
         private absenceReason _oldReason;
+
+        public TimeOnly FromTime { get; set; }
+        public TimeOnly ToTime { get; set; }
 
         public int ID { get; set; }
         public int EmployeeId { get; set; }
@@ -31,7 +33,7 @@ namespace CheckInSystem.Models
         public absenceReason AbsenceReason { get; set; } 
         public string? Note { get; set; } 
 
-
+        
         public Absence(Absence absence)
         {
             ID = absence.ID;
@@ -48,13 +50,21 @@ namespace CheckInSystem.Models
 
             FromDate = _oldFromDate = fromDate;
             ToDate = _oldToDate = toDate;
+
+            FromTime = TimeOnly.FromDateTime(fromDate);
+            ToTime = TimeOnly.FromDateTime(toDate);
+
             Note = _oldNote = note;
             AbsenceReason = _oldReason = reason;
         }
 
         public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
-            return dbHelper.InsertAbsence(employeeId, fromDate, toDate, note, reason);
+            DateTime fromDateWithTime = fromDate.Date.Add(FromTime.ToTimeSpan());
+
+            DateTime toDateWithTime = toDate.Date.Add(ToTime.ToTimeSpan());
+
+            return dbHelper.InsertAbsence(employeeId, fromDateWithTime, toDateWithTime, note, reason);
         }
 
         public void EditAbsence(DateTime fromDate, DateTime toDate, string note, absenceReason reason)
@@ -63,7 +73,7 @@ namespace CheckInSystem.Models
             ToDate = toDate;
             Note = note;
             AbsenceReason = reason;
-
+            
             dbHelper.EditAbsence(fromDate, toDate, note, reason);
         }
 
@@ -71,7 +81,7 @@ namespace CheckInSystem.Models
         {
             dbHelper.DeleteAbsence(id);
         }
-
+        
         public static List<Absence> GetAllAbsence(Employee employee)
         {
             DatabaseHelper databHelper = new ();
