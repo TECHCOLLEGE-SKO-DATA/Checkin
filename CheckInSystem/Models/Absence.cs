@@ -18,11 +18,6 @@ namespace CheckInSystem.Models
 
         private DatabaseHelper dbHelper = new();
 
-        private DateTime _oldFromDate;
-        private DateTime _oldToDate;
-        private string _oldNote;
-        private absenceReason _oldReason;
-
         public TimeOnly FromTime { get; set; }
         public TimeOnly ToTime { get; set; }
 
@@ -42,11 +37,6 @@ namespace CheckInSystem.Models
             ToDate = absence.ToDate;
             Note = absence.Note;
             AbsenceReason = absence.AbsenceReason;
-            
-            _oldFromDate = absence.FromDate;
-            _oldToDate = absence.ToDate;
-            _oldNote = absence.Note;
-            _oldReason = absence.AbsenceReason;
         }
         public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
         {
@@ -60,11 +50,6 @@ namespace CheckInSystem.Models
 
             FromTime = TimeOnly.FromDateTime(fromDate);
             ToTime = TimeOnly.FromDateTime(toDate);
-
-            _oldFromDate = fromDate;
-            _oldToDate = toDate;
-            _oldNote = note;
-            _oldReason = reason;
         }
 
         public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
@@ -93,13 +78,13 @@ namespace CheckInSystem.Models
             return databHelper.GetAllAbsence(employee);
         }
 
-        public void RevertToPreviousState()
+        public static void SetIsOffSite(Employee employee)
         {
-            FromDate = _oldFromDate;
-            ToDate = _oldToDate;
-            Note = _oldNote;
-            AbsenceReason = _oldReason;
+            List<Absence> absences = GetAllAbsence(employee);
+
+            employee.IsOffSite = absences.Any(a => DateTime.Now >= a.FromDate && DateTime.Now <= a.ToDate);
         }
+
         public Absence()
         {
         }

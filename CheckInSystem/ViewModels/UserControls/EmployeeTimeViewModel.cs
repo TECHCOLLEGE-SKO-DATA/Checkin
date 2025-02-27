@@ -130,14 +130,6 @@ public class EmployeeTimeViewModel : ViewModelBase
         AbsencesToAddToDb.Remove(absence); 
     }
 
-    public void RevertAbsences()
-    {
-        foreach (var absence in Absences)
-        {
-            absence.RevertToPreviousState(); 
-        }
-    }
-
     private void AddAbsences()
     {
         foreach (var absence in AbsencesToAddToDb)
