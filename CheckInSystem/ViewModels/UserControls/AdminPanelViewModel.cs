@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.Views.Dialog;
-using CheckInSystem.Views.UserControls;
 using static Dapper.SqlMapper;
 using WpfScreenHelper;
 using CheckInSystem.Settings;
@@ -12,9 +11,12 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
+
 public class AdminPanelViewModel : ViewModelBase
 {
-    //public ContentControl EmployeesControl { get; set; } = new();
+    public const int EMPLOYEE_LISTPAGE_TAB = 0;
+    public const int EMPLOYEE_TIME_TAB = 1;
+    public const int GROUP_LISTPAGE_TAB = 2;
     ObservableCollection<Group> _groups = new();
     public ObservableCollection<Group> Groups
     {
@@ -33,6 +35,12 @@ public class AdminPanelViewModel : ViewModelBase
         get => _adminEmployeeViewModel;
         set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
     }
+    AdminGroupViewModel _adminGroupViewModel;
+    public AdminEmployeeViewModel AdminGroupViewModel 
+    {
+        get => _adminEmployeeViewModel;
+        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminGroupViewModel));
+    }
     EmployeeTimeViewModel _employeeTimeViewModel;
     public EmployeeTimeViewModel EmployeeTimeViewModel
     {
@@ -46,27 +54,12 @@ public class AdminPanelViewModel : ViewModelBase
         get => _selectedTab;
         set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
     }
-
-    /*public Group? UpdateEmployeesControl
-    {
-        set
-        {
-            if (value == null)
-            {
-                EmployeesControl.Content = new AdminEmployeeView(Employees);
-            }
-            else
-            {
-                EmployeesControl.Content = new AdminEmployeeView(value.Members);
-            }
-        }
-    }*/
     
     public AdminPanelViewModel(IPlatform platform) : base(platform)
     {
         AdminEmployeeViewModel = new(platform);
-       
-        //AdminPanelContent = new AdminEmployeeView(AdminEmployeeViewModel);
+        EmployeeTimeViewModel = new(platform);
+
 
         platform.DataLoaded += (sender, args) =>
         {
@@ -78,8 +71,8 @@ public class AdminPanelViewModel : ViewModelBase
 
     public void Logout()
     {
-        //MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
-        _platform.MainWindowViewModel.RequestView(typeof(LoginScreen));
+        SelectedTab = EMPLOYEE_LISTPAGE_TAB;
+        _platform.MainWindowViewModel.RequestView(typeof(LoginScreenViewModel));
     }
 
     public void EditNextScannedCard()
@@ -90,8 +83,8 @@ public class AdminPanelViewModel : ViewModelBase
 
     public void SwitchToGroups()
     {
-        //MainContentControl.Content = new AdminGroupView(new AdminGroupViewModel(_platform));
-        _platform.MainWindowViewModel.RequestView(typeof(AdminGroupView));
+        SelectedTab = GROUP_LISTPAGE_TAB;
+        _platform.MainWindowViewModel.RequestView(typeof(AdminGroupViewModel));
     }
 
     public void DeleteEmployee(Employee employee)

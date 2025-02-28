@@ -4,11 +4,10 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
-using CheckInSystem.Views.Windows;
-using CheckInSystem.Views.UserControls;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using PCSC.Interop;
+using CheckInSystem.Views.Windows;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -55,12 +54,6 @@ public class MainWindowViewModel : ViewModelBase
         set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
     }
 
-    #region Views
-    LoginScreen _loginScreen;
-    AdminPanel _adminPanel;
-    // AdminGroupView _adminGroupView;
-    // EmployeeTimeView _employeeTimeView;
-    #endregion
     ContentControl _mainContentControl;
     public ContentControl MainContentControl
     {
@@ -77,14 +70,9 @@ public class MainWindowViewModel : ViewModelBase
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
-        //_loginScreen = new();
-        //_adminPanel = new();
-        // _adminGroupView = new(AdminGroupViewModel);
-        // _employeeTimeView = new(EmployeeTimeViewModel);
-
-        MainContentControl = _loginScreen; //Set startup content
-        
-
+        LoginScreenViewModel.LoginSuccessful += (sender, args) => {
+            RequestView(typeof(AdminPanelViewModel));
+        };
     }
 
     public void LoadDataFromDatabase()
@@ -104,24 +92,22 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RequestView(Type view)
     {
-        if (view == typeof(LoginScreen))
+        if (view == typeof(LoginScreenViewModel))
         {
-            MainContentControl = _loginScreen;
             SelectedTab = 0;
         }
-        else if (view == typeof(AdminPanel))
+        else if (view == typeof(AdminPanelViewModel))
         {
-            MainContentControl = _adminPanel;
             SelectedTab = 1;
         } 
-        // else if (view == typeof(AdminGroupView))
-        // {
-        //     MainContentControl = _adminGroupView;
-        // }
-        // else if (view == typeof(EmployeeTimeView))
-        // {
-        //     MainContentControl = _employeeTimeView;
-        // }
+        else if (view == typeof(AdminGroupViewModel))
+        {
+            SelectedTab = 2;
+        }
+        else if (view == typeof(EmployeeTimeViewModel))
+        {
+            SelectedTab = 3;
+        }
         else
         {
             throw new InvalidOperationException($"Cannot switch to unknown view {view}");
@@ -148,6 +134,11 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         UpdateEmployeeLocal(cardID);
+    }
+    public void SeeEmployeeTime(Employee employee)
+    {
+        _employeeTimeViewModel.SelectedEmployee = employee;
+        RequestView(typeof(EmployeeTimeViewModel));
     }
     
     void UpdateNextEmployee(string cardID)

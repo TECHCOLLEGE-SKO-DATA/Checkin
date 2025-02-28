@@ -23,7 +23,7 @@ public partial class AdminGroupView : UserControl
 
     private void BtnSwitchToGroups(object sender, RoutedEventArgs e)
     {
-        _vm.SwtichToEmployees();
+        _vm.SwitchToEmployees();
     }
 
     private void BtnEditName(object sender, RoutedEventArgs e)

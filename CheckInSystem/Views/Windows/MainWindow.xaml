@@ -11,12 +11,23 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- <ContentControl Content="{Binding MainContentControl}"/> -->
-        <TabControl>
-            <TabItem>
+        <TabControl SelectedIndex="{Binding SelectedTab}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <local:LoginScreen DataContext="{Binding LoginScreenViewModel}" />
             </TabItem>
-            <TabItem>
+            <TabItem  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <local:AdminPanel DataContext="{Binding AdminPanelViewModel}" />
+            </TabItem>
+            <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:AdminGroupView DataContext="{Binding AdminGroupViewModel}"/>
+            </TabItem>
+            <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:EmployeeTimeView DataContext="{Binding EmployeeTimeViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

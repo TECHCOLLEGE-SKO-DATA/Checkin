@@ -37,15 +37,14 @@
                 FontSize="15"/>
         <!-- End of top bar -->
         <!-- <ContentControl Grid.Row="1" Content="{Binding AdminPanelContent}"/> -->
-        <TabControl SelectedIndex="{Binding SelectedTab}">
-                <TabItem>
-                        <local:AdminEmployeeView DataContext="{Binding AdminEmployeeViewModel}"/>
-                </TabItem>
-                <TabItem>
-                        <local:EmployeeTimeView DataContext="{Binding AdminGroupViewModel}"/>
-                </TabItem>
-                <TabItem>
-                        <local:AdminGroupView DataContext="{Binding AdminGroupViewModel}"/>
+        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TabControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type TabItem}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                </TabControl.ItemContainerStyle>
+                <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <local:AdminEmployeeView DataContext="{Binding AdminEmployeeViewModel}" />
                 </TabItem>
         </TabControl>
         <!-- Bottom bar -->
