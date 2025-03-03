@@ -82,10 +82,11 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
+        Absence absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
-            Absence.SetIsOffSite(employee);
+            absence.SetIsOffSite(employee);
             Employees.Add(employee);
         }
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));

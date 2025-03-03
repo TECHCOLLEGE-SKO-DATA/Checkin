@@ -55,16 +55,15 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <ItemContainerTemplate.Triggers>
-                                            
+                                            <DataTrigger 
+                                                Binding="{Binding Path=IsOffSite}" 
+                                                Value="True"> 
+                                                <Setter Property="Background" TargetName="MemberPanel" Value="#FFFF00"/>
+                                            </DataTrigger>
                                             <DataTrigger 
                                                 Binding="{Binding Path=IsCheckedIn}"
                                                 Value="True">
                                                 <Setter Property="Background" TargetName="MemberPanel" Value="#009e73"/>
-                                            </DataTrigger>
-                                            <DataTrigger 
-    Binding="{Binding Path=IsOffSite}" 
-    Value="True">
-                                                <Setter Property="Background" TargetName="MemberPanel" Value="Gray"/>
                                             </DataTrigger>
                                         </ItemContainerTemplate.Triggers>
                                     </ItemContainerTemplate>

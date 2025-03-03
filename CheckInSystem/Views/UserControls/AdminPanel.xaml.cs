@@ -41,7 +41,7 @@ public partial class AdminPanel : UserControl
         Absence absence = new Absence();
         if (editOffsite.ShowDialog() == true)
         { 
-            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, editOffsite.Isoffsite, editOffsite.OffsiteUntil,
+            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, /*editOffsite.Isoffsite, editOffsite.OffsiteUntil,*/
                 (DateTime)editOffsite.FromDate, (DateTime)editOffsite.ToDate, editOffsite.Note, (Absence.absenceReason)editOffsite.AbsenceReason);
         }
     }

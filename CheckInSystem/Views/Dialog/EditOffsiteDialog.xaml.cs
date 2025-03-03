@@ -11,8 +11,8 @@ public partial class EditOffsiteDialog : Window
         DateTime? ToDate = null, absenceReason? AbsenceReason = null, string? Note = null)
     {
         InitializeComponent();
-        CbIsOffsite.IsChecked = isOffsite;
-        DpOffsiteUntil.SelectedDate = offsiteUntil;
+       // CbIsOffsite.IsChecked = isOffsite;
+       //DpOffsiteUntil.SelectedDate = offsiteUntil;
         _FromDate.SelectedDate = FromDate;
         _ToDate.SelectedDate = ToDate;
         _Note.Text = Note;
@@ -39,7 +39,7 @@ public partial class EditOffsiteDialog : Window
         get => (absenceReason)ComboBoxAbsenceReason.SelectedIndex;
     }
 
-    public bool Isoffsite
+    /*public bool Isoffsite
     {
         get => CbIsOffsite.IsChecked ?? false;
     }
@@ -47,7 +47,7 @@ public partial class EditOffsiteDialog : Window
     public DateTime? OffsiteUntil
     {
         get => DpOffsiteUntil.SelectedDate;
-    }
+    }*/
 
     private void BtnConfrimed(object sender, RoutedEventArgs e)
     {

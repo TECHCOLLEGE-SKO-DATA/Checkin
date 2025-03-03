@@ -77,6 +77,8 @@ public class EmployeeTimeViewModel : ViewModelBase
         DeleteAbsences();
         AddAbsences();
 
+        absenc.SetIsOffSite(SelectedEmployee);
+
         SelectedEmployee.GetUpdatedSiteTimes();
         _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
     }

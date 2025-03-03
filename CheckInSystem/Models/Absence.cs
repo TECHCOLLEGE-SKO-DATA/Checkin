@@ -78,11 +78,22 @@ namespace CheckInSystem.Models
             return databHelper.GetAllAbsence(employee);
         }
 
-        public static void SetIsOffSite(Employee employee)
+        public void SetIsOffSite(Employee employee)
         {
             List<Absence> absences = GetAllAbsence(employee);
-
-            employee.IsOffSite = absences.Any(a => DateTime.Now >= a.FromDate && DateTime.Now <= a.ToDate);
+            
+            foreach(var absence in absences)
+            {
+                if (absence.FromDate <= DateTime.Now && absence.ToDate > DateTime.Now)
+                {
+                    employee.IsOffSite = true;
+                    break;
+                }
+                else
+                {
+                    employee.IsOffSite = false;
+                }
+            }
         }
 
         public Absence()

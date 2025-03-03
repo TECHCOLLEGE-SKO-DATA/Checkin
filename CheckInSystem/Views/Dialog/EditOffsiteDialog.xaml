@@ -11,9 +11,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="2">
+       <!--<StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="På orlov"/>
                 <CheckBox x:Name="CbIsOffsite" Margin="5 0 0 0"/>
@@ -33,7 +33,7 @@
             <StackPanel.LayoutTransform>
                 <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
             </StackPanel.LayoutTransform>
-        </StackPanel>
+        </StackPanel>-->
 
         <Border Background="DarkBlue">
             
