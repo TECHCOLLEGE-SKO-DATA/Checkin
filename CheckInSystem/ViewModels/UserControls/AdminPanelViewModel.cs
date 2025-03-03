@@ -120,6 +120,7 @@ public class AdminPanelViewModel : ViewModelBase
         foreach (Employee employee in employees)
         {
             absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
+
             absence.SetIsOffSite(employee);
             //UpdateOffsite(employee, isOffsite, offsiteUntil);
             //employee.IsOffSite = true;

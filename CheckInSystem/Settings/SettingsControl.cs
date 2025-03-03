@@ -42,9 +42,9 @@ namespace CheckInSystem.Settings
                 <settings>
                     <screen>2</screen>
                     <absence>
-                    Sick,
-                    Skole,
-                    Orlov
+                        <type>Sick</type>
+                        <type>Skole</type>
+                        <type>Orlov</type>
                     </absence>
                 </settings>";
         }

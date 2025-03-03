@@ -86,7 +86,7 @@ public class MainWindowViewModel : ViewModelBase
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
-            absence.SetIsOffSite(employee);
+            absence.OffsiteTimer(employee);
             Employees.Add(employee);
         }
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));

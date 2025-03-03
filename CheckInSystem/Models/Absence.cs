@@ -77,24 +77,56 @@ namespace CheckInSystem.Models
 
             return databHelper.GetAllAbsence(employee);
         }
-
         public void SetIsOffSite(Employee employee)
         {
             List<Absence> absences = GetAllAbsence(employee);
-            
-            foreach(var absence in absences)
+
+            foreach (var absence in absences)
             {
                 if (absence.FromDate <= DateTime.Now && absence.ToDate > DateTime.Now)
                 {
                     employee.IsOffSite = true;
-                    break;
-                }
-                else
-                {
-                    employee.IsOffSite = false;
+                    return; 
                 }
             }
         }
+
+        public async Task OffsiteTimer(Employee employee)
+        {
+            while (true == true)
+            {
+                var activeAbsence = GetAllAbsence(employee)
+                    .FirstOrDefault(a => a.FromDate <= DateTime.Now && a.ToDate > DateTime.Now);
+
+                if (activeAbsence != null)
+                {
+                    employee.IsOffSite = true;
+
+                    var delayTime = (int)(activeAbsence.ToDate - DateTime.Now).TotalMilliseconds;
+                    var startTime = DateTime.Now;
+
+                    // Loop until the absence ends or gets deleted
+                    while ((DateTime.Now - startTime).TotalMilliseconds < delayTime)
+                    {
+                        //2 min wait
+                        await Task.Delay(120000);
+                        
+                        if (!GetAllAbsence(employee).Any(a => a.FromDate == activeAbsence.FromDate && a.ToDate == activeAbsence.ToDate))
+                        {
+                            break;
+                        }
+                    }
+
+                    continue;
+                }
+
+                employee.IsOffSite = false;
+
+                //1 min wait
+                await Task.Delay(60000);
+            }
+        }
+
 
         public Absence()
         {
