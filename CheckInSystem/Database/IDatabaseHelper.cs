@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CheckInSystem.Models;
+using static CheckInSystem.Models.Absence;
 
 namespace CheckInSystem.Database
 {
@@ -37,5 +38,11 @@ namespace CheckInSystem.Database
         bool AddEmployee(Employee employee, ObservableCollection<Employee> Members, int ID);
         bool RemoveEmployee(Employee employee, ObservableCollection<Employee> Members, int ID);
         Group NewGroup(string name);
+
+        // 🔹 Absence Management
+        Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason);
+        void EditAbsence(List<Absence> absences);
+        void DeleteAbsence(int id);
+        List<Absence> GetAllAbsence(Employee employee);
     }
 }
