@@ -438,7 +438,7 @@ public class DatabaseHelper : IDatabaseHelper
         var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
         .Select(t =>
         {
-            t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Sick;
+            t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Syg;
 
             // Ensure that FromTime and ToTime are populated based on FromDate and ToDate
             if (t.FromDate != null)

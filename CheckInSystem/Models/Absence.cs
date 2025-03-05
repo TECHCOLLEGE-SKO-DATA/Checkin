@@ -12,9 +12,13 @@ namespace CheckInSystem.Models
     {
         public enum absenceReason
         {
-            Sick,
-            School,
-            Vacation
+            Syg,
+            Skole,
+            Ferie,
+            SøgeDag,
+            VirksomhedSamtale,
+            Læge,
+            Miscellaneous
         }
 
         private DatabaseHelper dbHelper = new();
