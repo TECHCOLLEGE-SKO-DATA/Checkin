@@ -32,7 +32,7 @@ namespace CheckInSystem.Settings
             {
                 File.WriteAllText(_filePath, _DefaultSetting);
             }
-            
+            //LoadAbsenceReasons(_filePath);
         }
         
         public void DefaultSettingsxml()

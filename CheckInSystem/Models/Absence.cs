@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -93,37 +94,59 @@ namespace CheckInSystem.Models
 
         public async Task OffsiteTimer(Employee employee)
         {
-            while (true == true)
+            var activeAbsences = GetAllAbsence(employee)
+                        .Where(a => a.ToDate > DateTime.Now).ToList();
+
+
+            if (activeAbsences == null)
+                return;
+
+            foreach (var activeAbsence in activeAbsences)
             {
-                var activeAbsence = GetAllAbsence(employee)
-                    .FirstOrDefault(a => a.FromDate <= DateTime.Now && a.ToDate > DateTime.Now);
-
-                if (activeAbsence != null)
+                // Wait until FromDate while checking every 5 minutes if the absence still exists
+                while (activeAbsence.FromDate > DateTime.Now)
                 {
-                    employee.IsOffSite = true;
+                    var CurrentAbsences = GetAllAbsence(employee)
+                        .Where(a => a.ID == activeAbsence.ID);
 
-                    var delayTime = (int)(activeAbsence.ToDate - DateTime.Now).TotalMilliseconds;
-                    var startTime = DateTime.Now;
+                    foreach (var absence in CurrentAbsences)
+                        activeAbsence.FromDate = absence.FromDate;
 
-                    // Loop until the absence ends or gets deleted
-                    while ((DateTime.Now - startTime).TotalMilliseconds < delayTime)
+                    if (!CurrentAbsences.Any(a => a.ID == activeAbsence.ID))
+                        return; 
+
+                    var waitTime = TimeSpan.FromMinutes(5);
+                    var timeUntilStart = activeAbsence.FromDate - DateTime.Now;
+
+                    //it uses whatever time is shortest for the constent checking if the absence still exist
+                    await Task.Delay(timeUntilStart < waitTime ? timeUntilStart : waitTime);
+                }
+
+                employee.IsOffSite = true;
+
+                // Wait until ToDate while checking every 5 minutes if the absence still exists
+                while (activeAbsence.ToDate > DateTime.Now)
+                {
+                    var CurrentAbsences = GetAllAbsence(employee)
+                        .Where(a => a.ID == activeAbsence.ID);
+
+                    foreach (var absence in CurrentAbsences)
+                        activeAbsence.ToDate = absence.ToDate;
+
+                    if (!CurrentAbsences.Any(a => a.ID == activeAbsence.ID))
                     {
-                        //2 min wait
-                        await Task.Delay(120000);
-                        
-                        if (!GetAllAbsence(employee).Any(a => a.FromDate == activeAbsence.FromDate && a.ToDate == activeAbsence.ToDate))
-                        {
-                            break;
-                        }
+                        employee.IsOffSite = false;
+                        return;
                     }
 
-                    continue;
+                    var waitTime = TimeSpan.FromMinutes(5);
+                    var timeUntilEnd = activeAbsence.ToDate - DateTime.Now;
+
+                    //it uses whatever time is shortest for the constent checking if the absence still exist
+                    await Task.Delay(timeUntilEnd < waitTime ? timeUntilEnd : waitTime);
                 }
 
                 employee.IsOffSite = false;
-
-                //1 min wait
-                await Task.Delay(60000);
             }
         }
 
