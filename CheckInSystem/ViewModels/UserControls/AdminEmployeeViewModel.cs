@@ -1,9 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
 using CheckInSystem.Views.Windows;
 using PCSC.Interop;
 using CheckInSystem.Views.Dialog;
@@ -24,11 +21,11 @@ public class AdminEmployeeViewModel : ViewModelBase
     {
         platform.DataLoaded += (sender, args) =>
         {
-            SelectedEmployeeGroup = platform.MainWindowViewModel.Employees;
-            //foreach (var employee in platform.MainWindowViewModel.Employees)
-            //{
-            //    SelectedEmployeeGroup.Add(employee);
-            //}
+            SelectedEmployeeGroup.Clear();
+            foreach (var employee in platform.MainWindowViewModel.Employees)
+            {
+                SelectedEmployeeGroup.Add(employee);
+            }
         };
         SelectedEmployees = new();
     }
@@ -50,10 +47,7 @@ public class AdminEmployeeViewModel : ViewModelBase
 
     public void SeeEmployeeTime(Employee employee)
     {
-        _platform.MainWindowViewModel.EmployeeTimeViewModel = new(_platform) {
-            SelectedEmployee = employee
-        };
-        _platform.MainWindowViewModel.RequestView(typeof(EmployeeTimeView));
+        _platform.MainWindowViewModel.SeeEmployeeTime(employee);
     }
 
     public void EditEmployeeGroup(Employee employee)

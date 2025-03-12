@@ -11,12 +11,8 @@ namespace CheckInSystem.Views.UserControls;
 public partial class EmployeeTimeView : UserControl
 {
     public EmployeeTimeViewModel _vm => (EmployeeTimeViewModel) DataContext;
-    private IPlatform _platform;
-
-    public EmployeeTimeView(EmployeeTimeViewModel vm)
+    public EmployeeTimeView()
     {
-        //_vm = vm;
-        DataContext = vm;
         InitializeComponent();
     }
 

@@ -4,12 +4,14 @@ using System.Windows.Input;
 using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
+public delegate void LoginSuccessful(object sender, EventArgs args);
+
 public class LoginScreenViewModel : ViewModelBase
 {
+    public event LoginSuccessful? LoginSuccessful;
     private string _username = "";
 
     public string Username
@@ -41,17 +43,7 @@ public class LoginScreenViewModel : ViewModelBase
         }
         else
         {
-            //Move to Adminpanel
-            //MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
-            _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
-        }
-    }
-    
-    public void LoginKeyPressed(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            AdminLogin();
+            LoginSuccessful?.Invoke(this, new());
         }
     }
 }
