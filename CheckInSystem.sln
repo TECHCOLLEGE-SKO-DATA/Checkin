@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckInSystem", "CheckInSys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem.Tests", "CheckInSystem.Tests\CheckInSystem.Tests.csproj", "{5E065F17-F636-497F-8F47-35E24CC1FDD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinSystemAvalonia", "CheckinSystemAvalonia\CheckinSystemAvalonia.csproj", "{28AA0AE2-6CD3-8E43-DD55-F49CB333D042}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinSystemAvalonia.Desktop", "CheckinSystemAvalonia.Desktop\CheckinSystemAvalonia.Desktop.csproj", "{1494DA50-FA9F-08A4-1739-742CC93A90E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28AA0AE2-6CD3-8E43-DD55-F49CB333D042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28AA0AE2-6CD3-8E43-DD55-F49CB333D042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28AA0AE2-6CD3-8E43-DD55-F49CB333D042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28AA0AE2-6CD3-8E43-DD55-F49CB333D042}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
