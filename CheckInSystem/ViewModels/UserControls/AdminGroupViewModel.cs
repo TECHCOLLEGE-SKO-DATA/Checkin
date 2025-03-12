@@ -41,7 +41,7 @@ public class AdminGroupViewModel : ViewModelBase
 
     public void EditGroupName(Group group, string name)
     {
-        group.UpdateName(name);
+        group.UpdateName(name,group.ID);
     }
 
     public void DeleteGroup(Group group)
