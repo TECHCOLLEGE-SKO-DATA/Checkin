@@ -4,11 +4,10 @@ using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
-using CheckInSystem.Views.Windows;
-using CheckInSystem.Views.UserControls;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using PCSC.Interop;
+using CheckInSystem.Views.Windows;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -37,10 +36,10 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _employeeTimeViewModel;
         set {
-            if (_employeeTimeView != null)
-            {
-                _employeeTimeView.DataContext = value;
-            }
+            // if (_employeeTimeView != null)
+            // {
+            //     _employeeTimeView.DataContext = value;
+            // }
             SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
         }
     }
@@ -48,12 +47,13 @@ public class MainWindowViewModel : ViewModelBase
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
 
-    #region Views
-    AdminPanel _adminPanel;
-    AdminGroupView _adminGroupView;
-    LoginScreen _loginScreen;
-    EmployeeTimeView _employeeTimeView;
-    #endregion
+    int _selectedTab = 0;
+    public int SelectedTab
+    {
+        get => _selectedTab;
+        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
+    }
+
     ContentControl _mainContentControl;
     public ContentControl MainContentControl
     {
@@ -70,14 +70,9 @@ public class MainWindowViewModel : ViewModelBase
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
-        _loginScreen = new(LoginScreenViewModel);
-        _adminPanel = new(AdminPanelViewModel);
-        _adminGroupView = new(AdminGroupViewModel);
-        _employeeTimeView = new(EmployeeTimeViewModel);
-
-        MainContentControl = _loginScreen; //Set startup content
-        
-
+        LoginScreenViewModel.LoginSuccessful += (sender, args) => {
+            RequestView(typeof(AdminPanelViewModel));
+        };
     }
 
     public void LoadDataFromDatabase()
@@ -97,21 +92,21 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RequestView(Type view)
     {
-        if (view == typeof(LoginScreen))
+        if (view == typeof(LoginScreenViewModel))
         {
-            MainContentControl = _loginScreen;
+            SelectedTab = 0;
         }
-        else if (view == typeof(AdminPanel))
+        else if (view == typeof(AdminPanelViewModel))
         {
-            MainContentControl = _adminPanel;
+            SelectedTab = 1;
         } 
-        else if (view == typeof(AdminGroupView))
+        else if (view == typeof(AdminGroupViewModel))
         {
-            MainContentControl = _adminGroupView;
+            SelectedTab = 2;
         }
-        else if (view == typeof(EmployeeTimeView))
+        else if (view == typeof(EmployeeTimeViewModel))
         {
-            MainContentControl = _employeeTimeView;
+            SelectedTab = 3;
         }
         else
         {
@@ -139,6 +134,11 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         UpdateEmployeeLocal(cardID);
+    }
+    public void SeeEmployeeTime(Employee employee)
+    {
+        _employeeTimeViewModel.SelectedEmployee = employee;
+        RequestView(typeof(EmployeeTimeViewModel));
     }
     
     void UpdateNextEmployee(string cardID)

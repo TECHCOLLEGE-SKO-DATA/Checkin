@@ -10,13 +10,14 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminPanel : UserControl
 {
-    private AdminPanelViewModel _vm;
-    
-    public AdminPanel(AdminPanelViewModel vm)
+    public AdminPanelViewModel _vm => (AdminPanelViewModel) DataContext;
+    public AdminPanel()
     {
         InitializeComponent();
-        _vm = vm;
-        DataContext = _vm;
+    }
+    public AdminPanel(AdminPanelViewModel vm)
+    {
+        throw new Exception("Don't use");
     }
 
     private void BtnResetGroup(object sender, RoutedEventArgs e)
@@ -62,10 +63,4 @@ public partial class AdminPanel : UserControl
     {
         _vm.EditNextScannedCard();
     }
-    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
-    private void BtnSetScreen(object sender, RoutedEventArgs e)
-    {
-        _vm.setscreen();
-    }
-    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
 }
