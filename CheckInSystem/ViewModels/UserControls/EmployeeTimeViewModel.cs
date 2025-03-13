@@ -8,11 +8,9 @@ namespace CheckInSystem.ViewModels.UserControls;
 public class EmployeeTimeViewModel : ViewModelBase
 {
     Absence absenc = new();
-    public ObservableCollection<Absence> Absences { get; set; }
-    public List<Absence> AbsencesToAddToDb { get; set; }
-    public List<Absence> AbsencesToDelete { get; set; }
-
-
+    public ObservableCollection<Absence> Absences { get; set; } = new();
+    public List<Absence> AbsencesToAddToDb { get; set; } = new();
+    public List<Absence> AbsencesToDelete { get; set; } = new();
 
     public ObservableCollection<OnSiteTime> SiteTimes { get; set; } = new();
     public List<OnSiteTime> SiteTimesToDelete { get; set; } = new();
@@ -25,8 +23,25 @@ public class EmployeeTimeViewModel : ViewModelBase
         get => _selectedEmployee;
         set
         {
-            SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(value));
-            SetProperty(ref _selectedEmployee, value, nameof(SiteTimes));
+            if (_selectedEmployee != value) // Ensure we only update if different
+            {
+                SetProperty(ref _selectedEmployee, value);
+
+                Absences.Clear();
+                foreach (var absence in Absence.GetAllAbsence(value))
+                {
+                    Absences.Add(absence);
+                }
+
+                SiteTimes.Clear();
+                foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
+                {
+                    SiteTimes.Add(siteTime);
+                }
+
+                OnPropertyChanged(nameof(Absences));
+                OnPropertyChanged(nameof(SiteTimes));
+            }
         }
     }
 
@@ -70,7 +85,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         AddAbsences();
 
         SelectedEmployee.GetUpdatedSiteTimes();
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
     }
 
     private void UpdateSiteTimes()
