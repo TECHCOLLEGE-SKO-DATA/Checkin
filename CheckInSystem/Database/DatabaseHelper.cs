@@ -309,7 +309,7 @@ public class DatabaseHelper : IDatabaseHelper
         var tempGroup = new { ID = newGroupId, Name = name, Members = new ObservableCollection<Employee>() };
 
         var newGroup = new Group();
-        newGroup.UpdateName(tempGroup.Name);
+        newGroup.UpdateName(tempGroup.Name, tempGroup.ID);
         //newGroup.AddEmployee(new Employee()); 
 
         return newGroup;

@@ -48,8 +48,9 @@ public class Group : INotifyPropertyChanged
         databaseHelper.RemoveGroupDb(ID);
     }
 
-    public void UpdateName(string name)
+    public void UpdateName(string name, int id)
     {
+        this.ID = id;
         this.Name = databaseHelper.UpdateName(name, ID);
     }
 

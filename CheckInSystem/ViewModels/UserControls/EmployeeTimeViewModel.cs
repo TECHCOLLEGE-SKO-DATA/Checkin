@@ -1,22 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using CheckInSystem.Database;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
-
 
 namespace CheckInSystem.ViewModels.UserControls;
 
 public class EmployeeTimeViewModel : ViewModelBase
 {
-    Absence absenc = new();
-    public ObservableCollection<Absence> Absences { get; set; }
-    public List<Absence> AbsencesToAddToDb { get; set; }
-    public List<Absence> AbsencesToDelete { get; set; }
-
-    public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
-    public List<OnSiteTime> SiteTimesToDelete { get; set; }
-    public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
+    public ObservableCollection<OnSiteTime> SiteTimes { get; set; } = new();
+    public List<OnSiteTime> SiteTimesToDelete { get; set; } = new();
+    public List<OnSiteTime> SiteTimesToAddToDb { get; set; } = new();
+    //public Employee SelectedEmployee { get; set; }
 
     Employee _selectedEmployee = new();
     public Employee SelectedEmployee
@@ -24,13 +17,8 @@ public class EmployeeTimeViewModel : ViewModelBase
         get => _selectedEmployee;
         set
         {
-            SetProperty(ref _selectedEmployee, value, nameof(SelectedEmployee));
-
-            if (_selectedEmployee != null)
-            {
-                Absences = new ObservableCollection<Absence>(Absence.GetAllAbsence(_selectedEmployee));
-                SiteTimes = new ObservableCollection<OnSiteTime>(OnSiteTime.GetOnsiteTimesForEmployee(_selectedEmployee)); 
-            }
+            SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(value));
+            SetProperty(ref _selectedEmployee, value, nameof(SiteTimes));
         }
     }
 
@@ -39,10 +27,6 @@ public class EmployeeTimeViewModel : ViewModelBase
         //SelectedEmployee = employee;
         SiteTimesToDelete = new();
         SiteTimesToAddToDb = new();
-
-        
-        AbsencesToAddToDb = new();
-        AbsencesToDelete = new();
     }
 
     public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -64,7 +48,7 @@ public class EmployeeTimeViewModel : ViewModelBase
         {
             siteTime.RevertTopreviousTime();
         }
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
     }
 
     public void SaveChanges()
@@ -72,15 +56,8 @@ public class EmployeeTimeViewModel : ViewModelBase
         UpdateSiteTimes();
         DeleteSiteTimes();
         AddSiteTimes();
-
-        UpdateAbsenceTimes();
-        DeleteAbsences();
-        AddAbsences();
-
-        absenc.OffsiteTimer(SelectedEmployee);
-
         SelectedEmployee.GetUpdatedSiteTimes();
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
     }
 
     private void UpdateSiteTimes()
@@ -118,51 +95,5 @@ public class EmployeeTimeViewModel : ViewModelBase
             }
         }
         SiteTimesToAddToDb.Clear();
-    }
-    public void AppendAbsenceToAddToDb(Absence absence)
-    {
-        Absences.Add(absence);
-        AbsencesToAddToDb.Add(absence);
-    }
-
-    public void AppendAbsenceToDelete(Absence absence)
-    {
-        AbsencesToDelete.Add(absence);
-        Absences.Remove(absence);
-        AbsencesToAddToDb.Remove(absence); 
-    }
-
-    private void AddAbsences()
-    {
-        foreach (var absence in AbsencesToAddToDb)
-        {
-            absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
-        }
-        AbsencesToAddToDb.Clear();
-    }
-
-    private void DeleteAbsences()
-    {
-        foreach (var absence in AbsencesToDelete)
-        {
-            absence.DeleteAbsence(absence.ID);
-        }
-        AbsencesToDelete.Clear();
-    }
-    private void UpdateAbsenceTimes()
-    {
-        List<Absence> changedAbsence = new List<Absence>();
-        foreach (var absence in Absences)
-        {
-            absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
-
-            absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
-            
-            changedAbsence.Add(absence);
-        }
-        if (Absences.Count > 0)
-        {
-            absenc.EditAbsence(changedAbsence);
-        }
     }
 }

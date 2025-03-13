@@ -11,12 +11,10 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminEmployeeView : UserControl
 {
-    private AdminEmployeeViewModel _vm;
+    public AdminEmployeeViewModel _vm => (AdminEmployeeViewModel) DataContext;
     
-    public AdminEmployeeView(AdminEmployeeViewModel vm)
+    public AdminEmployeeView()
     {
-        _vm = vm;
-        DataContext = _vm;
         InitializeComponent();
     }
 
