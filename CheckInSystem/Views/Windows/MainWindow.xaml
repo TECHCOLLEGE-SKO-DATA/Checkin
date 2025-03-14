@@ -3,13 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CheckInSystem"
+        xmlns:local="clr-namespace:CheckInSystem.Views.UserControls"
         mc:Ignorable="d"
         Title="Check In System v0.2.5-alpha" Height="750" Width="1200"
         MinHeight="350"
         MinWidth="630"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <ContentControl Content="{Binding MainContentControl}"/>
+        <!-- <ContentControl Content="{Binding MainContentControl}"/> -->
+        <TabControl SelectedIndex="{Binding SelectedTab}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:LoginScreen DataContext="{Binding LoginScreenViewModel}" />
+            </TabItem>
+            <TabItem  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:AdminPanel DataContext="{Binding AdminPanelViewModel}" />
+            </TabItem>
+            <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:AdminGroupView DataContext="{Binding AdminGroupViewModel}"/>
+            </TabItem>
+            <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <local:EmployeeTimeView DataContext="{Binding EmployeeTimeViewModel}"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

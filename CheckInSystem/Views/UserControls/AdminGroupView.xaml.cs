@@ -9,11 +9,10 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminGroupView : UserControl
 {
-    private AdminGroupViewModel _vm;
-    public AdminGroupView(AdminGroupViewModel vm)
+    public AdminGroupViewModel _vm => (AdminGroupViewModel) DataContext;
+    
+    public AdminGroupView()
     {
-        _vm = vm;
-        DataContext = _vm;
         InitializeComponent();
     }
 
@@ -24,7 +23,7 @@ public partial class AdminGroupView : UserControl
 
     private void BtnSwitchToGroups(object sender, RoutedEventArgs e)
     {
-        _vm.SwtichToEmployees();
+        _vm.SwitchToEmployees();
     }
 
     private void BtnEditName(object sender, RoutedEventArgs e)

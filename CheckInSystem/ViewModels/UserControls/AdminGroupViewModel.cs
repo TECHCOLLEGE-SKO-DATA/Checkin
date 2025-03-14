@@ -1,6 +1,5 @@
 ﻿using CheckInSystem.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
 using System.Collections.ObjectModel;
 
 namespace CheckInSystem.ViewModels.UserControls;
@@ -27,14 +26,12 @@ public class AdminGroupViewModel : ViewModelBase
     
     public void Logout()
     {
-        //MainContentControl.Content = new LoginScreen(new LoginScreenViewModel(_platform));
-        _platform.MainWindowViewModel.RequestView(typeof(LoginScreen));
+        _platform.MainWindowViewModel.RequestView(typeof(LoginScreenViewModel));
     }
 
-    public void SwtichToEmployees()
+    public void SwitchToEmployees()
     {
-        //MainContentControl.Content = new AdminPanel(new AdminPanelViewModel(_platform,new()));
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanel));
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));        
     }
 
     public void AddNewGroup(string name)
@@ -44,7 +41,7 @@ public class AdminGroupViewModel : ViewModelBase
 
     public void EditGroupName(Group group, string name)
     {
-        group.UpdateName(name);
+        group.UpdateName(name,group.ID);
     }
 
     public void DeleteGroup(Group group)

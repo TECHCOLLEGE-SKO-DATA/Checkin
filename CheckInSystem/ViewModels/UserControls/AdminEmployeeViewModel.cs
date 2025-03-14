@@ -1,9 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows;
 using CheckInSystem.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
 using CheckInSystem.Views.Windows;
 using PCSC.Interop;
 using CheckInSystem.Views.Dialog;
@@ -12,7 +9,7 @@ namespace CheckInSystem.ViewModels.UserControls;
 
 public class AdminEmployeeViewModel : ViewModelBase
 {
-    ObservableCollection<Employee> _selectedEmployeeGroup;
+    ObservableCollection<Employee> _selectedEmployeeGroup = new();
     public ObservableCollection<Employee> SelectedEmployeeGroup
     {
         get => _selectedEmployeeGroup;
@@ -56,10 +53,7 @@ public class AdminEmployeeViewModel : ViewModelBase
 
     public void SeeEmployeeTime(Employee employee)
     {
-        _platform.MainWindowViewModel.EmployeeTimeViewModel = new(_platform) {
-            SelectedEmployee = employee
-        };
-        _platform.MainWindowViewModel.RequestView(typeof(EmployeeTimeView));
+        _platform.MainWindowViewModel.SeeEmployeeTime(employee);
     }
 
     public void EditEmployeeGroup(Employee employee)
