@@ -3,7 +3,7 @@ using DynamicData;
 using ReactiveUI;
 using System.Reactive;
 
-namespace CheckinSystemAvalonia.ViewModels;
+namespace CheckinSystemAvalonia.ViewModels.UserControls;
 
 public class AdminLoginViewModel : ViewModelBase
 {

@@ -10,4 +10,8 @@ public partial class EmployeeOverviewWindow : Window
     {
         InitializeComponent();
     }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 }

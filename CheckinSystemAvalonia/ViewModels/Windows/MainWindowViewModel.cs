@@ -1,4 +1,5 @@
-﻿using CheckinSystemAvalonia.Views.UserControls;
+﻿using CheckinSystemAvalonia.ViewModels.UserControls;
+using CheckinSystemAvalonia.Views.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckinSystemAvalonia.ViewModels;
+namespace CheckinSystemAvalonia.ViewModels.Windows;
 class MainWindowViewModel : ViewModelBase
 {
     private ViewModelBase _currentViewModel;

@@ -14,8 +14,8 @@ namespace CheckinSystemAvalonia
 
             var viewModelName = data.GetType().FullName!;
 
-            var name = viewModelName.Replace("ViewModels", "Views.UserControls");
-            name = name.Replace("ViewModel", "View");
+            //var name = viewModelName.Replace("ViewModels", "Views.UserControls");
+            var name = viewModelName.Replace("ViewModel", "View");
 
             var type = Type.GetType(name);
 

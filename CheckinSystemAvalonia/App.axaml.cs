@@ -21,13 +21,13 @@ namespace CheckinSystemAvalonia
                 var mainWindow = new MainWindow
                 {
                     DataTemplates = { new ViewLocator() },
-                    DataContext = new MainWindowViewModel()
+                    DataContext = new ViewModels.Windows.MainWindowViewModel()
                 };
                 mainWindow.Show();
 
                 var employeeWindow = new EmployeeOverviewWindow
                 {
-                    DataContext = new EmployeeOverviewWindowViewModel()
+                    DataContext = new ViewModels.Windows.EmployeeOverviewViewModel()
                 };
                 employeeWindow.Show();
             }
