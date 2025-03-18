@@ -2,7 +2,128 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="550"
              x:Class="CheckinSystemAvalonia.AdminPanelView">
-  Welcome to Avalonia!
+	
+	<Grid>
+		
+		<Grid.RowDefinitions>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="40"/>
+		</Grid.RowDefinitions>
+		
+		<WrapPanel Background="Blue" 
+				   Orientation="Horizontal" 
+				   Grid.Row="0">
+			
+			<ComboBox Background="Gray" 
+					  Margin="3"
+					  MinWidth="200"/>
+			
+			<Button Content="Alle Brugere"
+					Margin="10 0 0 0"
+                    FontSize="15"
+					Background="gray"/>
+			
+			<Button Content="Rediger næste scannet kort"
+					Margin="10 0 0 0"
+                    FontSize="15"
+					Background="Gray"/>
+			
+			<Button Content="Settings"
+					Margin="10 0 0 0"
+					FontSize="15"
+					Background="Gray"/>
+			
+		</WrapPanel>
+		
+		<Button Content="Logout"
+				Grid.Row="0"
+				HorizontalAlignment="Right"
+				Margin="0 0 10 0"
+				Background="Gray"/>
+
+		<!--Item Control for Employees-->
+		<ItemsControl Grid.Row="1">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+
+					<Border BorderThickness="3">
+						<StackPanel>
+							<WrapPanel Orientation="Horizontal">
+
+								<CheckBox Margin="3"/>
+
+								<TextBlock Margin="10 0 0 0"
+										   Text=""
+										   FontSize="70"/>
+							</WrapPanel>
+
+							<WrapPanel HorizontalAlignment="Center">
+
+								<Button Margin="10 0 0 0"
+										Content="Rediger"
+										Background="Gray"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Se tider"
+										Background="Gray"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Ændre Grupper"
+										Background="Gray"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Slet"
+										Background="Gray"/>
+
+							</WrapPanel>
+
+							<WrapPanel HorizontalAlignment="Right">
+
+								<TextBlock Margin="10 0 0 0"
+										   FontSize="70"
+										   Text=""/>
+
+								<TextBlock Margin="10 0 0 0"
+										   FontSize="70"
+										   Text=""/>
+
+							</WrapPanel>
+						</StackPanel>
+					</Border>
+
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<!--Bottom Functions-->
+		<WrapPanel Grid.Row="2"
+				   Orientation="Horizontal"
+				   Background="Blue">
+
+			<Button Content="Tilføj/Fjern valgte brugere fra gruppe"
+					FontSize="15"
+					Margin="3"
+					Background="Gray"/>
+
+			<Button Content="Markere valgte brugere som orlov"
+					Margin="10 0 0 0"
+					FontSize="15"
+					Background="Gray"/>
+			
+			<Button Content="Slet valgte brugere"
+					Margin="10 0 0 0"
+					FontSize="15"
+					Background="Gray"/>
+		</WrapPanel>
+
+		<Button Content="Skift til grupper"
+				Grid.Row="2"
+				Margin="0 0 10 0"
+				FontSize="15"
+				HorizontalAlignment="Right"
+				Background="Gray"/>
+	</Grid>
 </UserControl>
