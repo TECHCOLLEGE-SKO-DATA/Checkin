@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using PCSC.Interop;
 using CheckInSystem.Views.Windows;
-using CheckInSystem.Background_tasks;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -78,12 +77,11 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
-        AbsenceTimer absenceTimer = new();
         Absence absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
-            absenceTimer.OffsiteEmployeeChecker();
+            absence.OffsiteTimer(employee);
             Employees.Add(employee);
         }
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));
