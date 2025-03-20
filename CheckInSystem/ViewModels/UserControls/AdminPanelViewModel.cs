@@ -121,7 +121,6 @@ public class AdminPanelViewModel : ViewModelBase
         {
             absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
 
-            absence.OffsiteTimer(employee);
             //UpdateOffsite(employee, isOffsite, offsiteUntil);
             //employee.IsOffSite = true;
         }

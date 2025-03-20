@@ -96,65 +96,10 @@ namespace CheckInSystem.Models
             }
         }
 
-        public async Task OffsiteTimer(Employee employee)
+        public void OffsiteTimer()
         {
-            var activeAbsences = GetAllAbsence(employee)
-                        .Where(a => a.ToDate > DateTime.Now).ToList();
 
-
-            if (activeAbsences == null)
-                return;
-
-            foreach (var activeAbsence in activeAbsences)
-            {
-                // Wait until FromDate while checking every 5 minutes if the absence still exists
-                while (activeAbsence.FromDate > DateTime.Now)
-                {
-                    var CurrentAbsences = GetAllAbsence(employee)
-                        .Where(a => a.ID == activeAbsence.ID);
-
-                    foreach (var absence in CurrentAbsences)
-                        activeAbsence.FromDate = absence.FromDate;
-
-                    if (!CurrentAbsences.Any(a => a.ID == activeAbsence.ID))
-                        return; 
-
-                    var waitTime = TimeSpan.FromMinutes(5);
-                    var timeUntilStart = activeAbsence.FromDate - DateTime.Now;
-
-                    //it uses whatever time is shortest for the constent checking if the absence still exist
-                    await Task.Delay(timeUntilStart < waitTime ? timeUntilStart : waitTime);
-                }
-
-                employee.IsOffSite = true;
-
-                // Wait until ToDate while checking every 5 minutes if the absence still exists
-                while (activeAbsence.ToDate > DateTime.Now)
-                {
-                    var CurrentAbsences = GetAllAbsence(employee)
-                        .Where(a => a.ID == activeAbsence.ID);
-
-                    foreach (var absence in CurrentAbsences)
-                        activeAbsence.ToDate = absence.ToDate;
-
-                    if (!CurrentAbsences.Any(a => a.ID == activeAbsence.ID))
-                    {
-                        employee.IsOffSite = false;
-                        return;
-                    }
-
-                    var waitTime = TimeSpan.FromMinutes(5);
-                    var timeUntilEnd = activeAbsence.ToDate - DateTime.Now;
-
-                    //it uses whatever time is shortest for the constent checking if the absence still exist
-                    await Task.Delay(timeUntilEnd < waitTime ? timeUntilEnd : waitTime);
-                }
-
-                employee.IsOffSite = false;
-            }
         }
-
-
         public Absence()
         {
         }
