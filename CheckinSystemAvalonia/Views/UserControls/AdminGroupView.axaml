@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckinSystemAvalonia.AdminGroupView">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="40"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0"
+					Background="Blue"
+					Orientation="Horizontal">
+			
+			<Button Margin="3"
+					Content="settings"
+					Background="Gray"/>
+			
+		</StackPanel>
+
+		<Button Margin="0 0 3 0" 
+				HorizontalAlignment="Right"
+				Content="Logout"
+				Background="Gray"/>
+
+		<ItemsControl Grid.Row="1"
+					  ItemsSource=""
+					  Background="White">
+			
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border BorderThickness="4">
+						<WrapPanel Orientation="Horizontal">
+						
+							<TextBlock Margin="3"
+									   Text=""/>
+
+							<Border BorderThickness="2">
+								<StackPanel Orientation="Horizontal">
+
+									<TextBlock Margin="2"
+											   Text="Antal medlemmer:"/>
+									
+									<TextBlock  Text=""/>
+									
+									
+								</StackPanel>
+							</Border>
+
+							<TextBlock Text="Synlighed"/>
+
+							<CheckBox VerticalAlignment="Center">
+								<CheckBox.RenderTransform>
+									<ScaleTransform ScaleX="2" ScaleY="2" />
+								</CheckBox.RenderTransform>
+							</CheckBox>
+							
+							<Button Content="Rediger Navn"/>
+							
+							<Button Content="Slet"/>
+						
+						</WrapPanel>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			
+		</ItemsControl>
+
+		<WrapPanel Grid.Row="2"
+				   Background="Blue">
+			
+			<Button Margin="3"
+					Content="Add Group"
+					Background="Gray"/>
+			
+			<Button Margin="7 0 0 0"
+					Content="Show All"
+					Background="Gray"/>
+			
+			<Button Margin="10 0 0 0"
+					Content="Hide All"
+					Background="Gray"/>
+			
+		</WrapPanel>
+		
+		<Button Grid.Row="2"
+				HorizontalAlignment="Right"
+				Content="Employee List"
+				Background="Gray"/>
+		
+	</Grid>
+</UserControl>

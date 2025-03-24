@@ -27,11 +27,16 @@ public class AdminLoginViewModel : ViewModelBase
     public AdminLoginViewModel()
     {
         
-        Btn_Login_Click = ReactiveCommand.Create(() => Yes());
+        Btn_Login_Click = ReactiveCommand.Create(() => Login(Username,PassWord));
     }
 
-    private void Yes()
-    {    }
+    private void Login(string userName, string password)
+    {
+        if(userName == "sko" && password == "test123")
+        {
+
+        }
+    }
 
     public string Greeting => "Welcome to Avalonia!";
 
