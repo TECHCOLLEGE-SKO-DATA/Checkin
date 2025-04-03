@@ -1,4 +1,4 @@
-﻿public class BackgroundTimeService
+﻿public partial class BackgroundTimeService
 {
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
     private readonly TimeSpan _startTime = new TimeSpan(21, 0, 0);  // 21:00 (9 PM)
@@ -40,6 +40,8 @@
 
         if ((currentTime >= _startTime || currentTime < _endTime) && !_hasLoggedToday)
         {
+            AbsenceTask();
+
             _hasLoggedToday = true;
             PerformMaintenanceAction.Invoke();
         }

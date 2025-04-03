@@ -77,11 +77,14 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
-        Absence absence = new();
+        BackgroundTimeService absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
-            absence.OffsiteTimer(employee);
+            absence.AddEmployeesToAbsenceCheck(employee);
+
+            absence.AbsenceTask();
+
             Employees.Add(employee);
         }
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));
