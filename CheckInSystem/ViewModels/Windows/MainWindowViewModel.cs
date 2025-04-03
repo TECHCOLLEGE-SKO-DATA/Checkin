@@ -77,7 +77,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
-        BackgroundTimeService absence = new();
+        Abse absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {

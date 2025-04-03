@@ -1,11 +1,12 @@
-﻿using CheckInSystem.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class BackgroundTimeService
+namespace CheckInSystem.Background_tasks;
+
+public class AbsencBackGroundService
 {
     Absence absence = new();
 
@@ -32,7 +33,7 @@ public partial class BackgroundTimeService
                 {
                     employees.Remove(employee);
 
-                    var (emp,some) = await OffsiteTimer(employee, activeAbsences);
+                    var (emp, some) = await OffsiteTimer(employee, activeAbsences);
 
                     employees.Add(emp);
                 }));
@@ -40,9 +41,9 @@ public partial class BackgroundTimeService
         }
     }
 
-    public async Task<(Employee,bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
+    public Task<(Employee, bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
     {
-        
+
 
         foreach (var activeAbsence in activeAbsences)
         {
@@ -85,4 +86,3 @@ public partial class BackgroundTimeService
         employees.Add(employee);
     }
 }
-
