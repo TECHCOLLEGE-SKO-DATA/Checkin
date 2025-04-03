@@ -33,9 +33,9 @@ public class AbsencBackGroundService
                     lock (employees) // Ensure thread safety
                     {
                         employees.Remove(employee);
-                    }
+                    }// Lock is released here for other tasks to do what they need
 
-                    var (emp, some) = await OffsiteTimer(employee, activeAbsences);
+                    var emp = await OffsiteTimer(employee, activeAbsences);
 
                     lock (employees)
                     {
@@ -47,7 +47,7 @@ public class AbsencBackGroundService
     }
 
 
-    public async Task<(Employee, bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
+    public async Task<Employee> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
     {
 
 
@@ -84,7 +84,7 @@ public class AbsencBackGroundService
             employee.IsOffSite = false;
             break;
         }
-        return (employee, false);
+        return employee;
     }
 
     public void AddEmployeesToAbsenceCheck(Employee employee)
