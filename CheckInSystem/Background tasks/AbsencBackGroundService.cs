@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CheckInSystem.Models;
 
 namespace CheckInSystem.Background_tasks;
 
@@ -41,7 +42,7 @@ public class AbsencBackGroundService
         }
     }
 
-    public Task<(Employee, bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
+    public async Task<(Employee, bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
     {
 
 
