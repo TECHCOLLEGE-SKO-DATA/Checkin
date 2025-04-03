@@ -1,6 +1,7 @@
-﻿public class BackgroundTimeService
+﻿using CheckInSystem.Background_tasks;
+public class BackgroundTimeService
 {
-    CheckInSystem.Background_tasks.AbsenceBackgroundService absence = new();
+    AbsencBackGroundService absence = new();
 
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
     private readonly TimeSpan _startTime = new TimeSpan(21, 0, 0);  // 21:00 (9 PM)

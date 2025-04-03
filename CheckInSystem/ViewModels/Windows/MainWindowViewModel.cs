@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using PCSC.Interop;
 using CheckInSystem.Views.Windows;
+using CheckInSystem.Background_tasks;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -77,7 +78,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
-        Abse absence = new();
+        AbsencBackGroundService absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
