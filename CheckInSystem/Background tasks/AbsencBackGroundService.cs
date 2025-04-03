@@ -17,30 +17,35 @@ public class AbsencBackGroundService
 
     public void AbsenceTask()
     {
-        List<Task> offsiteTasks = new(); // Stores async tasks for each employee
+        List<Task> offsiteTasks = new();
+        var employeesCopy = employees.ToList(); // Create a copy
 
-        bool some;
-
-        foreach (var employee in employees)
+        foreach (var employee in employeesCopy)
         {
             var activeAbsences = Absence.GetAllAbsence(employee)
                 .Where(a => a.ToDate > DateTime.Now)
                 .ToList();
 
-            if (activeAbsences.Any()) // Checks if absences exist
+            if (activeAbsences.Any())
             {
-                // Run OffsiteTimer asynchronously and store the task
                 offsiteTasks.Add(Task.Run(async () =>
                 {
-                    employees.Remove(employee);
+                    lock (employees) // Ensure thread safety
+                    {
+                        employees.Remove(employee);
+                    }
 
                     var (emp, some) = await OffsiteTimer(employee, activeAbsences);
 
-                    employees.Add(emp);
+                    lock (employees)
+                    {
+                        employees.Add(emp);
+                    }
                 }));
             }
         }
     }
+
 
     public async Task<(Employee, bool)> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
     {
