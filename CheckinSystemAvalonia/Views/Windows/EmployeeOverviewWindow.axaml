@@ -16,9 +16,7 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*"/>
-			<!-- Main content area -->
 			<RowDefinition Height="40"/>
-			<!-- Bottom controls area -->
 		</Grid.RowDefinitions>
 		
 		<LayoutTransformControl>
