@@ -6,8 +6,64 @@
              x:Class="CheckinSystemAvalonia.EmployeeTimeView">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition />
+			<RowDefinition Height="35"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="35"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="35"/>
 		</Grid.RowDefinitions>
+
+		<StackPanel Background="Blue"
+				   Grid.Row="0"
+				   Orientation="Horizontal">
+			<Button Background="Gray" 
+					Content="Settings"
+					Margin="2"/>
+		</StackPanel>
 		
+		<Button Background="Gray"
+				Content="Logout"
+				HorizontalAlignment="Right"
+				Margin="2"/>
+
+		<ListBox Grid.Row="1">
+			
+		</ListBox>
+
+		<StackPanel Background="Blue"
+				   Grid.Row="2">
+			
+			<Button Background="Gray"
+					Content="Tilføj Tid"
+					Margin="2"/>
+			
+		</StackPanel>
+
+		<ListBox Grid.Row="3">
+			
+		</ListBox>
+
+		<StackPanel Background="Blue" 
+				    Grid.Row="4" 
+					Orientation="Horizontal">
+			
+			<Button Background="Gray"
+					Content="Tilføj Fravær"
+					Margin="2"/>
+			
+		</StackPanel>
+
+		<StackPanel Grid.Row="4"
+					Orientation="Horizontal"
+					HorizontalAlignment="Right">
+			
+			<Button Background="Gray"
+					Content="Gem" 
+					Margin="0 0 10 0"/>
+			
+			<Button Background="Gray"
+					Content="Anuller"/>
+			
+		</StackPanel>
 	</Grid>
 </UserControl>
