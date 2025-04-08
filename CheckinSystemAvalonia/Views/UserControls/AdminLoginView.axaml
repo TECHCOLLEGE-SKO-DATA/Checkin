@@ -6,9 +6,15 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CheckinSystemAvalonia.Views.UserControls.AdminLoginView"
              x:DataType="vm:AdminLoginViewModel">
-  <Design.DataContext>
-    <vm:AdminLoginViewModel />
-  </Design.DataContext>
+	         <!--xmlns:vm holds the refrense to where
+			 the VeiwModel is x:Datatype holds 
+			 the actual name of the ViewModel to use-->
+
+	<!--
+	<Design.DataContext>
+		<vm:AdminLoginViewModel />
+	</Design.DataContext>
+	-->
 
   <Grid>
         <Grid.ColumnDefinitions>
@@ -33,6 +39,7 @@
                          BorderBrush="Black"></TextBox>
 				
                 <TextBlock Text="Kodeord" FontSize="20" Margin="5"/>
+				
 				<TextBox Text="{Binding PassWord, Mode=TwoWay}"
                          FontSize="20"
                          Background="LightGray"

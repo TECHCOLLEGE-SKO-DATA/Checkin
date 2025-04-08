@@ -3,9 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
+			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
 			 x:Class="CheckinSystemAvalonia.Views.UserControls.FakeNFCView"
-             x:DataType="vm:AdminLoginViewModel">
+             x:DataType="vm:FakeNFCViewModel">
+			 <!--xmlns:vm holds the refrense to where
+				 the VeiwModel is x:Datatype holds 
+				 the actual name of the ViewModel to use-->
 	
 	<Grid ShowGridLines="True">
 		<Grid.ColumnDefinitions>
@@ -13,7 +16,7 @@
 			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 		
-		<ItemsControl Grid.Column="0">
+		<ItemsControl Grid.Column="0" Background="LightGray">
 
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -24,9 +27,14 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 
-					<StackPanel>
+					<StackPanel Orientation="Horizontal">
 						
-						
+						<!--FirstName-->
+						<TextBlock/>
+						<!--MiddleName-->
+						<TextBlock/>
+						<!--LastName-->
+						<TextBlock/>
 						
 					</StackPanel>
 					
@@ -44,7 +52,7 @@
 			<TextBox Width="220" 
 					 MinHeight="40"
 					 Watermark="CardID Must be 11 charectors"/>
-
+			
 			<Button Content="Scan Card"
 					Margin="0 20 0 0"/>
 			
