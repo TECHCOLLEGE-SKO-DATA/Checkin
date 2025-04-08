@@ -1,4 +1,5 @@
-﻿using CheckinSystemAvalonia.Views.UserControls;
+﻿using CheckinSystemAvalonia.ViewModels.UserControls;
+using CheckinSystemAvalonia.Views.UserControls;
 using ReactiveUI;
 using System;
 

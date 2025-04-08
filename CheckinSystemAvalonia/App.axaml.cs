@@ -30,6 +30,15 @@ namespace CheckinSystemAvalonia
                     DataContext = new ViewModels.Windows.EmployeeOverviewViewModel()
                 };
                 employeeWindow.Show();
+                
+                #if DEBUG
+                var FakeNFC = new FakeNFCWindow
+                {
+                    DataTemplates = { new ViewLocator() },
+                    DataContext = new ViewModels.Windows.FakeNFCWindowViewModel()
+                };
+                FakeNFC.Show();
+                #endif
             }
 
             base.OnFrameworkInitializationCompleted();
