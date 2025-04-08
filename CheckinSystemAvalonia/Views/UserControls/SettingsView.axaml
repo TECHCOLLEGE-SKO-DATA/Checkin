@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckinSystemAvalonia.SettingsView">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="45" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="45" />
+		</Grid.RowDefinitions>
+
+		<WrapPanel Background="Blue"
+				   Grid.Row="0">
+			
+			<Button Content="Back"
+					Margin="6"
+					Background="Gray"/>
+			
+		</WrapPanel>
+		
+		<Button Content="LogOut" 
+				Background="Gray"
+				HorizontalAlignment="Right"
+				Margin="0 -1 10 0"/>
+
+		<WrapPanel Grid.Row="1">
+			<StackPanel>
+				
+				<TextBlock Margin="10"
+						   FontSize="20">
+					
+					Screen Settings
+				</TextBlock>
+
+				<TextBlock Margin="10 0 0 0">
+					Primary screen for Employee Overview
+				</TextBlock>
+
+				<TextBox Margin="10 10 0 0" 
+						 MinWidth="100"
+						 HorizontalAlignment="Left"/>
+				
+			</StackPanel>
+			
+		</WrapPanel>
+		
+		<WrapPanel Background="Blue"
+				   Grid.Row="2">
+			
+			<Button Content="Gem"
+					Margin="6"
+					Background="Gray"/>
+			
+		</WrapPanel>
+	</Grid>
+</UserControl>
