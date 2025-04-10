@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="390" d:DesignHeight="300"
+        x:Class="CheckinSystemAvalonia.EditOffsiteDialog"
+        Title="EditOffsiteDialog"
+		WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="20"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
+
+		<Border Background="DarkBlue">
+
+		</Border>
+		<StackPanel Grid.Row="1">
+			
+			<StackPanel Margin="20,10,0,0" HorizontalAlignment="Left">
+				<ComboBox x:Name="ComboBoxAbsenceReason" SelectedIndex="0" Width="100"></ComboBox>
+			</StackPanel>
+			
+			<StackPanel Margin="5,10,0,0" 
+						Orientation="Horizontal">
+				
+				<TextBlock Margin="0,5,10,0">Fra:</TextBlock>
+				
+				<DatePicker  x:Name="_FromDate"
+							 Margin="43 0 0 0"></DatePicker>
+				
+			</StackPanel>
+			
+			<StackPanel Margin="0 5 0 0" 
+						Orientation="Horizontal">
+				
+				<TextBlock Margin="5">Til og med:</TextBlock>
+				
+				<DatePicker x:Name="_ToDate"></DatePicker>
+				
+			</StackPanel>
+			
+			<StackPanel Margin="0 30 0 0" 
+						Orientation="Horizontal">
+				
+				<TextBlock Margin="10">Note:</TextBlock>
+				
+				<TextBox Margin="0,5,0,10" 
+						 Width="200" 
+						 Height="30" 
+						 FontSize="20" 
+						 x:Name="_Note"></TextBox>
+				
+			</StackPanel>
+			
+			<DockPanel Margin="0 40"
+					   HorizontalAlignment="Center">
+				
+				<Button Width="100" 
+						Content="Gem"
+						Margin="0 0 10 0"/>
+
+				<Button Width="100"
+                        Content="Annuller"/>
+				
+			</DockPanel>
+		</StackPanel>
+	</Grid>
+</Window>

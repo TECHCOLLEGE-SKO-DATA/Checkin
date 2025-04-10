@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="120"
+        x:Class="CheckinSystemAvalonia.InputDialog"
+        Title="InputDialog">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel>
+			
+			<TextBox Margin="20"/>
+			
+			<WrapPanel HorizontalAlignment="Center">
+				
+				<Button Content="Bekræft" 
+						Margin="0 0 10 0"/>
+
+				<Button Content="Annuller"/>
+				
+			</WrapPanel>
+		</StackPanel>
+		
+	</Grid>
+</Window>
