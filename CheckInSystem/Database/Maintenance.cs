@@ -31,7 +31,8 @@ public class Maintenance
         Task.Run(() =>
         {
             foreach (var employee in updatedEmployees)
-                InsrtNewCheckOutTime(employee);
+            InsrtNewCheckOutTime(employee);
+
         });
     }
 

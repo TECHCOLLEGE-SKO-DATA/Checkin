@@ -37,8 +37,7 @@
                                     <ItemContainerTemplate>
                                         <StackPanel Margin="5"
                                             Background="#d55e00"
-                                            x:Name="MemberPanel"
-                                            Visibility="{Binding Path=IsOffSite, Converter={x:Static checkInSystem:Converters.VisibleIfFalse}}">
+                                            x:Name="MemberPanel">
                                             <StackPanel Orientation="Horizontal" Margin="10">
                                                 <TextBlock Text="{Binding Path=FirstName}" FontSize="70" Margin="0 0 20 0"/>
                                                 <TextBlock Text="{Binding Path=MiddleNameShort}" FontSize="70" Margin="0 0 20 0">
@@ -57,8 +56,13 @@
                                         </StackPanel>
                                         <ItemContainerTemplate.Triggers>
                                             <DataTrigger 
-                                                 Binding="{Binding Path=IsCheckedIn}"
-                                                 Value="True">
+                                                Binding="{Binding Path=IsOffSite}" 
+                                                Value="True"> 
+                                                <Setter Property="Background" TargetName="MemberPanel" Value="#FFFF00"/>
+                                            </DataTrigger>
+                                            <DataTrigger 
+                                                Binding="{Binding Path=IsCheckedIn}"
+                                                Value="True">
                                                 <Setter Property="Background" TargetName="MemberPanel" Value="#009e73"/>
                                             </DataTrigger>
                                         </ItemContainerTemplate.Triggers>

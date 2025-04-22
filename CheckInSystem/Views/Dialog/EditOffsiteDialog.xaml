@@ -5,10 +5,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:CheckInSystem.Views.Windows"
         mc:Ignorable="d"
-        Title="Ændre orlov" Height="150" Width="300"
+        Title="Fravær" Height="250" Width="350"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+       <!--<StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="På orlov"/>
                 <CheckBox x:Name="CbIsOffsite" Margin="5 0 0 0"/>
@@ -28,6 +33,33 @@
             <StackPanel.LayoutTransform>
                 <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
             </StackPanel.LayoutTransform>
+        </StackPanel>-->
+
+        <Border Background="DarkBlue">
+            
+        </Border>
+        <StackPanel Grid.Row="1">
+            <StackPanel Margin="20,10,0,0" HorizontalAlignment="Left">
+                <ComboBox x:Name="ComboBoxAbsenceReason" SelectedIndex="0" Width="100"></ComboBox>
+            </StackPanel>
+            <DockPanel Margin="20,10,0,0">
+                <TextBlock Margin="0,5,0,0">Fra:</TextBlock>
+                <DatePicker Width="105" x:Name="_FromDate"></DatePicker>
+                <TextBlock Margin="5">Til og med:</TextBlock>
+                <DatePicker Width="105" x:Name="_ToDate"></DatePicker>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="10">Note:</TextBlock>
+                <TextBox Margin="0,5,0,10" Width="200" Height="30" FontSize="20" x:Name="_Note"></TextBox>
+            </StackPanel>
+            <DockPanel Margin="40">
+                <Button Width="100" Content="Gem"
+                        Click="BtnConfrimed"/>
+                
+                <Button Width="100" 
+                        Content="Annuller" 
+                        IsCancel="True"/>
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

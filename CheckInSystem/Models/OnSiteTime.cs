@@ -71,8 +71,8 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public bool IsChanged()
     {
-        if (_oldArrivalTime == ArrivalTime) return true;
-        if (_oldDepartureTime == DepartureTime) return true;
+        if (_oldArrivalTime != ArrivalTime) return true;
+        if (_oldDepartureTime != DepartureTime) return true;
         return false;
     }
 

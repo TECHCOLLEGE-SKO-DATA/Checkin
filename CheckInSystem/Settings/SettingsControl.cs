@@ -32,7 +32,6 @@ namespace CheckInSystem.Settings
             {
                 File.WriteAllText(_filePath, _DefaultSetting);
             }
-            
         }
         
         public void DefaultSettingsxml()
@@ -41,6 +40,11 @@ namespace CheckInSystem.Settings
                 @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <settings>
                     <screen>2</screen>
+                    <absence>
+                        <type>Sick</type>
+                        <type>Skole</type>
+                        <type>Orlov</type>
+                    </absence>
                 </settings>";
         }
     }

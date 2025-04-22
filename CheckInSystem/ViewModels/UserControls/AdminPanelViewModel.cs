@@ -112,11 +112,17 @@ public class AdminPanelViewModel : ViewModelBase
         employee.UpdateDb();
     }
     
-    public void UpdateOffsite(ObservableCollection<Employee> employees, bool isOffsite, DateTime? offsiteUntil)
+    public void UpdateOffsite(ObservableCollection<Employee> employees, /*bool isOffsite, DateTime? offsiteUntil,*/
+        DateTime FromDate, DateTime ToDate,string Note, Absence.absenceReason AbsenceReason)
     {
+        Absence absence = new();
+        absence.ToTime = absence.ToTime.AddHours(23);
         foreach (Employee employee in employees)
         {
-            UpdateOffsite(employee, isOffsite, offsiteUntil);
+            absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
+
+            //UpdateOffsite(employee, isOffsite, offsiteUntil);
+            //employee.IsOffSite = true;
         }
     }
 

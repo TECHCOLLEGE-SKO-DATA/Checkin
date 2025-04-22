@@ -56,6 +56,11 @@ public class AdminEmployeeViewModel : ViewModelBase
         _platform.MainWindowViewModel.SeeEmployeeTime(employee);
     }
 
+    public void SeeAbsence(Employee employee)
+    {
+
+    }
+
     public void EditEmployeeGroup(Employee employee)
     {
         EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
