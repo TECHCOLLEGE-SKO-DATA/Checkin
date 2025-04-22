@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+        x:Class="CheckinSystemAvalonia.EditEmployeeWindow"
+        Title="EditEmployeeWindow">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+		
+		<StackPanel Grid.Row="1">
+			
+			<StackPanel HorizontalAlignment="Center"
+						Margin="0 0 0 30">
+			
+				<TextBlock Text="Rediger"
+						   FontSize="30"/>
+			
+			</StackPanel>
+
+			<StackPanel HorizontalAlignment="Center">
+
+				<StackPanel Orientation="Horizontal"
+							Margin="3">
+
+					<TextBlock Text="Fornavn:"
+							   Margin="-30 5 36 0"/>
+
+					<TextBox Width="150"/>
+
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal"
+							Margin="3">
+
+					<TextBlock Text="Mellemnavn:"
+							   Margin="-30 5 10 0"/>
+
+					<TextBox Width="150"/>
+
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal"
+							Margin="3">
+
+					<TextBlock Text="Efternavn:"
+							   Margin="-30 5 26 0"/>
+
+					<TextBox Width="150"/>
+
+				</StackPanel>
+			
+			</StackPanel>
+
+			
+
+			<Button Content="Skift kort"
+					Width="250"
+					HorizontalAlignment="Center"
+					HorizontalContentAlignment="Center"
+					Margin="0 40 0 0"/>
+
+			<TextBlock Text="Venter på at et nyt kortet bliver scannet"
+                       Background="Yellow"
+                       Margin="0 10 0 0"
+					   Width="290"
+					   HorizontalAlignment="Center"
+					   TextAlignment="Center"/>
+			
+			<Button Content="Luk vinduet og gem"
+					Width="250"
+					HorizontalAlignment="Center"
+					HorizontalContentAlignment="Center"
+					Margin="0 10 0 0"/>
+			
+		</StackPanel>
+	</Grid>
+</Window>

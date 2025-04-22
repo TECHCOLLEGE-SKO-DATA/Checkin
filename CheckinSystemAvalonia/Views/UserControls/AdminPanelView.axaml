@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="550"
-             x:Class="CheckinSystemAvalonia.AdminPanelView">
+			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
+             x:Class="CheckinSystemAvalonia.Views.UserControls.AdminPanelView"
+			 x:DataType="vm:AdminPanelViewModel">
 	
 	<Grid>
 		
@@ -17,24 +19,29 @@
 				   Orientation="Horizontal" 
 				   Grid.Row="0">
 			
-			<ComboBox Background="Gray" 
+			<ComboBox Background="#808080" 
 					  Margin="3"
-					  MinWidth="200"/>
+					  MinWidth="200"
+					  Foreground="Black"/>
 			
 			<Button Content="Alle Brugere"
 					Margin="10 0 0 0"
                     FontSize="15"
-					Background="gray"/>
+					Background="#808080"
+					Foreground="Black">
+			</Button>
 			
 			<Button Content="Rediger næste scannet kort"
 					Margin="10 0 0 0"
                     FontSize="15"
-					Background="Gray"/>
+					Background="#808080"
+					Foreground="Black"/>
 			
 			<Button Content="Settings"
 					Margin="10 0 0 0"
 					FontSize="15"
-					Background="Gray"/>
+					Background="#808080"
+					Foreground="Black"/>
 			
 		</WrapPanel>
 		
@@ -42,7 +49,8 @@
 				Grid.Row="0"
 				HorizontalAlignment="Right"
 				Margin="0 0 10 0"
-				Background="Gray"/>
+				Background="#808080"
+				Foreground="Black"/>
 
 		<!--Item Control for Employees-->
 		<ItemsControl Grid.Row="1">
@@ -64,19 +72,23 @@
 
 								<Button Margin="10 0 0 0"
 										Content="Rediger"
-										Background="Gray"/>
+										Background="Gray"
+										Foreground="Black"/>
 
 								<Button Margin="10 0 0 0"
 										Content="Se tider"
-										Background="Gray"/>
+										Background="Gray"
+										Foreground="Black"/>
 
 								<Button Margin="10 0 0 0"
 										Content="Ændre Grupper"
-										Background="Gray"/>
+										Background="Gray"
+										Foreground="Black"/>
 
 								<Button Margin="10 0 0 0"
 										Content="Slet"
-										Background="Gray"/>
+										Background="Gray"
+										Foreground="Black"/>
 
 							</WrapPanel>
 
@@ -106,17 +118,20 @@
 			<Button Content="Tilføj/Fjern valgte brugere fra gruppe"
 					FontSize="15"
 					Margin="3"
-					Background="Gray"/>
+					Background="#808080"
+					Foreground="Black"/>
 
 			<Button Content="Markere valgte brugere som orlov"
 					Margin="10 0 0 0"
 					FontSize="15"
-					Background="Gray"/>
+					Background="#808080"
+					Foreground="Black"/>
 			
 			<Button Content="Slet valgte brugere"
 					Margin="10 0 0 0"
 					FontSize="15"
-					Background="Gray"/>
+					Background="#808080"
+					Foreground="Black"/>
 		</WrapPanel>
 
 		<Button Content="Skift til grupper"
@@ -124,6 +139,8 @@
 				Margin="0 0 10 0"
 				FontSize="15"
 				HorizontalAlignment="Right"
-				Background="Gray"/>
+				Background="#808080"
+				Foreground="Black"
+				Command="{Binding Btn_GroupView}"/>
 	</Grid>
 </UserControl>

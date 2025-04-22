@@ -1,6 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using CheckinSystemAvalonia.ViewModels.Windows;
 using DynamicData;
 using ReactiveUI;
+using System.Diagnostics;
 using System.Reactive;
 
 namespace CheckinSystemAvalonia.ViewModels.UserControls;
@@ -24,9 +27,12 @@ public class AdminLoginViewModel : ViewModelBase
     //buttons
     public ReactiveCommand<Unit, Unit> Btn_Login_Click { get; }
 
-    public AdminLoginViewModel()
+    private MainWindowViewModel _mainWindowViewModel;
+
+    public AdminLoginViewModel(MainWindowViewModel mainWindowViewModel)
     {
-        
+        _mainWindowViewModel = mainWindowViewModel;
+
         Btn_Login_Click = ReactiveCommand.Create(() => Login(Username,PassWord));
     }
 
@@ -34,10 +40,8 @@ public class AdminLoginViewModel : ViewModelBase
     {
         if(userName == "sko" && password == "test123")
         {
-
+            _mainWindowViewModel.CurrentViewModel = new AdminPanelViewModel(_mainWindowViewModel);
         }
     }
-
-    public string Greeting => "Welcome to Avalonia!";
 
 }
