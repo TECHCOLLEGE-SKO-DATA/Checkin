@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CheckinSystemAvalonia.EmployeeTimeView">
+             x:Class="CheckinSystemAvalonia.Views.UserControls.EmployeeTimeView"
+			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
+			 x:DataType="vm:EmployeeTimeViewModel">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="35"/>
@@ -26,9 +28,21 @@
 				HorizontalAlignment="Right"
 				Margin="2"/>
 
-		<ListBox Grid.Row="1">
-			
-		</ListBox>
+		<DataGrid Grid.Row="1"
+          AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Dato"/> <!--Binding="{Binding ArrivalTime, StringFormat=\{0:dd.MM.yy\}}"-->
+				<DataGridTextColumn Header="Ankomsttid"/> <!--Binding="{Binding ArrivalTime, StringFormat=\{0:HH:mm:ss\}}"-->
+				<DataGridTextColumn Header="Afgangstid"/> <!--Binding="{Binding DepartureTime, StringFormat=\{0:HH:mm:ss\}}"-->
+				<DataGridTemplateColumn>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Content="X"/> <!--Click="BtnDelete"-->
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
 
 		<StackPanel Background="Blue"
 				   Grid.Row="2">
@@ -39,9 +53,50 @@
 			
 		</StackPanel>
 
-		<ListBox Grid.Row="3">
+		<DataGrid Grid.Row="3"
+				  AutoGenerateColumns="False">
 			
-		</ListBox>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="Starts Dato">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<DatePicker/> <!--SelectedDate="{Binding FromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTextColumn Header="Starts Tid"/> <!--Binding="{Binding FromTime, StringFormat=\{0:HH:mm\}}"-->
+
+				<DataGridTemplateColumn Header="Sluts Dato">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<DatePicker/> <!--SelectedDate="{Binding ToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTextColumn Header="Sluts Tid"/> <!--Binding="{Binding ToTime, StringFormat=\{0:HH:mm\}}"-->
+
+				<DataGridTemplateColumn>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Content="X"/> <!--Click="BtnDeleteAbsence"-->
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Fravær">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox Width="100"/>
+								<!--ItemsSource="{Binding Source={StaticResource AbsenceReasonProvider}}" SelectedItem="{Binding AbsenceReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTextColumn Header="Note"/> <!--Binding="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+			</DataGrid.Columns>
+		</DataGrid>
 
 		<StackPanel Background="Blue" 
 				    Grid.Row="4" 

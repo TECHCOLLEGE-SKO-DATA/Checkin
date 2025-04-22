@@ -18,18 +18,17 @@
 		<WrapPanel Background="Blue" 
 				   Orientation="Horizontal" 
 				   Grid.Row="0">
-			
-			<ComboBox Background="#808080" 
+
+			<ComboBox Background="#808080"
 					  Margin="3"
 					  MinWidth="200"
-					  Foreground="Black"/>
+					  BorderBrush="Black"/>
 			
 			<Button Content="Alle Brugere"
 					Margin="10 0 0 0"
                     FontSize="15"
 					Background="#808080"
-					Foreground="Black">
-			</Button>
+					Foreground="Black"/>
 			
 			<Button Content="Rediger næste scannet kort"
 					Margin="10 0 0 0"
@@ -41,7 +40,8 @@
 					Margin="10 0 0 0"
 					FontSize="15"
 					Background="#808080"
-					Foreground="Black"/>
+					Foreground="Black"
+					Command="{Binding Btn_SettingsView}"/>
 			
 		</WrapPanel>
 		
@@ -50,7 +50,8 @@
 				HorizontalAlignment="Right"
 				Margin="0 0 10 0"
 				Background="#808080"
-				Foreground="Black"/>
+				Foreground="Black"
+				Command="{Binding Btn_LoginView}"/>
 
 		<!--Item Control for Employees-->
 		<ItemsControl Grid.Row="1">
