@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
+        x:Class="CheckinSystemAvalonia.Views.MessageBoxWindow"
+        xmlns:vm="using:CheckinSystemAvalonia.ViewModels.Windows"
+		x:DataType="vm:MessageBoxViewModel"
+		Width="400" Height="200"
+		CanResize="False"
+		Title="{Binding Title}">
+	
+	<Grid>
+		<StackPanel Margin="20" Spacing="10">
+			<TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" FontSize="16"/>
+			<Button Content="Ok" HorizontalAlignment="Right" Width="80" Click="Btn_Ok"/>
+		</StackPanel>
+	</Grid>
+	
+</Window>

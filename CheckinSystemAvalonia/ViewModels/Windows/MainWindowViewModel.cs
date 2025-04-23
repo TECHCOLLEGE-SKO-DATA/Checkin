@@ -23,5 +23,20 @@ public class MainWindowViewModel : ViewModelBase
     {
         CurrentViewModel = new AdminLoginViewModel(this);
     }
+
+    public void SwitchToGroupView()
+    {
+        CurrentViewModel = new AdminGroupViewModel();
+    }
+
+    public void SwitchToSettingsView()
+    {
+        CurrentViewModel = new SettingsViewModel();
+    }
+
+    public void SwitchToLoginView()
+    {
+       CurrentViewModel = new AdminLoginViewModel(this);
+    }
 }
 

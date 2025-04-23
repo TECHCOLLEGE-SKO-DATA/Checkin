@@ -1,0 +1,23 @@
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+/*
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+*/
+namespace CheckinSystemAvalonia.CustomControls;
+
+public class DatePickerNoWatermark : DatePicker
+{
+    /*
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        DatePickerTextBox box = base.GetTemplateChild("PART_TextBox") as DatePickerTextBox;
+        box.ApplyTemplate();
+
+        ContentControl watermark = box.Template.FindName("PART_Watermark", box) as ContentControl;
+        watermark.Content = "";
+    }
+    */
+}

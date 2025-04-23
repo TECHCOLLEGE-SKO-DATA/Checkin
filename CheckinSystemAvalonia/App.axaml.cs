@@ -3,11 +3,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CheckinSystemAvalonia.ViewModels;
 using CheckinSystemAvalonia.Views;
+using CheckinSystemAvalonia.Database;
 
 namespace CheckinSystemAvalonia
 {
     public partial class App : Application
     {
+        DatabaseHelper database;
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -40,8 +42,18 @@ namespace CheckinSystemAvalonia
                 FakeNFC.Show();
                 #endif
             }
-
+            if (Database.Database.EnsureDatabaseAvailable()) 
+            { }
             base.OnFrameworkInitializationCompleted();
+        }
+        public void OpenMessageBox(string title, string errorMessage)
+        {
+            var messageBox = new MessageBoxWindow
+            {
+                DataTemplates = { new ViewLocator() },
+                DataContext = new ViewModels.Windows.MessageBoxViewModel(title, errorMessage),
+            };
+            messageBox.Show();
         }
     }
 }
