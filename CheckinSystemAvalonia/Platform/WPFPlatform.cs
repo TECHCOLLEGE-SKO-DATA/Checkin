@@ -1,6 +1,5 @@
 using CheckinSystemAvalonia.CardReader;
 using CheckinSystemAvalonia.ViewModels.Windows;
-using System;
 
 namespace CheckinSystemAvalonia.Platform;
 
@@ -26,12 +25,10 @@ public class WPFPlatform : IPlatform
 
     public void Start()
     {
-        /*
         Startup.OpenEmployeeOverview(this);
         _mainWindowViewModel = new(this);
         _mainWindowViewModel.LoadDataFromDatabase();
         DataLoaded?.Invoke(this, EventArgs.Empty);
-        */
     }
 
 }

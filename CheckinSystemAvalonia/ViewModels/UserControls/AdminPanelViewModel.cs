@@ -1,4 +1,5 @@
-﻿using CheckinSystemAvalonia.ViewModels.Windows;
+﻿using CheckinSystemAvalonia.Platform;
+using CheckinSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 
         private MainWindowViewModel _mainWindowViewModel;
 
-        public AdminPanelViewModel(MainWindowViewModel mainWindowViewModel) 
+        public AdminPanelViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform) 
         {
             _mainWindowViewModel = mainWindowViewModel;
 
@@ -29,6 +30,10 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             Btn_SettingsView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToSettingsView());
 
             Btn_LoginView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToLoginView());
+        }
+
+        public AdminPanelViewModel(IPlatform platform) : base(platform)
+        {
         }
     }
 }

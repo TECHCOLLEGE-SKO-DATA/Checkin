@@ -4,9 +4,8 @@ using Dapper;
 using System.Data.SqlClient;
 using CheckinSystemAvalonia.Database;
 using System.Windows;
-using Avalonia.Media;
 using System;
-using System.Collections.Generic;
+using Avalonia.Media;
 
 namespace CheckinSystemAvalonia.Models;
 
@@ -160,7 +159,6 @@ public class Employee : INotifyPropertyChanged
         IsCheckedIn = isCheckedIn;
     }
     public FontWeight FontBoldNormal { get; set; } = FontWeight.Normal;
-
     public Employee(string firstName, string middleName, string lastName, string cardID)
     {
         FirstName = firstName;

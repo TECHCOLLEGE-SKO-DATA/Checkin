@@ -9,6 +9,7 @@ using Dapper;
 
 namespace CheckinSystemAvalonia.Models;
 
+
 public class Group : INotifyPropertyChanged
 {
     DatabaseHelper databaseHelper = new();
@@ -28,6 +29,7 @@ public class Group : INotifyPropertyChanged
         get => _isvisible;
         set => SetProperty(ref _isvisible, value);
     }
+
     public ObservableCollection<Employee> Members { get; private set; } = new();
 
     public static List<Group> GetAllGroups(List<Employee> employees)

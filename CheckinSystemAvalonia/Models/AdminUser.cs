@@ -1,13 +1,6 @@
 ﻿namespace CheckinSystemAvalonia.Models;
 
-using System.Data.SqlClient;
-using System.Diagnostics;
 using CheckinSystemAvalonia.Database;
-using Dapper;
-using BCrypt.Net;
-using Database;
-//using System.Windows.Controls;
-using Avalonia.Controls;
 using System.Collections.Generic;
 
 public class AdminUser
@@ -37,7 +30,6 @@ public class AdminUser
     {
         return databasehelper.GetAdminUsers();
     }
-
     public void Delete(int ID)
     {
         databasehelper.Delete(ID);

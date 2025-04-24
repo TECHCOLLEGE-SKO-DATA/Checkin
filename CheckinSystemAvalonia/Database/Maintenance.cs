@@ -5,9 +5,6 @@ using CheckinSystemAvalonia.ViewModels;
 using System.Diagnostics;
 using Dapper;
 using System.Collections.Generic;
-using Avalonia;
-using System;
-using System.Threading.Tasks;
 
 namespace CheckinSystemAvalonia.Database;
 
@@ -25,17 +22,18 @@ public class Maintenance
             
             if (!Equals(lastCheckInDate, currentDate) && employee.DepartureTime == null)
             {
-                /*Application.Current.Dispatcher.Invoke( () => {
+                Application.Current.Dispatcher.Invoke( () => {
                     employee.DepartureTime = lastCheckInDate.ToDateTime(TimeOnly.Parse("23:50"));
                     employee.IsCheckedIn = false;
                 });
-                updatedEmployees.Add(employee);*/
+                updatedEmployees.Add(employee);
             }
         }
         Task.Run(() =>
         {
             foreach (var employee in updatedEmployees)
-                InsrtNewCheckOutTime(employee);
+            InsrtNewCheckOutTime(employee);
+
         });
     }
 
@@ -50,17 +48,18 @@ public class Maintenance
             using var connection = Database.GetConnection();
             if (connection == null)
                 throw new Exception("Could not establish database connection!");
+
             var siteTime = connection.Execute(updatequery, employee);
         }
         catch (SqlException e)
         {
             Debug.WriteLine(e);
-            //MessageBox.Show($"Database Fejl: {e.Message}", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Database Fejl: {e.Message}", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
-            //MessageBox.Show($"Der opstod en fejl: {e.Message}", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Der opstod en fejl: {e.Message}", "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

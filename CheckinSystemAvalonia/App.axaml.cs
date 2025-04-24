@@ -20,18 +20,14 @@ namespace CheckinSystemAvalonia
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
 
+
+                /*
                 var mainWindow = new MainWindow
                 {
                     DataTemplates = { new ViewLocator() },
                     DataContext = new ViewModels.Windows.MainWindowViewModel()
                 };
                 mainWindow.Show();
-
-                var employeeWindow = new EmployeeOverviewWindow
-                {
-                    DataContext = new ViewModels.Windows.EmployeeOverviewViewModel()
-                };
-                employeeWindow.Show();
                 
                 #if DEBUG
                 var FakeNFC = new FakeNFCWindow
@@ -41,6 +37,7 @@ namespace CheckinSystemAvalonia
                 };
                 FakeNFC.Show();
                 #endif
+                */
             }
             if (Database.Database.EnsureDatabaseAvailable()) 
             { }

@@ -63,9 +63,9 @@ public static class Database
             if (!IsSqlServerInstalled())
             {
                 /*
-                MessageBox.Show("Microsoft SQL Server er ikke installeret!",
-                    "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
-                */
+               MessageBox.Show("Microsoft SQL Server er ikke installeret!",
+                   "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+               */
                 return false;
             }
 
@@ -80,8 +80,9 @@ public static class Database
         catch (Exception e)
         {
             Debug.WriteLine(e);
-            app.OpenMessageBox("Uforventet Fejl", $"Database opstartsfejl: {e.Message} Database Fejl");
-            
+
+            MessageBox.Show($"Database opstartsfejl: {e.Message}",
+                "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
     }
@@ -117,19 +118,15 @@ public static class Database
 
     private static bool IsSqlServerInstalled()
     {
-        /*
         return ServiceController
             .GetServices()
             .Any(sc => sc.ServiceName.Equals(SqlServiceName));
-        */
-        return true;
     }
 
     private static bool EnsureSqlServiceRunning()
     {
         try
         {
-            
             using (ServiceController sc = new ServiceController(SqlServiceName))
             {
                 if (sc.Status == ServiceControllerStatus.Running)

@@ -5,7 +5,7 @@ using System.Data.SQLite;
 using Dapper;
 using CheckinSystemAvalonia.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
+using static CheckinSystemAvalonia.Models.Absence;
 
 namespace CheckinSystemAvalonia.Database
 {
@@ -31,7 +31,7 @@ namespace CheckinSystemAvalonia.Database
             connection.Open();
             connection.Execute(sql, parameters);
         }
-      
+
         private T QuerySingle<T>(string sql, object parameters = null)
         {
             using var connection = GetConnection();
@@ -209,5 +209,86 @@ namespace CheckinSystemAvalonia.Database
             int newGroupId = QuerySingle<int>(query, new { name });
             return new Group(newGroupId, name);
         }
+
+        //From Absence
+        public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, absenceReason _reason)
+        {
+            string insertQuery = @"
+            INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
+            VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
+            SELECT last_insert_rowid();";
+
+            using var connection = GetConnection();
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            var absenceId = connection.ExecuteScalar<int>(insertQuery, new
+            {
+                employeeId = _employeeId,
+                fromDate = _fromDate,
+                toDate = _toDate,
+                note = _note,
+                reason = (int)_reason
+            });
+
+            return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
+        }
+        public void EditAbsence(List<Absence> absences)
+        {
+            string editQuery = @"
+            UPDATE Absence SET 
+            fromDate = @FromDate, 
+            toDate = @ToDate, 
+            note = @Note, 
+            AbsenceReason = @AbsenceReason
+            WHERE ID = @ID";
+
+            using var connection = GetConnection();
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            connection.Execute(editQuery, absences);
+        }
+
+        public void DeleteAbsence(int _id)
+        {
+            string deleteQuery = @"DELETE FROM Absence WHERE ID = @id";
+
+            using var connection = GetConnection(); 
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            connection.Execute(deleteQuery, new { id = _id });
+        }
+        public List<Absence> GetAllAbsence(Employee employee)
+        {
+            string selectQuery = @"SELECT * FROM Absence WHERE employeeId = @employeeId";
+
+            using var connection = GetConnection();
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
+            .Select(t =>
+            {
+                t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Syg;
+
+                // Ensure that FromTime and ToTime are populated based on FromDate and ToDate
+                if (t.FromDate != null)
+                {
+                    t.FromTime = TimeOnly.FromDateTime(t.FromDate);
+                }
+                if (t.ToDate != null)
+                {
+                    t.ToTime = TimeOnly.FromDateTime(t.ToDate);
+                }
+
+                return t;
+            })
+            .ToList();
+
+            return absences;
+        }
+
     }
 }

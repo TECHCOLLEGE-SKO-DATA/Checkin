@@ -39,7 +39,7 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             }
         }
 
-        public EmployeeOverviewViewModel()
+        public EmployeeOverviewViewModel(Platform.IPlatform platform)
         {
             LoadDummyData();
             ZoomIn = ReactiveCommand.Create(ZoomInExecuted);

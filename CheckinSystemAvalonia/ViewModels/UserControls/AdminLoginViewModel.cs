@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.Windows;
 using DynamicData;
 using ReactiveUI;
@@ -29,7 +30,7 @@ public class AdminLoginViewModel : ViewModelBase
 
     private MainWindowViewModel _mainWindowViewModel;
 
-    public AdminLoginViewModel(MainWindowViewModel mainWindowViewModel)
+    public AdminLoginViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform)
     {
         _mainWindowViewModel = mainWindowViewModel;
 
