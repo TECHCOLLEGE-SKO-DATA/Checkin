@@ -21,11 +21,17 @@ public class AdminEmployeeViewModel : ViewModelBase
     {
         platform.DataLoaded += (sender, args) =>
         {
+            SelectedEmployeeGroup = platform.MainWindowViewModel.Employees;
+            var sortedList = SelectedEmployeeGroup.OrderBy(emp => emp.FirstName).ToList();
             SelectedEmployeeGroup.Clear();
-            foreach (var employee in platform.MainWindowViewModel.Employees)
+            foreach (var employee in sortedList)
             {
                 SelectedEmployeeGroup.Add(employee);
             }
+            //foreach (var employee in platform.MainWindowViewModel.Employees)
+            //{
+            //    SelectedEmployeeGroup.Add(employee);
+            //}
         };
         SelectedEmployees = new();
     }
@@ -48,6 +54,11 @@ public class AdminEmployeeViewModel : ViewModelBase
     public void SeeEmployeeTime(Employee employee)
     {
         _platform.MainWindowViewModel.SeeEmployeeTime(employee);
+    }
+
+    public void SeeAbsence(Employee employee)
+    {
+
     }
 
     public void EditEmployeeGroup(Employee employee)

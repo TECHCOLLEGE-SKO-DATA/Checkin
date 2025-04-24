@@ -43,3 +43,14 @@ CREATE TABLE adminUser (
     username TEXT NOT NULL UNIQUE,
     hashedPassword TEXT NOT NULL
 );
+
+-- Absence Table
+CREATE TABLE Absence (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    employeeId INT NOT NULL,
+    fromDate DATETIME NOT NULL,
+    toDate DATETIME NOT NULL,
+    AbsenceReason INT NOT NULL,
+    note TEXT,
+    FOREIGN KEY (employeeId) REFERENCES employee(ID) ON DELETE CASCADE
+);

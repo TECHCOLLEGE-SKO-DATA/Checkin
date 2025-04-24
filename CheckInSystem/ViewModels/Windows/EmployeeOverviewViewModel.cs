@@ -103,8 +103,11 @@ namespace CheckInSystem.ViewModels.Windows
                 LoadGroupsAndEmployees(); // Load groups and apply sorting
                 SortEmployees();
             };
-            platform.CardReader.CardScanned += (sender, args) =>
+            platform.CardReader.CardScanned += async (sender, args) =>
             {
+                //to ensure correct sorting 10 millisecond delay
+                await Task.Delay(10);
+
                 //Sort again
                 SortEmployees();
             };

@@ -1,5 +1,8 @@
-﻿public class BackgroundTimeService
+﻿using CheckInSystem.Background_tasks;
+public class BackgroundTimeService
 {
+    AbsencBackGroundService absence = new();
+
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
     private readonly TimeSpan _startTime = new TimeSpan(21, 0, 0);  // 21:00 (9 PM)
     private readonly TimeSpan _endTime = new TimeSpan(1, 0, 0);    // 01:00 (1 AM)
@@ -7,7 +10,7 @@
     private bool _hasLoggedToday = false;
     private CancellationTokenSource _cts;
     private readonly Func<DateTime> _timeProvider;
-
+    
     public event Action OnDailyReset;
     public Action PerformMaintenanceAction { get; set; } = () => { };
 
@@ -40,6 +43,8 @@
 
         if ((currentTime >= _startTime || currentTime < _endTime) && !_hasLoggedToday)
         {
+            absence.AbsenceTask();
+
             _hasLoggedToday = true;
             PerformMaintenanceAction.Invoke();
         }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using CheckInSystem.Models;
 using CheckInSystem.ViewModels;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.Dialog;
@@ -38,9 +39,11 @@ public partial class AdminPanel : UserControl
     private void BtnEditOffsiteForEmployees(object sender, RoutedEventArgs e)
     {
         EditOffsiteDialog editOffsite = new EditOffsiteDialog();
+        Absence absence = new Absence();
         if (editOffsite.ShowDialog() == true)
-        {
-            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, editOffsite.Isoffsite, editOffsite.OffsiteUntil);
+        { 
+            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, /*editOffsite.Isoffsite, editOffsite.OffsiteUntil,*/
+                (DateTime)editOffsite.FromDate, (DateTime)editOffsite.ToDate, editOffsite.Note, (Absence.absenceReason)editOffsite.AbsenceReason);
         }
     }
 
