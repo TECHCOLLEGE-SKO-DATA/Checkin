@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using CheckinLib.Platform;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
 
         public string ErrorMessage { get; set; }
 
-        public MessageBoxViewModel(string title, string errorMessage)
+        public MessageBoxViewModel(IPlatform platform, string title, string errorMessage) : base(platform)
         {
             Title = title;
 

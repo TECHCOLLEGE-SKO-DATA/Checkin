@@ -1,26 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CheckinSystemAvalonia.CardReader;
-using CheckinSystemAvalonia.Database;
-using CheckinSystemAvalonia.Settings;
-using CheckinSystemAvalonia.Models;
-using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels;
-using CheckinSystemAvalonia.ViewModels.UserControls;
+﻿using Avalonia.Controls;
+using Avalonia.Platform;
+using Avalonia;
+using CheckinSystemAvalonia;
+using CheckinLib.Database;
+using CheckinLib.Platform;
+using CheckinLib.Settings;
 using CheckinSystemAvalonia.ViewModels.Windows;
 using CheckinSystemAvalonia.Views;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia;
-using System.Threading.Tasks;
-using Avalonia.Platform;
-using System.Linq;
 
-namespace CheckinSystemAvalonia;
-
-public static class Startup
+public class Startup
 {
-    private static IPlatform _platform;
+    private static IScreenImpl screenImpl;
+
+    private static IPlatform platform;
+
+    private static Platform _platform;
 
     public static bool Run()
     {
@@ -28,41 +22,60 @@ public static class Startup
 
         if (!EnsureDatabaseAvailable()) return false;
 
-        //ACR122U.StartReader(); // Optional: uncomment if needed
-        //ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
-        //ViewModelBase.Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
+        _platform = new Platform();
+        platform = _platform;
 
+        _platform.DataLoaded += (sender, args) => {};
+
+        _platform.Start();
+
+        var mainWindow = new MainWindow
+        {
+            DataTemplates = { new ViewLocator() },
+            DataContext = new MainWindowViewModel(_platform)
+        };
+        mainWindow.Show();
+
+
+        OpenEmployeeOverview(_platform);
         AddAdmin();
 
         return true;
     }
 
-    public static void OpenEmployeeOverview(IPlatform platform)
+    public static void OpenEmployeeOverview(IPlatform iplatform)
     {
-        _platform = platform;
+        platform = iplatform; 
+
+        Screens screenRetriver = new Screens(screenImpl);
 
         SettingsControl settings = new SettingsControl();
         int screenIndex = settings.GetEmployeeOverViewSettings();
 
-        var employeeOverview = new EmployeeOverviewWindow(new EmployeeOverviewViewModel(_platform));
+        var employeeOverviewViewModel = new EmployeeOverviewViewModel(_platform);
+        var employeeOverview = new EmployeeOverviewWindow(employeeOverviewViewModel)
+        {
+            DataTemplates = { new ViewLocator() },
+            DataContext = employeeOverviewViewModel
+        };
 
-        var screens = employeeOverview.Screens.All.ToList();
+        var screensCount = screenRetriver.ScreenCount;
+        var screens = screenRetriver.All;
 
-        if (screenIndex >= 0 && screenIndex < screens.Count)
+        if (screenIndex >= 0 && screenIndex < screensCount)
         {
             var targetScreen = screens[screenIndex];
             var bounds = targetScreen.Bounds;
 
-            employeeOverview.WindowStartupLocation = WindowStartupLocation.Manual;
+            employeeOverview.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.Manual;
             employeeOverview.Position = new PixelPoint(bounds.X, bounds.Y);
             employeeOverview.Width = bounds.Width;
             employeeOverview.Height = bounds.Height;
         }
         else
         {
-            employeeOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            employeeOverview.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
         }
-
         employeeOverview.Show();
     }
 
@@ -70,38 +83,19 @@ public static class Startup
     {
         DatabaseHelper databaseHelper = new();
         var admins = databaseHelper.GetAdminUsers();
-
         if (admins.Count == 0)
         {
             databaseHelper.CreateUser("sko", "test123");
         }
     }
 
+    // Ensure database is available
     private static bool EnsureDatabaseAvailable()
     {
-        if (!Database.Database.EnsureDatabaseAvailable())
+        if (!Database.EnsureDatabaseAvailable())
         {
-            var messageBox = new MessageBoxWindow
-            {
-                DataContext = new MessageBoxViewModel(
-                    "Uforventet Fejl",
-                    "Kunne ikke oprette forbindelse til databasen!")
-            };
-
-            var lifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-            if (lifetime?.MainWindow != null)
-            {
-                messageBox.ShowDialog(lifetime.MainWindow);
-            }
-            else
-            {
-                
-            }
-
             return false;
         }
-
         return true;
     }
-
 }

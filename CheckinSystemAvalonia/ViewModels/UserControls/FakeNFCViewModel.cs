@@ -1,4 +1,4 @@
-﻿using CheckinSystemAvalonia.Platform;
+﻿using CheckinLib.Platform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 {
     public class FakeNFCViewModel : ViewModelBase
     {
-        public FakeNFCViewModel(IPlatform platform) : base(platform) 
+        public FakeNFCViewModel(IPlatform platform) : base(platform)
         {
             
         }

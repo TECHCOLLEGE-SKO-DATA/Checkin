@@ -49,6 +49,7 @@ public class Startup
     //    }
     //    employeeOverview.Show();
     //}
+
     public static void OpenEmployeeOverview(IPlatform _platform)
     {
         SettingsControl settings = new SettingsControl();

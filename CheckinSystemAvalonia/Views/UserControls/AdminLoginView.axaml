@@ -32,21 +32,24 @@
             <StackPanel>
                 <TextBlock Text="Administrations Login" FontSize="25" TextAlignment="Center"/>
                 <TextBlock Text="Brugernavn" FontSize="20" Margin="5"/>
-                <TextBox Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged}" 
-                         FontSize="20" 
-                         Margin="5" 
-                         BorderBrush="Gray"></TextBox>
-				
-                <TextBlock Text="Kodeord" FontSize="20" Margin="5"/>
-				
-				<TextBox Text="{Binding PassWord, Mode=TwoWay}"
-                         FontSize="20"
-                         Margin="5"
-                         BorderBrush="Gray"
-                         PasswordChar="*"/>
-				
-				<Button Command="{Binding Btn_Login_Click}" Content="Login" FontSize="20" Margin="5"/>
-            </StackPanel>
+                <TextBox Text="{Binding Path=Username, Mode=TwoWay}"
+		                 FontSize="20"
+		                 Margin="5"
+		                 BorderBrush="Gray"></TextBox>
+
+				<TextBlock Text="Kodeord" FontSize="20" Margin="5"/>
+
+				<TextBox Text="{Binding Path=PassWord, Mode=TwoWay}"
+						 FontSize="20"
+						 Margin="5"
+						 BorderBrush="Gray"
+						 PasswordChar="*"></TextBox>
+
+				<Button Command="{Binding Btn_Login_Click}"
+                        Content="Login"
+                        FontSize="20"
+                        Margin="5"/>
+			</StackPanel>
         </Border>
     </Grid>
 </UserControl>

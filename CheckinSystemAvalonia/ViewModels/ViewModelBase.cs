@@ -1,4 +1,4 @@
-﻿using CheckinSystemAvalonia.Platform;
+﻿using CheckinLib.Platform;
 using CheckinSystemAvalonia.ViewModels.UserControls;
 using CheckinSystemAvalonia.Views.UserControls;
 using ReactiveUI;
@@ -10,10 +10,8 @@ namespace CheckinSystemAvalonia.ViewModels;
 
 public class ViewModelBase : ReactiveObject
 {
-    private IPlatform platform;
 
     public ViewModelBase(IPlatform platform)
     {
-        this.platform = platform;
     }
 }

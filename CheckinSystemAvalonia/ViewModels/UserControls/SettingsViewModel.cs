@@ -1,4 +1,4 @@
-﻿using CheckinSystemAvalonia.Platform;
+﻿using CheckinLib.Platform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
