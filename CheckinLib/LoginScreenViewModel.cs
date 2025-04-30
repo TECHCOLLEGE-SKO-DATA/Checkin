@@ -3,17 +3,17 @@ using System.Windows;
 using System.Windows.Input;
 using CheckinLib.Database;
 using CheckinLib.Models;
-using CheckinLib.Platform;
+
 
 namespace CheckinLib.ViewModels.UserControls;
 
 public delegate void LoginSuccessful(object sender, EventArgs args);
 
-public class LoginScreenViewModel : ViewModelBase
+public class LoginScreenViewModel
 {
     public event LoginSuccessful? LoginSuccessful;
 
-    public LoginScreenViewModel(IPlatform platform) : base(platform)
+    public LoginScreenViewModel()
     {
         
     }

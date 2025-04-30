@@ -1,61 +1,46 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media;
-using CheckinLib.Platform;
-using ReactiveUI;
-using System.Collections.Generic;
+﻿using ReactiveUI;
+using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using CheckinLib.Models;
+using System.Reactive;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Windows;
 using CheckinLib.Database;
-using CheckinLib.ViewModels.Windows;
+using CheckinSystemAvalonia.Platform;
 
 namespace CheckinSystemAvalonia.ViewModels.Windows
 {
     public class EmployeeOverviewViewModel : ViewModelBase
     {
-
+        private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
-        private WindowState _windowState = WindowState.Normal;
-        private bool _canResize = true;
-
-        public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> ToggleFullscreen { get; private set; }
-
-        ObservableCollection<Group> _groups = new();
-
-        public ObservableCollection<Group> Groups
-        {
-            get => _groups;
-            set => this.RaiseAndSetIfChanged(ref _groups, value);
-        }
+        private ResizeMode _resizeMode = ResizeMode.NoResize;
+        private WindowStyle _windowStyle = WindowStyle.None;
+        WindowState _windowState;
 
         public string AppVersion
         {
             get
             {
-                string version = Assembly.GetExecutingAssembly()
+                string? version = Assembly.GetExecutingAssembly()
                     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
                     .InformationalVersion;
 
+                // Remove anything after '+' to keep it clean
                 return "v" + (version?.Split('+')[0] ?? "Unknown");
             }
         }
-
-        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
+        // Add Groups property
+        private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
+        public ObservableCollection<Group> Groups
         {
-
-            SortEmployees();
-
-
-            ZoomIn = ReactiveCommand.Create(ZoomInExecuted);
-            ZoomOut = ReactiveCommand.Create(ZoomOutExecuted);
-            ToggleFullscreen = ReactiveCommand.Create(ToggleFullscreenExecuted);
+            get => _groups;
+            set => this.RaiseAndSetIfChanged(ref _groups, value);
         }
 
         public decimal ScaleSize
@@ -64,41 +49,111 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             set => this.RaiseAndSetIfChanged(ref _scaleSize, value);
         }
 
+        public ResizeMode ResizeMode
+        {
+            get => _resizeMode;
+            set => this.RaiseAndSetIfChanged(ref _resizeMode, value);
+        }
+        public WindowStyle WindowStyle
+        {
+            get => _windowStyle;
+            set => this.RaiseAndSetIfChanged(ref _windowStyle, value);
+        }
         public WindowState WindowState
         {
             get => _windowState;
             set => this.RaiseAndSetIfChanged(ref _windowState, value);
         }
 
-        public bool CanResize
-        {
-            get => _canResize;
-            set => this.RaiseAndSetIfChanged(ref _canResize, value);
-        }
-
-        private void ZoomInExecuted()
+        public void ZoomIn()
         {
             ScaleSize += 0.1M;
         }
 
-        private void ZoomOutExecuted()
+        public void ZoomOut()
         {
             ScaleSize -= 0.1M;
             if (ScaleSize < 0.1M) ScaleSize = 0.1M;
         }
 
-        private void ToggleFullscreenExecuted()
+        public void ToggleFullscreen()
         {
-            if (_windowState == WindowState.Normal)
+            if (ResizeMode == ResizeMode.NoResize)
             {
-
-                WindowState = WindowState.FullScreen;
-                
+                ResizeMode = ResizeMode.CanResizeWithGrip;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                WindowState = WindowState.Normal;
             }
             else
             {
-                WindowState = WindowState.Normal;
+                ResizeMode = ResizeMode.NoResize;
+                WindowStyle = WindowStyle.None;
+                WindowState = WindowState.Maximized;
             }
+        }
+
+        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
+        {
+            string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            filePath += @"\EmployeeOverviewViewModelConfig.txt";
+            ConfigFilePath = filePath;
+            ReadConfig();
+
+            platform.DataLoaded += (sender, args) =>
+            {
+                LoadGroupsAndEmployees(); // Load groups and apply sorting
+                SortEmployees();
+            };
+            platform.CardReader.CardScanned += async (sender, args) =>
+            {
+                //to ensure correct sorting 10 millisecond delay
+                await Task.Delay(10);
+
+                //Sort again
+                SortEmployees();
+            };
+        }
+
+        // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
+        private void ReadConfig()
+        {
+            if (!File.Exists(ConfigFilePath))
+            {
+                File.WriteAllText(ConfigFilePath, ScaleSize.ToString());
+                return;
+            }
+
+            try
+            {
+                string contents = File.ReadAllText(ConfigFilePath);
+                ScaleSize = Convert.ToDecimal(contents);
+            }
+            catch
+            {
+                File.Delete(ConfigFilePath);
+                UpdateConfig();
+            }
+        }
+
+        public void UpdateConfig()
+        {
+            File.WriteAllText(ConfigFilePath, ScaleSize.ToString());
+        }
+
+        // New Method: Load groups and apply sorting
+        private void LoadGroupsAndEmployees()
+        {
+            DatabaseHelper databaseHelper = new();
+            // Fetch employees from the database
+
+            // Fetch groups and assign employees
+            //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
+            Groups = _platform.MainWindowViewModel.Groups;
+
         }
 
         private void SortEmployees()

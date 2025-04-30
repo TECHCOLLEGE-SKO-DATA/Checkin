@@ -1,4 +1,4 @@
-﻿using CheckinLib.Platform;
+﻿using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
 using System;
@@ -25,11 +25,11 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
         {
             _mainWindowViewModel = mainWindowViewModel;
 
-            //Btn_GroupView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToGroupView());
+            Btn_GroupView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToGroupView());
 
-            //Btn_SettingsView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToSettingsView());
+            Btn_SettingsView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToSettingsView());
 
-            //Btn_LoginView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToLoginView());
+            Btn_LoginView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToLoginView());
         }
     }
 }

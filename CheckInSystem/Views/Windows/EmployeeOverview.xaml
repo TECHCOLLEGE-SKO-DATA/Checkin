@@ -78,6 +78,7 @@
             </ItemsControl.LayoutTransform>
         </ItemsControl>
         
+
         <!-- Version Number in Bottom Left Corner -->
         <TextBlock Text="{Binding AppVersion, StringFormat=Version: {0}}" 
                    HorizontalAlignment="Left" 

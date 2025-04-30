@@ -16,6 +16,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="FrApp42.ACR122U" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,8 +24,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Dialog\LoadingStartup.axaml.cs">
-      <DependentUpon>LoadingStartup.axaml</DependentUpon>
-    </Compile>
+    <AvaloniaXaml Update="Views\Windows\EmployeeOverviewWindow.axaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
-using CheckinLib.CardReader;
 using static CheckinLib.Models.Absence;
 
 public class DatabaseHelper : IDatabaseHelper

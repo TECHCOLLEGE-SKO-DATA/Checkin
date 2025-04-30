@@ -1,22 +1,15 @@
-﻿using Avalonia.Controls;
-using CheckinLib.Platform;
+﻿using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
-using System;
 using System.Reactive;
-using CheckinSystemAvalonia.Views;
-using CheckinLib.Database;
-using CheckinLib.Models;
 using CheckinLib.ViewModels.UserControls;
-using System.DirectoryServices.ActiveDirectory;
-using CheckinSystemAvalonia.Views.UserControls;
 
 namespace CheckinSystemAvalonia.ViewModels.UserControls
 {
     public class AdminLoginViewModel : ViewModelBase
     {
-        LoginScreenViewModel loginScreenViewModel = new(Platform);
-        private static IPlatform Platform;
+        LoginScreenViewModel loginScreenViewModel = new();
+
         private MainWindowViewModel _mainWindowViewModel;
 
         private string _userName;
@@ -38,10 +31,8 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 
         public AdminLoginViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform)
         {
-            Platform = platform;
             _mainWindowViewModel = mainWindowViewModel;
 
-            // ReactiveCommand to trigger login method
             Btn_Login_Click = ReactiveCommand.Create(() => Login(Username, PassWord));
         }
 
@@ -51,7 +42,7 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             
             if (status)
             {
-                _mainWindowViewModel.CurrentViewModel = new AdminPanelViewModel(Platform, _mainWindowViewModel);
+                _mainWindowViewModel.SwitchToAdminPanel();
             }
         }
     }

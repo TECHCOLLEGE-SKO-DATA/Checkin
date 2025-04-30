@@ -1,9 +1,9 @@
 
 
 using System.Diagnostics;
-using CheckinLib.Platform;
+using CheckinSystemAvalonia.Platform;
 
-namespace CheckinLib.CardReader;
+namespace CheckinSystemAvalonia.CardReader;
 
 public class ScriptedCardReader : ICardReader
 {

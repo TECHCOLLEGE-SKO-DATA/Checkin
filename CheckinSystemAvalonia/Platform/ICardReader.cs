@@ -1,4 +1,6 @@
-namespace CheckinLib.Platform;
+using System;
+
+namespace CheckinSystemAvalonia.Platform;
 public class ReaderEventArgs : EventArgs
 {
     public string Value = "";

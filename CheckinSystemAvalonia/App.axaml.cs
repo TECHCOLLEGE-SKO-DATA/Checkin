@@ -8,30 +8,28 @@ using CheckinSystemAvalonia.ViewModels.Windows;
 using CheckinLib;
 using System;
 using System.IO;
-using CheckinLib.Platform;
+using CheckinSystemAvalonia.Platform;
 
 namespace CheckinSystemAvalonia;
 
 public partial class App : Application
 {
-    private static IPlatform platform;
-
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public static IPlatform Platform { get; private set; } = null!;
 
     public override void OnFrameworkInitializationCompleted()
     {
-        LoadingStartup loadingStartup = new LoadingStartup();
-        loadingStartup.Show();
         AppDomain.CurrentDomain.UnhandledException += log;
         try
         {
-            if (!Startup.Run())
+            Platform = new Platform.Platform();
+
+            LoadingStartup loadingStartup = new();
+            loadingStartup.Show();
+
+            if (!Startup.Run(Platform)) 
             {
-                
             }
+
             loadingStartup.Close();
         }
         catch (Exception exception)
@@ -39,24 +37,24 @@ public partial class App : Application
             Logger.LogError(exception);
             throw;
         }
+
         base.OnFrameworkInitializationCompleted();
     }
+
+    public bool OpenMessageBox(string title, string errormessage)
+    {
+        var messageBoxWindow = new MessageBoxWindow
+        {
+            DataContext = new MessageBoxViewModel(Platform, title, errormessage)
+        };
+        messageBoxWindow.Show();
+        return true;
+    }
+
     private static void log(object sender, UnhandledExceptionEventArgs e)
     {
         string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
-        if (!Directory.Exists(filePath))
-        {
-            Directory.CreateDirectory(filePath);
-        }
-        filePath += @"\log.txt";
-        File.AppendAllText(filePath, $"At {DateTime.Now} {e}\r\n");
+        if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+        File.AppendAllText(Path.Combine(filePath, "log.txt"), $"At {DateTime.Now} {e}\r\n");
     }
-
-    public bool OpenMessageBox(string tital, string errormessage)
-    {
-        MessageBoxWindow messageBoxWindow = new();
-        MessageBoxViewModel messageBoxViewMode = new(platform ,tital, errormessage);
-        messageBoxWindow.Show();
-        return true;
-    } 
 }

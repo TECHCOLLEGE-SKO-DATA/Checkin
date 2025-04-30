@@ -16,7 +16,6 @@ namespace CheckInSystem;
 
 public class Startup
 {
-    private static IPlatform _platform;
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();

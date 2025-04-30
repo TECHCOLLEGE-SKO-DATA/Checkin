@@ -46,7 +46,7 @@ public static class Database
                 _sqlServiceName = ConfigurationManager.AppSettings["SqlServiceName"];
                 if (string.IsNullOrEmpty(_sqlServiceName))
                 {
-                    throw new Exception("SQL service name is missing in app.config.");
+                    //throw new Exception("SQL service name is missing in app.config.");
                 }
             }
             return _sqlServiceName;
@@ -60,8 +60,8 @@ public static class Database
         {
             if (!IsSqlServerInstalled())
             {
-                MessageBox.Show("Microsoft SQL Server er ikke installeret!",
-                    "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+                /*MessageBox.Show("Microsoft SQL Server er ikke installeret!",
+                    "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);*/
                 return false;
             }
 

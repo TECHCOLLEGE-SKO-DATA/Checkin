@@ -1,4 +1,4 @@
-﻿using CheckinLib.Platform;
+﻿using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.UserControls;
 using ReactiveUI;
 using System;

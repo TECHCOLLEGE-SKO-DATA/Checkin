@@ -1,7 +1,8 @@
-using CheckinLib.CardReader;
-using CheckinLib.ViewModels.Windows;
+using CheckinSystemAvalonia.CardReader;
+using CheckinSystemAvalonia.ViewModels.Windows;
+using System;
 
-namespace CheckinLib.Platform;
+namespace CheckinSystemAvalonia.Platform;
 public class Platform : IPlatform
 {
     ICardReader _cardReader;
@@ -25,7 +26,8 @@ public class Platform : IPlatform
     {
         _mainWindowViewModel = new(this);
         _mainWindowViewModel.LoadDataFromDatabase();
-
+        Startup.OpenEmployeeOverview(this);
         DataLoaded?.Invoke(this, EventArgs.Empty);
     }
+    
 }
