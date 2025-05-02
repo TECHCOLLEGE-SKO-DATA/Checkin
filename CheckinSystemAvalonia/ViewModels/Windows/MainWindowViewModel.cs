@@ -14,9 +14,9 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
-using CheckinLib.CardReader;
 using CheckinLib.Background_tasks;
 using System.Windows;
+using CheckinSystemAvalonia.CardReader;
 
 namespace CheckinSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase

@@ -1,6 +1,6 @@
 ﻿using CheckinLib.Models;
 
-namespace CheckinLib.CardReader;
+namespace CheckinSystemAvalonia.CardReader;
 
 public class State
 { 

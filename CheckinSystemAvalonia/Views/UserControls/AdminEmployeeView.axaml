@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
+			 x:Class="CheckinSystemAvalonia.Views.UserControls.AdminEmployeeView"
+			 x:DataType="vm:AdminEmployeeViewModel">
+	<Grid>
+		<TextBlock Text="Skibidirizz"/>
+		
+		<!--Item Control for Employees-->
+		<ItemsControl>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+
+					<Border BorderThickness="3">
+						<StackPanel>
+							<WrapPanel Orientation="Horizontal">
+
+								<CheckBox Margin="3"/>
+
+								<TextBlock Margin="10 0 0 0"
+										   Text=""
+										   FontSize="70"/>
+							</WrapPanel>
+
+							<WrapPanel HorizontalAlignment="Center">
+
+								<Button Margin="10 0 0 0"
+										Content="Rediger"
+										Background="Gray"
+										Foreground="Black"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Se tider"
+										Background="Gray"
+										Foreground="Black"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Ændre Grupper"
+										Background="Gray"
+										Foreground="Black"/>
+
+								<Button Margin="10 0 0 0"
+										Content="Slet"
+										Background="Gray"
+										Foreground="Black"/>
+
+							</WrapPanel>
+
+							<WrapPanel HorizontalAlignment="Right">
+
+								<TextBlock Margin="10 0 0 0"
+										   FontSize="70"
+										   Text=""/>
+
+								<TextBlock Margin="10 0 0 0"
+										   FontSize="70"
+										   Text=""/>
+
+							</WrapPanel>
+						</StackPanel>
+					</Border>
+
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
+</UserControl>
