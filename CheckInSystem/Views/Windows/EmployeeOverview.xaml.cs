@@ -3,6 +3,8 @@ using System.Windows;
 using CheckInSystem.ViewModels;
 using CheckInSystem.ViewModels.Windows;
 using System.Threading.Tasks;
+using CheckInSystem.Background_tasks;
+using System.Windows.Input;
 
 namespace CheckInSystem.Views
 {
@@ -16,7 +18,11 @@ namespace CheckInSystem.Views
             _vm = vm;
             this.DataContext = _vm;
             InitializeComponent();
-
+            KeyDown += (_, e) =>
+            {
+                if (e.Key == Key.F11)
+                    FullScreenHelpers.ToggleFullScreenWpf();
+            };
             // Start the background time service when the window opens
             StartBackgroundService();
         }
@@ -60,5 +66,7 @@ namespace CheckInSystem.Views
             base.OnClosed(e);
             _timeService?.Stop();  // Stop the background service when the window is closed
         }
+        // Handle the F11 key to toggle full screen
+        
     }
 }
