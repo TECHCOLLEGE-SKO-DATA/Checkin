@@ -15,47 +15,53 @@
 			<ColumnDefinition Width="1*"/>
 			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
-		
-		<ItemsControl Grid.Column="0" Background="LightGray">
 
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<WrapPanel Orientation="Vertical"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-
-					<StackPanel Orientation="Horizontal">
-						
-						<!--FirstName-->
-						<TextBlock/>
-						<!--MiddleName-->
-						<TextBlock/>
-						<!--LastName-->
-						<TextBlock/>
-						
-					</StackPanel>
-					
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-
-		<StackPanel Grid.Column="1" 
-					HorizontalAlignment="Center"
-					VerticalAlignment="Center">
-
-			<Button Content="Get Database" 
-					Margin="0 0 0 20"/>
-			
-			<TextBox Width="220" 
-					 MinHeight="40"
-					 Watermark="CardID Must be 11 charectors"/>
-			
-			<Button Content="Scan Card"
-					Margin="0 20 0 0"/>
-			
+		<StackPanel Orientation="Horizontal" Spacing="20">
+			<!-- Employee List -->
+			<ListBox ItemsSource="{Binding Employees}"
+					 SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding FirstName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+							<TextBlock Text="{Binding MiddleName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+							<TextBlock Text="{Binding LastName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
 		</StackPanel>
+
+
+		<!-- Controls -->
+		<StackPanel HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					Spacing="10"
+					Grid.Column="1">
+
+			<Button Width="150" 
+					Height="50" 
+					FontSize="15"
+					HorizontalAlignment="Center"
+					Content="Get data From DB"
+					Command="{Binding GetFromDatabaseCommand}" />
+
+			<TextBlock FontSize="13" Text="Card ID length is 11 char if the box below has"/>
+			<TextBlock FontSize="13" Text="less then 11 char a random card will be generated" />
+
+			<TextBox Width="200"
+					 Height="50"
+					 FontSize="15"
+					 MaxLength="11"
+					 Text="{Binding NewCardId, Mode=TwoWay}" />
+
+			<Button Width="150"
+					Height="50"
+					FontSize="15"
+					HorizontalAlignment="Center"
+					Content="Scan New Card"
+					Command="{Binding ScanNewCardCommand}" />
+		</StackPanel>
+
 	</Grid>
 </UserControl>

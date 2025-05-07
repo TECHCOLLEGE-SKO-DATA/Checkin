@@ -18,9 +18,4 @@ public partial class MessageBoxWindow : Window
     {
         AvaloniaXamlLoader.Load(this);
     }
-
-    private void Btn_Ok(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        this.Close(); 
-    }
 }

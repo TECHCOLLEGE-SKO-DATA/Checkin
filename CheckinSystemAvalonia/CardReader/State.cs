@@ -1,4 +1,4 @@
-﻿using CheckinSystemAvalonia.Models;
+﻿using CheckinLib.Models;
 
 namespace CheckinSystemAvalonia.CardReader;
 

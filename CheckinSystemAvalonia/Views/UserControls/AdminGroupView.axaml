@@ -96,7 +96,9 @@
 				HorizontalAlignment="Right"
 				Content="Employee List"
 				Background="Gray"
-				Foreground="Black"/>
+				Foreground="Black"
+				Margin="3"
+				Command="{Binding Btn_AdminPanel}"/>
 		
 	</Grid>
 </UserControl>

@@ -1,50 +1,46 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media;
-using ReactiveUI;
-using System.Collections.Generic;
+﻿using ReactiveUI;
+using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using CheckinLib.Models;
+using System.Reactive;
+using System.ComponentModel;
+using System.Windows.Data;
+using System.Windows;
+using CheckinLib.Database;
+using CheckinSystemAvalonia.Platform;
 
 namespace CheckinSystemAvalonia.ViewModels.Windows
 {
     public class EmployeeOverviewViewModel : ViewModelBase
     {
+        private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
-        private WindowState _windowState = WindowState.Normal;
-        private bool _canResize = true;
-
-        public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> ToggleFullscreen { get; private set; }
-
-        private ObservableCollection<Group> _groups;
-        public ObservableCollection<Group> Groups
-        {
-            get => _groups;
-            set => this.RaiseAndSetIfChanged(ref _groups, value);
-        }
+        private ResizeMode _resizeMode = ResizeMode.NoResize;
+        private WindowStyle _windowStyle = WindowStyle.None;
+        WindowState _windowState;
 
         public string AppVersion
         {
             get
             {
-                string version = Assembly.GetExecutingAssembly()
+                string? version = Assembly.GetExecutingAssembly()
                     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
                     .InformationalVersion;
 
+                // Remove anything after '+' to keep it clean
                 return "v" + (version?.Split('+')[0] ?? "Unknown");
             }
         }
-
-        public EmployeeOverviewViewModel()
+        // Add Groups property
+        private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
+        public ObservableCollection<Group> Groups
         {
-            LoadDummyData();
-            ZoomIn = ReactiveCommand.Create(ZoomInExecuted);
-            ZoomOut = ReactiveCommand.Create(ZoomOutExecuted);
-            ToggleFullscreen = ReactiveCommand.Create(ToggleFullscreenExecuted);
+            get => _groups;
+            set => this.RaiseAndSetIfChanged(ref _groups, value);
         }
 
         public decimal ScaleSize
@@ -53,129 +49,122 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             set => this.RaiseAndSetIfChanged(ref _scaleSize, value);
         }
 
+        public ResizeMode ResizeMode
+        {
+            get => _resizeMode;
+            set => this.RaiseAndSetIfChanged(ref _resizeMode, value);
+        }
+        public WindowStyle WindowStyle
+        {
+            get => _windowStyle;
+            set => this.RaiseAndSetIfChanged(ref _windowStyle, value);
+        }
         public WindowState WindowState
         {
             get => _windowState;
             set => this.RaiseAndSetIfChanged(ref _windowState, value);
         }
 
-        public bool CanResize
-        {
-            get => _canResize;
-            set => this.RaiseAndSetIfChanged(ref _canResize, value);
-        }
-
-        private void ZoomInExecuted()
+        public void ZoomIn()
         {
             ScaleSize += 0.1M;
         }
 
-        private void ZoomOutExecuted()
+        public void ZoomOut()
         {
             ScaleSize -= 0.1M;
             if (ScaleSize < 0.1M) ScaleSize = 0.1M;
         }
 
-        private void ToggleFullscreenExecuted()
+        public void ToggleFullscreen()
         {
-            if (_windowState == WindowState.Normal)
+            if (ResizeMode == ResizeMode.NoResize)
             {
-
-                WindowState = WindowState.FullScreen;
-                
+                ResizeMode = ResizeMode.CanResizeWithGrip;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                WindowState = WindowState.Normal;
             }
             else
             {
-                WindowState = WindowState.Normal;
+                ResizeMode = ResizeMode.NoResize;
+                WindowStyle = WindowStyle.None;
+                WindowState = WindowState.Maximized;
             }
         }
 
-        private void LoadDummyData()
+        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
-            var employees1 = new List<Employee>
+            string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
+            if (!Directory.Exists(filePath))
             {
-                new Employee { ID = 1, FirstName = "John", MiddleName = "A", LastName = "Doe", IsCheckedIn = true, IsOffSite = false },
-                new Employee { ID = 2, FirstName = "Jane", MiddleName = "", LastName = "Smith", IsCheckedIn = false, IsOffSite = false }
-            };
+                Directory.CreateDirectory(filePath);
+            }
+            filePath += @"\EmployeeOverviewViewModelConfig.txt";
+            ConfigFilePath = filePath;
+            ReadConfig();
 
-            var employees2 = new List<Employee>
+            platform.DataLoaded += (sender, args) =>
             {
-                new Employee { ID = 3, FirstName = "Alice", MiddleName = "B", LastName = "Brown", IsCheckedIn = true, IsOffSite = true },
-                new Employee { ID = 4, FirstName = "Bob", MiddleName = "C", LastName = "Taylor", IsCheckedIn = false, IsOffSite = false }
+                LoadGroupsAndEmployees(); // Load groups and apply sorting
+                SortEmployees();
             };
-
-            Groups = new ObservableCollection<Group>
+            platform.CardReader.CardScanned += async (sender, args) =>
             {
-                new Group { ID = 101, Name = "Group A", IsVisible = true, Members = new ObservableCollection<Employee>(employees1) },
-                new Group { ID = 102, Name = "Group B", IsVisible = true, Members = new ObservableCollection<Employee>(employees2) }
+                //to ensure correct sorting 10 millisecond delay
+                await Task.Delay(10);
+
+                //Sort again
+                SortEmployees();
             };
         }
 
-        public class Group : ReactiveObject
+        // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
+        private void ReadConfig()
         {
-            public int ID { get; set; }
-
-            private string _name;
-            public string Name
+            if (!File.Exists(ConfigFilePath))
             {
-                get => _name;
-                set => this.RaiseAndSetIfChanged(ref _name, value);
+                File.WriteAllText(ConfigFilePath, ScaleSize.ToString());
+                return;
             }
 
-            private bool _isVisible;
-            public bool IsVisible
+            try
             {
-                get => _isVisible;
-                set => this.RaiseAndSetIfChanged(ref _isVisible, value);
+                string contents = File.ReadAllText(ConfigFilePath);
+                ScaleSize = Convert.ToDecimal(contents);
             }
-
-            private ObservableCollection<Employee> _members = new();
-            public ObservableCollection<Employee> Members
+            catch
             {
-                get => _members;
-                set => this.RaiseAndSetIfChanged(ref _members, value);
+                File.Delete(ConfigFilePath);
+                UpdateConfig();
             }
         }
 
-        public class Employee : ReactiveObject
+        public void UpdateConfig()
         {
-            public int ID { get; set; }
+            File.WriteAllText(ConfigFilePath, ScaleSize.ToString());
+        }
 
-            private string _firstName;
-            public string FirstName
+        // New Method: Load groups and apply sorting
+        private void LoadGroupsAndEmployees()
+        {
+            DatabaseHelper databaseHelper = new();
+            // Fetch employees from the database
+
+            // Fetch groups and assign employees
+            //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
+            Groups = _platform.MainWindowViewModel.Groups;
+
+        }
+
+        private void SortEmployees()
+        {
+            // Apply sorting to each group's Members
+            foreach (var group in Groups)
             {
-                get => _firstName;
-                set => this.RaiseAndSetIfChanged(ref _firstName, value);
-            }
-
-            private string _middleName;
-            public string MiddleName
-            {
-                get => _middleName;
-                set => this.RaiseAndSetIfChanged(ref _middleName, value);
-            }
-
-            public string MiddleNameShort => string.IsNullOrWhiteSpace(MiddleName) ? "" : MiddleName.Substring(0, 1) + ".";
-
-            private string _lastName;
-            public string LastName
-            {
-                get => _lastName;
-                set => this.RaiseAndSetIfChanged(ref _lastName, value);
-            }
-
-            private bool _isCheckedIn;
-            public bool IsCheckedIn
-            {
-                get => _isCheckedIn;
-                set => this.RaiseAndSetIfChanged(ref _isCheckedIn, value);
-            }
-
-            private bool _isOffSite;
-            public bool IsOffSite
-            {
-                get => _isOffSite;
-                set => this.RaiseAndSetIfChanged(ref _isOffSite, value);
+                var view = CollectionViewSource.GetDefaultView(group.Members);
+                view.SortDescriptions.Clear();
+                view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending)); // Checked-in first
+                view.SortDescriptions.Add(new SortDescription(nameof(Employee.FirstName), ListSortDirection.Ascending));    // Alphabetical
             }
         }
     }

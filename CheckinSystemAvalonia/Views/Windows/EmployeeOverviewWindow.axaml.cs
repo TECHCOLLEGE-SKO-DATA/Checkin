@@ -6,7 +6,7 @@ namespace CheckinSystemAvalonia;
 
 public partial class EmployeeOverviewWindow : Window
 {
-    public EmployeeOverviewWindow()
+    public EmployeeOverviewWindow(ViewModels.Windows.EmployeeOverviewViewModel employeeOverviewViewModel)
     {
         InitializeComponent();
     }

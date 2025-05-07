@@ -3,57 +3,58 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CheckinSystemAvalonia.ViewModels;
 using CheckinSystemAvalonia.Views;
-using CheckinSystemAvalonia.Database;
+using CheckinSystemAvalonia;
+using CheckinSystemAvalonia.ViewModels.Windows;
+using CheckinLib;
+using System;
+using System.IO;
+using CheckinSystemAvalonia.Platform;
 
-namespace CheckinSystemAvalonia
+namespace CheckinSystemAvalonia;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public static IPlatform Platform { get; private set; } = null!;
+
+    public override void OnFrameworkInitializationCompleted()
     {
-        DatabaseHelper database;
-        public override void Initialize()
+        AppDomain.CurrentDomain.UnhandledException += log;
+        try
         {
-            AvaloniaXamlLoader.Load(this);
-        }
+            Platform = new Platform.Platform();
 
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            LoadingStartup loadingStartup = new();
+            loadingStartup.Show();
+
+            if (!Startup.Run(Platform)) 
             {
-
-                var mainWindow = new MainWindow
-                {
-                    DataTemplates = { new ViewLocator() },
-                    DataContext = new ViewModels.Windows.MainWindowViewModel()
-                };
-                mainWindow.Show();
-
-                var employeeWindow = new EmployeeOverviewWindow
-                {
-                    DataContext = new ViewModels.Windows.EmployeeOverviewViewModel()
-                };
-                employeeWindow.Show();
-                
-                #if DEBUG
-                var FakeNFC = new FakeNFCWindow
-                {
-                    DataTemplates = { new ViewLocator() },
-                    DataContext = new ViewModels.Windows.FakeNFCWindowViewModel()
-                };
-                FakeNFC.Show();
-                #endif
             }
-            if (Database.Database.EnsureDatabaseAvailable()) 
-            { }
-            base.OnFrameworkInitializationCompleted();
+
+            loadingStartup.Close();
         }
-        public void OpenMessageBox(string title, string errorMessage)
+        catch (Exception exception)
         {
-            var messageBox = new MessageBoxWindow
-            {
-                DataTemplates = { new ViewLocator() },
-                DataContext = new ViewModels.Windows.MessageBoxViewModel(title, errorMessage),
-            };
-            messageBox.Show();
+            Logger.LogError(exception);
+            throw;
         }
+
+        base.OnFrameworkInitializationCompleted();
+    }
+
+    public bool OpenMessageBox(string title, string errormessage)
+    {
+        var messageBoxWindow = new MessageBoxWindow
+        {
+            DataContext = new MessageBoxViewModel(Platform, title, errormessage)
+        };
+        messageBoxWindow.Show();
+        return true;
+    }
+
+    private static void log(object sender, UnhandledExceptionEventArgs e)
+    {
+        string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
+        if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+        File.AppendAllText(Path.Combine(filePath, "log.txt"), $"At {DateTime.Now} {e}\r\n");
     }
 }

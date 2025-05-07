@@ -5,143 +5,103 @@
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="550"
 			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
              x:Class="CheckinSystemAvalonia.Views.UserControls.AdminPanelView"
-			 x:DataType="vm:AdminPanelViewModel">
-	
+			 x:DataType="vm:AdminPanelViewModel"
+			 xmlns:Views="clr-namespace:CheckinSystemAvalonia.Views.UserControls">
+
 	<Grid>
-		
+
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"/>
-			<RowDefinition Height="1*"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
-		
-		<WrapPanel Background="Blue" 
-				   Orientation="Horizontal" 
-				   Grid.Row="0">
 
+		<!-- Top bar -->
+		<WrapPanel Background="Blue" Orientation="Horizontal" Grid.Row="0">
 			<ComboBox Background="#808080"
-					  Margin="3"
-					  MinWidth="200"
-					  BorderBrush="Black"/>
-			
+                      Margin="3"
+                      MinWidth="200"
+                      BorderBrush="Black"
+                      SelectedItem="{Binding SelectedGroup}"/>
+
 			<Button Content="Alle Brugere"
-					Margin="10 0 0 0"
+                    Margin="10 0 0 0"
                     FontSize="15"
-					Background="#808080"
-					Foreground="Black"/>
-			
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding ResetGroupCommand}"/>
+
 			<Button Content="Rediger næste scannet kort"
-					Margin="10 0 0 0"
+                    Margin="10 0 0 0"
                     FontSize="15"
-					Background="#808080"
-					Foreground="Black"/>
-			
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding EditNextScannedCardCommand}"/>
+
 			<Button Content="Settings"
-					Margin="10 0 0 0"
-					FontSize="15"
-					Background="#808080"
-					Foreground="Black"
-					Command="{Binding Btn_SettingsView}"/>
-			
+                    Margin="10 0 0 0"
+                    FontSize="15"
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding Btn_SettingsView}"/>
 		</WrapPanel>
-		
+
 		<Button Content="Logout"
-				Grid.Row="0"
-				HorizontalAlignment="Right"
-				Margin="0 0 10 0"
-				Background="#808080"
-				Foreground="Black"
-				Command="{Binding Btn_LoginView}"/>
+                Grid.Row="0"
+                HorizontalAlignment="Right"
+                Margin="0 0 10 0"
+                Background="#808080"
+                Foreground="Black"
+                Command="{Binding Btn_LoginView}"/>
 
-		<!--Item Control for Employees-->
-		<ItemsControl Grid.Row="1">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
+		<!-- Main tab content -->
+		<TabControl Grid.Row="1"
+                    SelectedIndex="{Binding SelectedTab}"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch">
+			<TabControl.Styles>
+				<Style Selector="TabItem">
+					<Setter Property="IsVisible" Value="False"/>
+				</Style>
+			</TabControl.Styles>
+			<TabItem>
+				<Views:AdminEmployeeView/>
+			</TabItem>
+		</TabControl>
 
-					<Border BorderThickness="3">
-						<StackPanel>
-							<WrapPanel Orientation="Horizontal">
-
-								<CheckBox Margin="3"/>
-
-								<TextBlock Margin="10 0 0 0"
-										   Text=""
-										   FontSize="70"/>
-							</WrapPanel>
-
-							<WrapPanel HorizontalAlignment="Center">
-
-								<Button Margin="10 0 0 0"
-										Content="Rediger"
-										Background="Gray"
-										Foreground="Black"/>
-
-								<Button Margin="10 0 0 0"
-										Content="Se tider"
-										Background="Gray"
-										Foreground="Black"/>
-
-								<Button Margin="10 0 0 0"
-										Content="Ændre Grupper"
-										Background="Gray"
-										Foreground="Black"/>
-
-								<Button Margin="10 0 0 0"
-										Content="Slet"
-										Background="Gray"
-										Foreground="Black"/>
-
-							</WrapPanel>
-
-							<WrapPanel HorizontalAlignment="Right">
-
-								<TextBlock Margin="10 0 0 0"
-										   FontSize="70"
-										   Text=""/>
-
-								<TextBlock Margin="10 0 0 0"
-										   FontSize="70"
-										   Text=""/>
-
-							</WrapPanel>
-						</StackPanel>
-					</Border>
-
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-
-		<!--Bottom Functions-->
-		<WrapPanel Grid.Row="2"
-				   Orientation="Horizontal"
-				   Background="Blue">
-
+		<!-- Bottom bar -->
+		<WrapPanel Grid.Row="2" Orientation="Horizontal" Background="Blue">
 			<Button Content="Tilføj/Fjern valgte brugere fra gruppe"
-					FontSize="15"
-					Margin="3"
-					Background="#808080"
-					Foreground="Black"/>
+                    FontSize="15"
+                    Margin="3"
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding EditGroupsForEmployeesCommand}"/>
 
 			<Button Content="Markere valgte brugere som orlov"
-					Margin="10 0 0 0"
-					FontSize="15"
-					Background="#808080"
-					Foreground="Black"/>
-			
+                    Margin="10 0 0 0"
+                    FontSize="15"
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding MarkAsOffsiteCommand}"/>
+
 			<Button Content="Slet valgte brugere"
-					Margin="10 0 0 0"
-					FontSize="15"
-					Background="#808080"
-					Foreground="Black"/>
+                    Margin="10 0 0 0"
+                    FontSize="15"
+                    Background="#808080"
+                    Foreground="Black"
+                    Command="{Binding DeleteEmployeesCommand}"/>
 		</WrapPanel>
 
 		<Button Content="Skift til grupper"
-				Grid.Row="2"
-				Margin="0 0 10 0"
-				FontSize="15"
-				HorizontalAlignment="Right"
-				Background="#808080"
-				Foreground="Black"
-				Command="{Binding Btn_GroupView}"/>
+                Grid.Row="2"
+                Margin="0 0 10 0"
+                FontSize="15"
+                HorizontalAlignment="Right"
+                Background="#808080"
+                Foreground="Black"
+                Command="{Binding Btn_GroupView}"/>
 	</Grid>
 </UserControl>
+
+

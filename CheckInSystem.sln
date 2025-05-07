@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinSystemAvalonia", "Ch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinSystemAvalonia.Desktop", "CheckinSystemAvalonia.Desktop\CheckinSystemAvalonia.Desktop.csproj", "{1494DA50-FA9F-08A4-1739-742CC93A90E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinLib", "CheckinLib\CheckinLib.csproj", "{950F00C7-682E-4FA3-B386-83E65A1D35C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1494DA50-FA9F-08A4-1739-742CC93A90E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{950F00C7-682E-4FA3-B386-83E65A1D35C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{950F00C7-682E-4FA3-B386-83E65A1D35C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{950F00C7-682E-4FA3-B386-83E65A1D35C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{950F00C7-682E-4FA3-B386-83E65A1D35C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

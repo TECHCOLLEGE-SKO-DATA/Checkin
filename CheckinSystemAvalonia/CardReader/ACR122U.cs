@@ -1,16 +1,16 @@
 ﻿//using System.Data.SqlClient;
 //using System.Diagnostics;
 //using System.Windows;
-//using CheckinSystemAvalonia.Models;
-//using CheckinSystemAvalonia.ViewModels;
-//using CheckinSystemAvalonia.Views.Windows;
+//using CheckinLib.Models;
+//using CheckinLib.ViewModels;
+//using CheckinLib.Views.Windows;
 //using Dapper;
 //using FrApp42.ACR122U;
 //using PCSC;
 //using PCSC.Iso7816;
 
 
-//namespace CheckinSystemAvalonia.CardReader;
+//namespace CheckinLib.CardReader;
 
 //using Database;
 

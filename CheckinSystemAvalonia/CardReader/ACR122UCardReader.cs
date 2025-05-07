@@ -1,4 +1,3 @@
-using CheckinSystemAvalonia;
 using CheckinSystemAvalonia.Platform;
 using FrApp42.ACR122U;
 using PCSC;
@@ -45,7 +44,6 @@ public class ACR122UCardReader : Platform.ICardReader
             {
                 Logger.LogError(e);
             }
-            
 
             ReaderConnected?.Invoke(this, new ReaderEventArgs(){ Value = value});
         };

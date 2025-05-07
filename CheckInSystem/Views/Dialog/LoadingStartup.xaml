@@ -9,6 +9,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize">
+    
     <Grid>
         <TextBlock Text="Check in system starter op" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>

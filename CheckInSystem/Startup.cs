@@ -16,7 +16,6 @@ namespace CheckInSystem;
 
 public class Startup
 {
-    private static IPlatform _platform;
     public static bool Run()
     {
         DatabaseHelper dbHelper = new DatabaseHelper();
@@ -49,6 +48,7 @@ public class Startup
     //    }
     //    employeeOverview.Show();
     //}
+
     public static void OpenEmployeeOverview(IPlatform _platform)
     {
         SettingsControl settings = new SettingsControl();

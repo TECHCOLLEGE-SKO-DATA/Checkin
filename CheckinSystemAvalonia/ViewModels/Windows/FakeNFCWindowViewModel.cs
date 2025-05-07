@@ -1,4 +1,5 @@
-﻿using CheckinSystemAvalonia.ViewModels.UserControls;
+﻿using CheckinSystemAvalonia.Platform;
+using CheckinSystemAvalonia.ViewModels.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             get => _currentViewModel;
             set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
         }
-
-        public FakeNFCWindowViewModel()
+        
+        public FakeNFCWindowViewModel(IPlatform platform) : base(platform)
         {
-            CurrentViewModel = new FakeNFCViewModel();
+            CurrentViewModel = new FakeNFCViewModel(platform);
         }
     }
 }

@@ -1,7 +1,13 @@
-﻿using CheckinSystemAvalonia.ViewModels.Windows;
+﻿using Avalonia.Controls;
+using Avalonia.Platform;
+using CheckinLib.Models;
+using CheckinSystemAvalonia.Platform;
+using CheckinSystemAvalonia.ViewModels.Windows;
+using PCSC;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -12,23 +18,160 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
     public class AdminPanelViewModel : ViewModelBase
     {
 
-        public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
+        public const int EMPLOYEE_LISTPAGE_TAB = 0;
+        public const int EMPLOYEE_TIME_TAB = 1;
+        public const int GROUP_LISTPAGE_TAB = 2;
 
-        public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
+        private readonly IPlatform _platform;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public ReactiveCommand<Unit, Unit> Btn_LoginView {  get; }
+        public ObservableCollection<Group> Groups { get; private set; } = new();
 
-        private MainWindowViewModel _mainWindowViewModel;
-
-        public AdminPanelViewModel(MainWindowViewModel mainWindowViewModel) 
+        private Control _adminPanelContent;
+        public Control AdminPanelContent
         {
+            get => _adminPanelContent;
+            set => this.RaiseAndSetIfChanged(ref _adminPanelContent, value);
+        }
+
+        //public AdminEmployeeViewModel AdminEmployeeViewModel { get; }
+        public AdminGroupViewModel AdminGroupViewModel { get; }
+        public EmployeeTimeViewModel EmployeeTimeViewModel { get; }
+
+        private int _selectedTab;
+        public int SelectedTab
+        {
+            get => _selectedTab;
+            set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+        }
+
+        // Add this field
+        private Group _selectedGroup;
+        public Group SelectedGroup
+        {
+            get => _selectedGroup;
+            set => this.RaiseAndSetIfChanged(ref _selectedGroup, value);
+        }
+
+        // ReactiveCommands for actions
+        public ReactiveCommand<Unit, Unit> EditGroupsForEmployeesCommand { get; }
+        public ReactiveCommand<Unit, Unit> MarkAsOffsiteCommand { get; }
+        public ReactiveCommand<Unit, Unit> DeleteEmployeesCommand { get; }
+        public ReactiveCommand<Unit, Unit> EditNextScannedCardCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResetGroupCommand { get; }
+        public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
+        public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
+        public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
+        public AdminPanelViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform)
+        {
+            _platform = platform;
             _mainWindowViewModel = mainWindowViewModel;
 
-            Btn_GroupView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToGroupView());
+            //AdminEmployeeViewModel = new(platform);
+            AdminGroupViewModel = new(platform, mainWindowViewModel); // Fix to instantiate correctly
+            EmployeeTimeViewModel = new(platform);
 
-            Btn_SettingsView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToSettingsView());
+            platform.DataLoaded += (sender, args) =>
+            {
+                Groups = _mainWindowViewModel.Groups;
+                this.RaisePropertyChanged(nameof(Groups));
+            };
 
-            Btn_LoginView = ReactiveCommand.Create(() => _mainWindowViewModel.SwitchToLoginView());
+            Btn_LoginView = ReactiveCommand.Create(() => mainWindowViewModel.SwitchToLoginView());
+            Btn_GroupView = ReactiveCommand.Create(() => mainWindowViewModel.SwitchToGroupView());
+            Btn_SettingsView = ReactiveCommand.Create(()=> mainWindowViewModel.SwitchToSettingsView());
+            EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployees);
+            MarkAsOffsiteCommand = ReactiveCommand.Create(() =>
+            {
+                // Replace with actual SelectedEmployees when reintroducing AdminEmployeeViewModel
+                var selected = new ObservableCollection<Employee>();
+                UpdateOffsite(selected, DateTime.Today, DateTime.Today.AddDays(1), "Orlov", Absence.absenceReason.Ferie);
+            });
+
+            DeleteEmployeesCommand = ReactiveCommand.Create(() =>
+            {
+                var selected = new ObservableCollection<Employee>();
+                DeleteEmployee(selected);
+            });
+
+            EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
+           //ResetGroupCommand = ReactiveCommand.Create(() => SelectedGroup = null);
+
+        }
+
+
+
+        public void EditNextScannedCard()
+        {
+            CardReader.State.UpdateNextEmployee = true;
+            //Views.Dialog.WaitingForCardDialog.Open();
+        }
+
+        public void DeleteEmployee(Employee employee)
+        {
+            employee.DeleteFromDb();
+            foreach (Group group in _mainWindowViewModel.Groups)
+            {
+                group.Members.Remove(employee);
+            }
+            _mainWindowViewModel.Employees.Remove(employee);
+        }
+
+        public void DeleteEmployee(ObservableCollection<Employee> employees)
+        {
+            foreach (Employee employee in employees)
+            {
+                DeleteEmployee(employee);
+            }
+        }
+
+        public void UpdateOffsite(Employee employee, bool isOffsite, DateTime? offsiteUntil)
+        {
+            employee.IsOffSite = isOffsite;
+            employee.OffSiteUntil = offsiteUntil;
+            employee.UpdateDb();
+        }
+
+        public void UpdateOffsite(ObservableCollection<Employee> employees,
+            DateTime FromDate, DateTime ToDate, string Note, Absence.absenceReason AbsenceReason)
+        {
+            Absence absence = new();
+            absence.ToTime = absence.ToTime.AddHours(23);
+            foreach (Employee employee in employees)
+            {
+                absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
+            }
+        }
+
+        public void AddSelectedUsersToGroup(Group group)
+        {
+            /*foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            {
+                group.AddEmployee(employee);
+            }*/
+        }
+
+        public void RemoveSelectedUsersToGroup(Group group)
+        {
+            /*foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            {
+                group.RemoveEmployee(employee);
+            }*/
+        }
+
+        public void EditGroupsForEmployees()
+        {
+            /*
+            var editGroupsForEmployees = new EditGroupsForEmployees(_mainWindowViewModel.Groups);
+
+            if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+            {
+                if (editGroupsForEmployees.AddGroup)
+                    AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+
+                if (editGroupsForEmployees.RemoveGroup)
+                    RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+            }*/
         }
     }
 }
