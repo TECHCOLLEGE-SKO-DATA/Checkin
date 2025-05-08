@@ -10,8 +10,6 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
     {
         LoginScreenViewModel loginScreenViewModel = new();
 
-        private MainWindowViewModel _mainWindowViewModel;
-
         private string _userName;
         public string Username
         {
@@ -29,9 +27,11 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
         // Reactive Command for login button click
         public ReactiveCommand<Unit, Unit> Btn_Login_Click { get; }
 
-        public AdminLoginViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform)
+        public AdminLoginViewModel(IPlatform platform) : base(platform)
         {
-            _mainWindowViewModel = mainWindowViewModel;
+            _platform = platform;
+
+            MainWindowViewModel main = _platform.MainWindowViewModel;
 
             Btn_Login_Click = ReactiveCommand.Create(() => Login(Username, PassWord));
         }
@@ -42,7 +42,7 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             
             if (status)
             {
-                _mainWindowViewModel.SwitchToAdminPanel();
+                _platform.MainWindowViewModel.SwitchToAdminPanel();
             }
         }
     }

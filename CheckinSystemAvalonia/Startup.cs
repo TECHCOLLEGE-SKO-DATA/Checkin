@@ -14,12 +14,13 @@ public class Startup
 
     public static bool Run(IPlatform platform)
     {
+
         if (!EnsureDatabaseAvailable()) return false;
 
         var mainWindow = new MainWindow
         {
             DataTemplates = { new ViewLocator() },
-            DataContext = new MainWindowViewModel(platform)
+            DataContext = platform.MainWindowViewModel
         };
         mainWindow.Show();
 

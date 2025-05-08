@@ -24,10 +24,9 @@ public class Platform : IPlatform
 
     public void Start()
     {
-        _mainWindowViewModel = new(this);
-        _mainWindowViewModel.LoadDataFromDatabase();
         Startup.OpenEmployeeOverview(this);
+        _mainWindowViewModel = new(this);
         DataLoaded?.Invoke(this, EventArgs.Empty);
     }
-    
+
 }

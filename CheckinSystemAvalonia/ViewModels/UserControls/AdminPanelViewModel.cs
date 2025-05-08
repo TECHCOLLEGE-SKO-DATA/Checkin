@@ -4,6 +4,7 @@ using CheckinLib.Models;
 using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.Windows;
 using PCSC;
+using PCSC.Interop;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Automation;
 
 namespace CheckinSystemAvalonia.ViewModels.UserControls
 {
@@ -22,8 +24,7 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
         public const int EMPLOYEE_TIME_TAB = 1;
         public const int GROUP_LISTPAGE_TAB = 2;
 
-        private readonly IPlatform _platform;
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        private IPlatform _platform;
 
         public ObservableCollection<Group> Groups { get; private set; } = new();
 
@@ -62,24 +63,17 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
         public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
         public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
-        public AdminPanelViewModel(IPlatform platform, MainWindowViewModel mainWindowViewModel) : base(platform)
+        public AdminPanelViewModel(IPlatform platform) : base(platform)
         {
-            _platform = platform;
-            _mainWindowViewModel = mainWindowViewModel;
-
-            //AdminEmployeeViewModel = new(platform);
-            AdminGroupViewModel = new(platform, mainWindowViewModel); // Fix to instantiate correctly
-            EmployeeTimeViewModel = new(platform);
 
             platform.DataLoaded += (sender, args) =>
             {
-                Groups = _mainWindowViewModel.Groups;
-                this.RaisePropertyChanged(nameof(Groups));
+                Groups = platform.MainWindowViewModel.Groups;
             };
 
-            Btn_LoginView = ReactiveCommand.Create(() => mainWindowViewModel.SwitchToLoginView());
-            Btn_GroupView = ReactiveCommand.Create(() => mainWindowViewModel.SwitchToGroupView());
-            Btn_SettingsView = ReactiveCommand.Create(()=> mainWindowViewModel.SwitchToSettingsView());
+            Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
+            Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());
+            Btn_SettingsView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToSettingsView());
             EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployees);
             MarkAsOffsiteCommand = ReactiveCommand.Create(() =>
             {
@@ -103,18 +97,18 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 
         public void EditNextScannedCard()
         {
-            CardReader.State.UpdateNextEmployee = true;
+            //CardReader.State.UpdateNextEmployee = true;
             //Views.Dialog.WaitingForCardDialog.Open();
         }
 
         public void DeleteEmployee(Employee employee)
         {
             employee.DeleteFromDb();
-            foreach (Group group in _mainWindowViewModel.Groups)
+            foreach (Group group in _platform.MainWindowViewModel.Groups)
             {
                 group.Members.Remove(employee);
             }
-            _mainWindowViewModel.Employees.Remove(employee);
+            //_platform.MainWindowViewModel.Remove(employee);
         }
 
         public void DeleteEmployee(ObservableCollection<Employee> employees)

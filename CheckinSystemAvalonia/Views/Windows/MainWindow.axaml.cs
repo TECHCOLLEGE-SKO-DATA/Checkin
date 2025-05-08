@@ -15,17 +15,23 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
-        platform.Start();
+        //platform.Start();
         InitializeComponent();
 
         _vm = platform.MainWindowViewModel;
 
         LoadingStartup loading = new();
-        loading.Close();
+
+        Closing += OnWindowClosing;
+        LoadingStartup.Instance?.Close();
 
 #if DEBUG
         OpenFakeNFCWindow();
 #endif
+    }
+    public void OnWindowClosing(object sender, CancelEventArgs e)
+    {
+        System.Windows.Application.Current.Shutdown();
     }
 
     private static void OpenFakeNFCWindow()

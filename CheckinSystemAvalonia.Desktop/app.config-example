@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <!-- 🔹 SQL Service Name Configuration -->
+    <!-- This specifies which SQL Server instance is used. -->
+    <!-- Default: "MSSQL$SQLEXPRESS" (for SQL Express) -->
+    <!-- Other common options: -->
+    <!-- - "MSSQLSERVER" (for a standard SQL Server installation) -->
+    <!-- - "MyCustomInstance" (for named instances) -->
+    <!-- - (Not used for SQLite) -->
+    <add key="SqlServiceName" value="MSSQL$SQLEXPRESS"/>
+  </appSettings>
+
+  <connectionStrings>
+    <!-- 🔹 Database Connection String Configuration -->
+    <!-- This is the connection string for the database. -->
+    
+    <!-- 🟢 Default (SQL Express) -->
+    <!-- Server=localhost\SQLEXPRESS - Uses the SQL Express instance on localhost -->
+    <!-- Database=YOUR_DATABASE - Replace "YOUR_DATABASE" with the actual database name -->
+    <!-- Trusted_Connection=True - Uses Windows Authentication -->
+    <!-- Connect Timeout=30 - Times out if no connection is established in 30 seconds -->
+    <add name="CheckInSystemDb"
+         connectionString="Server=localhost\SQLEXPRESS;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;"
+         providerName="System.Data.SqlClient" />
+
+    <!-- 🔹 Alternative Examples: -->
+    
+    <!-- 🟢 Standard SQL Server (Not SQL Express) -->
+    <!-- <add name="CheckInSystemDb" -->
+    <!--      connectionString="Server=localhost;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;" -->
+    <!--      providerName="System.Data.SqlClient" /> -->
+
+    <!-- 🟢 Named SQL Server Instance -->
+    <!-- <add name="CheckInSystemDb" -->
+    <!--      connectionString="Server=localhost\MyCustomInstance;Database=YOUR_DATABASE;Trusted_Connection=True;Connect Timeout=30;" -->
+    <!--      providerName="System.Data.SqlClient" /> -->
+
+    <!-- 🟢 Remote SQL Server -->
+    <!-- If connecting to a remote database, replace 'localhost' with the actual server name or IP -->
+    <!-- <add name="CheckInSystemDb" -->
+    <!--      connectionString="Server=192.168.1.100,1433;Database=YOUR_DATABASE;User Id=YOUR_USER;Password=YOUR_PASSWORD;" -->
+    <!--      providerName="System.Data.SqlClient" /> -->
+
+    <!-- 🟢 Azure SQL Server -->
+    <!-- <add name="CheckInSystemDb" -->
+    <!--      connectionString="Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=YOUR_DATABASE;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" -->
+    <!--      providerName="System.Data.SqlClient" /> -->
+
+    <!-- 🟢 SQLite (For Lightweight, File-Based Database) -->
+    <!-- SQLite stores the database in a single .db file on disk. -->
+    <!-- Just replace "YOUR_DATABASE_FILE.db" with your actual database file. -->
+    <!-- add name="CheckInSystemDb"
+         connectionString="Data Source=YOUR_DATABASE_FILE.db;Version=3;"
+         providerName="System.Data.SQLite" /-->
+
+    <!-- 🟢 SQLite (In-Memory) -->
+    <!-- This runs an SQLite database purely in RAM and will not persist data after the app closes. -->
+    <!-- Useful for testing. -->
+    <!-- <add name="CheckInSystemDb" -->
+    <!--      connectionString="Data Source=:memory:;Version=3;" -->
+    <!--      providerName="System.Data.SQLite" /> -->
+
+  </connectionStrings>
+</configuration>

@@ -22,7 +22,7 @@
                       Margin="3"
                       MinWidth="200"
                       BorderBrush="Black"
-                      SelectedItem="{Binding SelectedGroup}"/>
+                      ItemsSource="{Binding Groups}"/>
 
 			<Button Content="Alle Brugere"
                     Margin="10 0 0 0"

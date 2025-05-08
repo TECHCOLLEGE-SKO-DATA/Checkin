@@ -75,10 +75,11 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
         platform.CardReader.CardScanned += (sender, args) => EmployeeCardScanned(args.CardId);
-        
-        LoginScreenViewModel = new(platform, this);
-        AdminPanelViewModel = new(platform, this);
-        AdminGroupViewModel = new(platform, this);
+        LoadDataFromDatabase();
+
+        LoginScreenViewModel = new(platform);
+        AdminPanelViewModel = new(platform);
+        AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
         CurrentViewModel = LoginScreenViewModel;
@@ -184,12 +185,12 @@ public class MainWindowViewModel : ViewModelBase
     }
     public void SwitchToAdminPanel()
     {
-        this.CurrentViewModel = new AdminPanelViewModel(_platform, this);
+        this.CurrentViewModel = AdminPanelViewModel;
     }
 
     public void SwitchToGroupView()
     {
-        this.CurrentViewModel = new AdminGroupViewModel(_platform, this);
+        this.CurrentViewModel = new AdminGroupViewModel(_platform);
     }
 
     public void SwitchToSettingsView()
@@ -199,6 +200,6 @@ public class MainWindowViewModel : ViewModelBase
 
     public void SwitchToLoginView()
     {
-        this.CurrentViewModel = new AdminLoginViewModel(_platform, this);
+        this.CurrentViewModel = new AdminLoginViewModel(_platform);
     }
 }

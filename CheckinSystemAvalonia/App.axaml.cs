@@ -14,17 +14,17 @@ namespace CheckinSystemAvalonia;
 
 public partial class App : Application
 {
-    public static IPlatform Platform { get; private set; } = null!;
+    public static Platform.Platform Platform = new();
 
     public override void OnFrameworkInitializationCompleted()
     {
         AppDomain.CurrentDomain.UnhandledException += log;
         try
         {
-            Platform = new Platform.Platform();
-
             LoadingStartup loadingStartup = new();
             loadingStartup.Show();
+
+            Platform.Start();
 
             if (!Startup.Run(Platform)) 
             {

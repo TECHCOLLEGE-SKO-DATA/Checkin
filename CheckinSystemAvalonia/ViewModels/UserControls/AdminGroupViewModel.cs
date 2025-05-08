@@ -13,9 +13,10 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
     public class AdminGroupViewModel : ViewModelBase
     {
         public ReactiveCommand<Unit, Unit> Btn_AdminPanel { get; }
-        public AdminGroupViewModel(IPlatform platform, MainWindowViewModel mainwindowViewModel) : base(platform)
+        public AdminGroupViewModel(IPlatform platform) : base(platform)
         {
-            Btn_AdminPanel = ReactiveCommand.Create(() => mainwindowViewModel.SwitchToAdminPanel());
+            _platform = platform;
+            Btn_AdminPanel = ReactiveCommand.Create(() => _platform.MainWindowViewModel.SwitchToAdminPanel());
         }
     }
 }
