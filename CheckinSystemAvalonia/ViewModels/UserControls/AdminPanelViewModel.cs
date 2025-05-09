@@ -3,6 +3,7 @@ using Avalonia.Platform;
 using CheckinLib.Models;
 using CheckinSystemAvalonia.Platform;
 using CheckinSystemAvalonia.ViewModels.Windows;
+using CheckinSystemAvalonia.Views.UserControls;
 using PCSC;
 using PCSC.Interop;
 using ReactiveUI;
@@ -35,6 +36,13 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             set => this.RaiseAndSetIfChanged(ref _adminPanelContent, value);
         }
 
+        AdminEmployeeViewModel _adminEmployeeViewModel;
+        public AdminEmployeeViewModel AdminEmployeeViewModel
+        {
+            get => _adminEmployeeViewModel;
+            set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
+        }
+
         //public AdminEmployeeViewModel AdminEmployeeViewModel { get; }
         public AdminGroupViewModel AdminGroupViewModel { get; }
         public EmployeeTimeViewModel EmployeeTimeViewModel { get; }
@@ -65,11 +73,12 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
         public AdminPanelViewModel(IPlatform platform) : base(platform)
         {
-
             platform.DataLoaded += (sender, args) =>
             {
                 Groups = platform.MainWindowViewModel.Groups;
             };
+
+            AdminEmployeeViewModel = new(platform);
 
             Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
             Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());

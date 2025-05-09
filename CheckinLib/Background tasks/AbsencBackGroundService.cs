@@ -18,7 +18,7 @@ public class AbsencBackGroundService
     public void AbsenceTask()
     {
         List<Task> offsiteTasks = new();
-        var employeesCopy = employees.ToList(); // Create a copy
+        var employeesCopy = employees.ToList(); 
 
         foreach (var employee in employeesCopy)
         {

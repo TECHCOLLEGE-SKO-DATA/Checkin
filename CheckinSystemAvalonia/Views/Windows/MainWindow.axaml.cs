@@ -31,7 +31,6 @@ public partial class MainWindow : Window
     }
     public void OnWindowClosing(object sender, CancelEventArgs e)
     {
-        System.Windows.Application.Current.Shutdown();
     }
 
     private static void OpenFakeNFCWindow()

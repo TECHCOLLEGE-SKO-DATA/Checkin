@@ -22,7 +22,8 @@
                       Margin="3"
                       MinWidth="200"
                       BorderBrush="Black"
-                      ItemsSource="{Binding Groups}"/>
+                      ItemsSource="{Binding Groups}"
+					  DisplayMemberBinding="{Binding Path=Name}"/>
 
 			<Button Content="Alle Brugere"
                     Margin="10 0 0 0"
@@ -65,7 +66,7 @@
 				</Style>
 			</TabControl.Styles>
 			<TabItem>
-				<Views:AdminEmployeeView/>
+				<Views:AdminEmployeeView DataContext="{Binding AdminEmployeeViewModel}" />
 			</TabItem>
 		</TabControl>
 

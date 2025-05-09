@@ -5,7 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
 			 x:Class="CheckinSystemAvalonia.Views.UserControls.AdminGroupView"
-			 x:DataType="vm:AdminGroupViewModel">
+			 x:DataType="vm:AdminGroupViewModel"
+			 >
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"/>
@@ -28,42 +29,65 @@
 				HorizontalAlignment="Right"
 				Content="Logout"
 				Background="Gray"
-				Foreground="Black"/>
+				Foreground="Black"
+				Command="{Binding Btn_LoginView}"/>
 
 		<ItemsControl Grid.Row="1"
-					  ItemsSource="">
+					  ItemsSource="{Binding Groups}">
 			
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Border BorderThickness="4">
+					<Border BorderThickness="4"
+							Background="Gray"
+							BorderBrush="Black">
 						<WrapPanel Orientation="Horizontal">
 						
 							<TextBlock Margin="3"
-									   Text=""/>
+									   Text="{Binding Path=Name}"
+									   FontSize="30"/>
 
-							<Border BorderThickness="2">
+							<Border BorderThickness="2"
+									BorderBrush="Black">
+								
 								<StackPanel Orientation="Horizontal">
 
 									<TextBlock Margin="2"
-											   Text="Antal medlemmer:"/>
+											   Text="Antal medlemmer:"
+											   FontSize="30"/>
 									
-									<TextBlock  Text=""/>
+									<TextBlock  Text="{Binding Path=Members.Count}"
+												FontSize="30"/>
 									
 									
 								</StackPanel>
 							</Border>
-
-							<TextBlock Text="Synlighed"/>
-
-							<CheckBox VerticalAlignment="Center">
-								<CheckBox.RenderTransform>
-									<ScaleTransform ScaleX="2" ScaleY="2" />
-								</CheckBox.RenderTransform>
-							</CheckBox>
 							
-							<Button Content="Rediger Navn"/>
+							<Border BorderThickness="2"
+									BorderBrush="Black">
+								<WrapPanel>
+									<TextBlock Text="Synlighed"
+											   FontSize="30"
+											   Margin="10 5 20 0"/>
+
+									<CheckBox VerticalAlignment="Center"
+											  IsChecked="{Binding Path=Isvisible}">
+										<CheckBox.RenderTransform>
+											<ScaleTransform ScaleX="2" ScaleY="2" />
+										</CheckBox.RenderTransform>
+									</CheckBox>
+								</WrapPanel>
+							</Border>
 							
-							<Button Content="Slet"/>
+							<Button Content="Rediger Navn"
+									Height="40"
+									FontSize="20"
+									Background="Black"
+									Margin="10 0 10 0"/>
+							
+							<Button Content="Slet"
+									FontSize="20"
+									Height="40"
+									Background="Black"/>
 						
 						</WrapPanel>
 					</Border>

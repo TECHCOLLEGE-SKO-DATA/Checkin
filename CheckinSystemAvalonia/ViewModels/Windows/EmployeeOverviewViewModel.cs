@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows;
 using CheckinLib.Database;
 using CheckinSystemAvalonia.Platform;
+using Avalonia.Controls;
 
 namespace CheckinSystemAvalonia.ViewModels.Windows
 {
@@ -21,7 +22,7 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
         private decimal _scaleSize = 1.0M;
         private ResizeMode _resizeMode = ResizeMode.NoResize;
         private WindowStyle _windowStyle = WindowStyle.None;
-        WindowState _windowState;
+        Avalonia.Controls.WindowState _windowState;
 
         public string AppVersion
         {
@@ -59,7 +60,7 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             get => _windowStyle;
             set => this.RaiseAndSetIfChanged(ref _windowStyle, value);
         }
-        public WindowState WindowState
+        public Avalonia.Controls.WindowState WindowState
         {
             get => _windowState;
             set => this.RaiseAndSetIfChanged(ref _windowState, value);
@@ -82,13 +83,13 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             {
                 ResizeMode = ResizeMode.CanResizeWithGrip;
                 WindowStyle = WindowStyle.SingleBorderWindow;
-                WindowState = WindowState.Normal;
+                WindowState = 0;
             }
             else
             {
                 ResizeMode = ResizeMode.NoResize;
                 WindowStyle = WindowStyle.None;
-                WindowState = WindowState.Maximized;
+                WindowState = (Avalonia.Controls.WindowState)2;
             }
         }
 
@@ -103,11 +104,14 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             ConfigFilePath = filePath;
             ReadConfig();
 
+
+
             platform.DataLoaded += (sender, args) =>
             {
                 LoadGroupsAndEmployees(); // Load groups and apply sorting
                 SortEmployees();
             };
+
             platform.CardReader.CardScanned += async (sender, args) =>
             {
                 //to ensure correct sorting 10 millisecond delay

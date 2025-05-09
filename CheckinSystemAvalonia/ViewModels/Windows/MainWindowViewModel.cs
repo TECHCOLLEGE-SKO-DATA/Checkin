@@ -74,14 +74,22 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
-        platform.CardReader.CardScanned += (sender, args) => EmployeeCardScanned(args.CardId);
-        LoadDataFromDatabase();
+        if (!Design.IsDesignMode)
+        {
+            platform.CardReader.CardScanned += (sender, args) => EmployeeCardScanned(args.CardId);
 
+            //loads data before making instances of ViewModels
+            LoadDataFromDatabase();
+        }
+
+        //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
+
+        //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
     }
 
@@ -91,8 +99,10 @@ public class MainWindowViewModel : ViewModelBase
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
+            //Adds Employees to a list in AbsenceBackgroundService.cs
             absence.AddEmployeesToAbsenceCheck(employee);
 
+            //runs a inital check on if people have upcoming absence
             absence.AbsenceTask();
 
             Employees.Add(employee);
@@ -103,11 +113,6 @@ public class MainWindowViewModel : ViewModelBase
 
         Maintenance.CheckOutEmployeesIfTheyForgot(employees);
         Maintenance.CheckForEndedOffSiteTime(employees);
-    }
-
-    public void RequestView(UserControl control)
-    {
-        MainContentControl = control;
     }
 
     public void EmployeeCardScanned(string cardID)
@@ -142,8 +147,8 @@ public class MainWindowViewModel : ViewModelBase
             }
             Employees.Add(editEmployee);
         }
-        /*
-        if (Views.Dialog.WaitingForCardDialog.Instance != null)
+        
+        /*if ( != null)
             Application.Current.Dispatcher.Invoke(() => {
                 Views.Dialog.WaitingForCardDialog.Instance.Close();
             });
@@ -177,29 +182,32 @@ public class MainWindowViewModel : ViewModelBase
         State.UpdateCard(cardID);
     }
 
+    //made to set current Viewmodel used for MainWindow
     private ViewModelBase _currentViewModel;
     public ViewModelBase CurrentViewModel
     {
         get => _currentViewModel;
         set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
     }
+
+    //switching methods for changing the View and ViewModel 
     public void SwitchToAdminPanel()
-    {
-        this.CurrentViewModel = AdminPanelViewModel;
+    {   
+        CurrentViewModel = AdminPanelViewModel;
     }
 
     public void SwitchToGroupView()
     {
-        this.CurrentViewModel = new AdminGroupViewModel(_platform);
+        CurrentViewModel = AdminGroupViewModel;
     }
 
     public void SwitchToSettingsView()
     {
-        this.CurrentViewModel = new SettingsViewModel(_platform);
+        CurrentViewModel = new SettingsViewModel(_platform);
     }
 
     public void SwitchToLoginView()
     {
-        this.CurrentViewModel = new AdminLoginViewModel(_platform);
+        CurrentViewModel = LoginScreenViewModel;
     }
 }
