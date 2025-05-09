@@ -23,6 +23,17 @@ public class AdminPanelViewModel : ViewModelBase
         get => _groups;
         set => SetProperty(ref _groups, value, nameof(Groups));
     }
+    /// <summary>
+    /// User filters a group. Render only employees in that group
+    /// </summary>
+    public Group? ChangeGroupList
+    {
+        set
+        {
+            SelectedTab = EMPLOYEE_LISTPAGE_TAB;
+            AdminEmployeeViewModel.SelectedEmployeeGroup = value.Members;
+        }
+    }
     Control _adminPanelContent;
     public Control AdminPanelContent
     {
