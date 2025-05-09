@@ -31,7 +31,14 @@ public class AdminPanelViewModel : ViewModelBase
         set
         {
             SelectedTab = EMPLOYEE_LISTPAGE_TAB;
-            AdminEmployeeViewModel.SelectedEmployeeGroup = value.Members;
+            if (value != null)
+            {
+                AdminEmployeeViewModel.SelectedEmployeeGroup = value.Members;
+            }
+            else
+            {
+                AdminEmployeeViewModel.SelectedEmployeeGroup.Clear();
+            }
         }
     }
     Control _adminPanelContent;
