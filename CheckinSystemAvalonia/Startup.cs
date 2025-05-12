@@ -17,13 +17,6 @@ public class Startup
 
         if (!EnsureDatabaseAvailable()) return false;
 
-        var mainWindow = new MainWindow
-        {
-            DataTemplates = { new ViewLocator() },
-            DataContext = platform.MainWindowViewModel
-        };
-        mainWindow.Show();
-
         AddAdmin();
         return true;
     }

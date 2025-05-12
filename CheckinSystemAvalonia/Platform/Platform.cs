@@ -1,5 +1,7 @@
 using CheckinSystemAvalonia.CardReader;
 using CheckinSystemAvalonia.ViewModels.Windows;
+using CheckinSystemAvalonia.Views;
+using PCSC.Interop;
 using System;
 
 namespace CheckinSystemAvalonia.Platform;
@@ -12,6 +14,8 @@ public class Platform : IPlatform
     public MainWindowViewModel MainWindowViewModel => _mainWindowViewModel;
 
     public event DataLoadedEventHandler? DataLoaded;
+    MainWindow _mainWindow;
+    public MainWindow MainWindow => _mainWindow;
 
     public Platform()
     {
@@ -27,6 +31,13 @@ public class Platform : IPlatform
         Startup.OpenEmployeeOverview(this);
         _mainWindowViewModel = new(this);
         DataLoaded?.Invoke(this, EventArgs.Empty);
+
+        _mainWindow = new MainWindow
+        {
+            DataTemplates = { new ViewLocator() },
+            DataContext = _mainWindowViewModel
+        };
+        _mainWindow.Show();
     }
 
 }
