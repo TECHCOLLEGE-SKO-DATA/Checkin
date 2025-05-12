@@ -108,6 +108,7 @@ public class EmployeeTimeViewModel : ViewModelBase
     {
         foreach (var siteTime in SiteTimesToDelete)
         {
+            
             siteTime.DeleteFromDb();
         }
         SiteTimesToDelete.Clear();
@@ -177,11 +178,9 @@ public class EmployeeTimeViewModel : ViewModelBase
 
 
     private void DeleteAbsences()
-
     {
 
         foreach (var absence in AbsencesToDelete)
-
         {
 
             absence.DeleteAbsence(absence.ID);

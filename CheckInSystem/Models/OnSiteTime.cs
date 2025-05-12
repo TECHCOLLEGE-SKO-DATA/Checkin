@@ -8,8 +8,6 @@ namespace CheckInSystem.Models;
 
 public class OnSiteTime : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper;
-
     private int _id;
     public int Id
     {
@@ -84,7 +82,9 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public void DeleteFromDb()
     {
+        DatabaseHelper databaseHelper = new();
         databaseHelper.DeleteFromDbOnSiteTime(Id);
+            
     }
 
     public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
