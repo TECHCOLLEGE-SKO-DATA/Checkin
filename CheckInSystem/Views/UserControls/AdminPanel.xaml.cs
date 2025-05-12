@@ -12,6 +12,7 @@ namespace CheckInSystem.Views.UserControls;
 public partial class AdminPanel : UserControl
 {
     public AdminPanelViewModel _vm => (AdminPanelViewModel) DataContext;
+    public Group CurrentGroup;
     public AdminPanel()
     {
         InitializeComponent();
