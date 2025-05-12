@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.Windows.Data;
 using CheckInSystem.Models;
 using System.ComponentModel;
+using System.Reflection;
 using CheckInSystem.Database;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels.Windows
 {
-    public class EmployeeOverviewViewModel : ViewmodelBase
+    public class EmployeeOverviewViewModel : ViewModelBase
     {
         private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
@@ -16,6 +18,18 @@ namespace CheckInSystem.ViewModels.Windows
         private WindowStyle _windowStyle = WindowStyle.None;
         WindowState _windowState;
 
+        public string AppVersion
+        {
+            get
+            {
+                string? version = Assembly.GetExecutingAssembly()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                    .InformationalVersion;
+
+                // Remove anything after '+' to keep it clean
+                return "v" + (version?.Split('+')[0] ?? "Unknown");
+            }
+        }
         // Add Groups property
         private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
         public ObservableCollection<Group> Groups
@@ -54,6 +68,7 @@ namespace CheckInSystem.ViewModels.Windows
         public void ZoomOut()
         {
             ScaleSize -= 0.1M;
+            if (ScaleSize < 0.1M) ScaleSize = 0.1M;
         }
 
         public void ToggleFullscreen()
@@ -72,7 +87,7 @@ namespace CheckInSystem.ViewModels.Windows
             }
         }
 
-        public EmployeeOverviewViewModel()
+        public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
             string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
             if (!Directory.Exists(filePath))
@@ -83,7 +98,19 @@ namespace CheckInSystem.ViewModels.Windows
             ConfigFilePath = filePath;
             ReadConfig();
 
-            LoadGroupsAndEmployees(); // Load groups and apply sorting
+            platform.DataLoaded += (sender, args) =>
+            {
+                LoadGroupsAndEmployees(); // Load groups and apply sorting
+                SortEmployees();
+            };
+            platform.CardReader.CardScanned += async (sender, args) =>
+            {
+                //to ensure correct sorting 10 millisecond delay
+                await Task.Delay(10);
+
+                //Sort again
+                SortEmployees();
+            };
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
@@ -115,12 +142,18 @@ namespace CheckInSystem.ViewModels.Windows
         // New Method: Load groups and apply sorting
         private void LoadGroupsAndEmployees()
         {
+            DatabaseHelper databaseHelper = new();
             // Fetch employees from the database
-            var employees = DatabaseHelper.GetAllEmployees();
 
             // Fetch groups and assign employees
-            Groups = new ObservableCollection<Group>(Group.GetAllGroups(employees));
+            //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
+            Groups = _platform.MainWindowViewModel.Groups;
 
+            
+        }
+
+        private void SortEmployees()
+        {
             // Apply sorting to each group's Members
             foreach (var group in Groups)
             {

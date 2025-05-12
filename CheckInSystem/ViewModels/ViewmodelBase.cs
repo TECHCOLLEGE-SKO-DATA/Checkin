@@ -3,18 +3,23 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.ViewModels;
 
-public class ViewmodelBase : INotifyPropertyChanged
+public class ViewModelBase : INotifyPropertyChanged
 {
-    public static ObservableCollection<Employee> Employees { get; set; }
-    public static ObservableCollection<Group> Groups { get; set; }
+    //public ObservableCollection<Employee> Employees => _platform.MainWindowViewModel.Employees;
+    //public static ObservableCollection<Group> Groups { get; set; }
     
-    public static ContentControl MainContentControl { get; set; }
+    //public static ContentControl MainContentControl { get; set; }
     
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    protected IPlatform _platform;
+    public ViewModelBase(IPlatform platform)
+    {
+        _platform = platform;
+    }
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         if (PropertyChanged != null)

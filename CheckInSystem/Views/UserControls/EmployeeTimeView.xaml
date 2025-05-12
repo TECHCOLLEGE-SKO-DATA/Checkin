@@ -3,16 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:CheckInSystem.Views.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:models="clr-namespace:CheckInSystem.Models"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="630">
+
+    <UserControl.Resources>
+        <!-- Provides the Enum values for Absence.AbsenceReason -->
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="AbsenceReasonProvider">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:Absence+absenceReason"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
+
         <StackPanel Grid.Row="0" Background="Blue"></StackPanel>
+
+        <!-- Site Times DataGrid -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Path=SiteTimes}" 
                   AutoGenerateColumns="False" 
                   CanUserAddRows="False">
@@ -21,23 +39,88 @@
                 <DataGridTextColumn Header="Ankomsttid" Binding="{Binding ArrivalTime, StringFormat=\{0:HH:mm:ss\}}"/>
                 <DataGridTextColumn Header="Afgangstid" Binding="{Binding DepartureTime, StringFormat=\{0:HH:mm:ss\}}"/>
                 <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate> 
+                    <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="X" Click="BtnDelete"/>
-                        </DataTemplate> 
-                    </DataGridTemplateColumn.CellTemplate> 
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.LayoutTransform>
-                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
             </DataGrid.LayoutTransform>
         </DataGrid>
-        <StackPanel Grid.Row="2" Background="Gold" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Annuler" Click="BtnCancel" FontSize="15"/>
-            <Button Content="Gem" Click="BtnSave" FontSize="15"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Content="Tilføj ny tid" Click="BtnAddTime" FontSize="15"/>
-        </StackPanel>
+
+        <Border Grid.Row="2" Background="Blue">
+            <DockPanel Margin="0,0,0,3">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Tilføj ny tid" Click="BtnAddTime" FontSize="15"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Absences DataGrid -->
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Path=Absences}"
+          AutoGenerateColumns="False" 
+          CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Starts Dato">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding FromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Starts Tid" Binding="{Binding FromTime, StringFormat=\{0:HH:mm\}}" />
+
+                <DataGridTemplateColumn Header="Sluts Dato">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding ToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Sluts Tid" Binding="{Binding ToTime, StringFormat=\{0:HH:mm\}}" />
+                
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="X" Click="BtnDeleteAbsence"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Fravær">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource AbsenceReasonProvider}}" 
+                              SelectedItem="{Binding AbsenceReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Width="100"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Note"
+                            Binding="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+
+            <DataGrid.LayoutTransform>
+                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+            </DataGrid.LayoutTransform>
+        </DataGrid>
+
+
+        <Border Grid.Row="4" Background="Blue">
+            <DockPanel>
+                <Button Content="Tilføj ny Fravær/Orlov"
+                        Click="BtnAddAbsence"/>
+                <StackPanel Background="Gold" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Annuler" Click="BtnCancel" FontSize="15"/>
+                    <Button Content="Gem" Click="BtnSave" FontSize="15"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using CheckInSystem.Models;
 using CheckInSystem.ViewModels;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.Dialog;
@@ -10,12 +11,15 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminPanel : UserControl
 {
-    private AdminPanelViewModel vm;
+    public AdminPanelViewModel _vm => (AdminPanelViewModel) DataContext;
+    public Group CurrentGroup;
     public AdminPanel()
     {
         InitializeComponent();
-        vm = new AdminPanelViewModel(EmployeesControl);
-        DataContext = vm;
+    }
+    public AdminPanel(AdminPanelViewModel vm)
+    {
+        throw new Exception("Don't use");
     }
 
     private void BtnResetGroup(object sender, RoutedEventArgs e)
@@ -25,25 +29,22 @@ public partial class AdminPanel : UserControl
 
     private void BtnLogOut(object sender, RoutedEventArgs e)
     {
-        vm.Logout();
+        _vm.Logout();
     }
 
     private void BtnEditGroupsForEmployees(object sender, RoutedEventArgs e)
     {
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewmodelBase.Groups);
-        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
-        {
-            if (editGroupsForEmployees.AddGroup) vm.AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-            if (editGroupsForEmployees.RemoveGroup) vm.RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-        }
+        _vm.EditGroupsForEmployees();
     }
 
     private void BtnEditOffsiteForEmployees(object sender, RoutedEventArgs e)
     {
         EditOffsiteDialog editOffsite = new EditOffsiteDialog();
+        Absence absence = new Absence();
         if (editOffsite.ShowDialog() == true)
-        {
-            vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, editOffsite.Isoffsite, editOffsite.OffsiteUntil);
+        { 
+            _vm.UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, /*editOffsite.Isoffsite, editOffsite.OffsiteUntil,*/
+                (DateTime)editOffsite.FromDate, (DateTime)editOffsite.ToDate, editOffsite.Note, (Absence.absenceReason)editOffsite.AbsenceReason);
         }
     }
 
@@ -52,18 +53,18 @@ public partial class AdminPanel : UserControl
         MessageBoxResult messageBoxResult = MessageBox.Show("Er du sikker på at du vil slette de valgte brugere.", "Sletning", MessageBoxButton.OKCancel);
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            vm.DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
+            _vm.DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
             AdminEmployeeViewModel.SelectedEmployees.Clear();
         }
     }
 
     private void BtnSwitchToGroups(object sender, RoutedEventArgs e)
     {
-        vm.SwitchToGroups();
+        _vm.SwitchToGroups();
     }
 
     private void BtnEditScannedCard(object sender, RoutedEventArgs e)
     {
-        vm.EditNextScannedCard();
+        _vm.EditNextScannedCard();
     }
 }

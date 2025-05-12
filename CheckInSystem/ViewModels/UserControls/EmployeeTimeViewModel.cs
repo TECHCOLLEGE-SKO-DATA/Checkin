@@ -1,22 +1,55 @@
 ﻿using System.Collections.ObjectModel;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
+using CheckInSystem.Views.UserControls;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class EmployeeTimeViewModel
+public class EmployeeTimeViewModel : ViewModelBase
 {
-    public ObservableCollection<OnSiteTime> SiteTimes { get; set; }
-    public List<OnSiteTime> SiteTimesToDelete { get; set; }
-    public List<OnSiteTime> SiteTimesToAddToDb { get; set; }
-    public Employee SelectedEmployee { get; set; }
+    Absence absenc = new();
+    public ObservableCollection<Absence> Absences { get; set; } = new();
+    public List<Absence> AbsencesToAddToDb { get; set; } = new();
+    public List<Absence> AbsencesToDelete { get; set; } = new();
 
-    public EmployeeTimeViewModel(Employee employee)
+    public ObservableCollection<OnSiteTime> SiteTimes { get; set; } = new();
+    public List<OnSiteTime> SiteTimesToDelete { get; set; } = new();
+    public List<OnSiteTime> SiteTimesToAddToDb { get; set; } = new();
+    //public Employee SelectedEmployee { get; set; }
+
+    Employee _selectedEmployee = new();
+    public Employee SelectedEmployee
     {
-        SelectedEmployee = employee;
+        get => _selectedEmployee;
+        set
+        {
+            if (_selectedEmployee != value) // Ensure we only update if different
+            {
+                SetProperty(ref _selectedEmployee, value);
+
+                Absences.Clear();
+                foreach (var absence in Absence.GetAllAbsence(value))
+                {
+                    Absences.Add(absence);
+                }
+
+                SiteTimes.Clear();
+                foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
+                {
+                    SiteTimes.Add(siteTime);
+                }
+
+                OnPropertyChanged(nameof(Absences));
+                OnPropertyChanged(nameof(SiteTimes));
+            }
+        }
+    }
+
+    public EmployeeTimeViewModel(IPlatform platform) : base(platform)
+    {
+        //SelectedEmployee = employee;
         SiteTimesToDelete = new();
         SiteTimesToAddToDb = new();
-        
-        SiteTimes = new(OnSiteTime.GetOnsiteTimesForEmployee(employee));
     }
 
     public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -38,6 +71,7 @@ public class EmployeeTimeViewModel
         {
             siteTime.RevertTopreviousTime();
         }
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
     }
 
     public void SaveChanges()
@@ -45,7 +79,13 @@ public class EmployeeTimeViewModel
         UpdateSiteTimes();
         DeleteSiteTimes();
         AddSiteTimes();
+
+        UpdateAbsenceTimes();
+        DeleteAbsences();
+        AddAbsences();
+
         SelectedEmployee.GetUpdatedSiteTimes();
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
     }
 
     private void UpdateSiteTimes()
@@ -68,6 +108,7 @@ public class EmployeeTimeViewModel
     {
         foreach (var siteTime in SiteTimesToDelete)
         {
+            
             siteTime.DeleteFromDb();
         }
         SiteTimesToDelete.Clear();
@@ -83,5 +124,101 @@ public class EmployeeTimeViewModel
             }
         }
         SiteTimesToAddToDb.Clear();
+    }
+    public void AppendAbsenceToAddToDb(Absence absence)
+
+    {
+
+        Absences.Add(absence);
+
+        AbsencesToAddToDb.Add(absence);
+
+    }
+
+
+
+    public void AppendAbsenceToDelete(Absence absence)
+
+    {
+
+        AbsencesToDelete.Add(absence);
+
+        Absences.Remove(absence);
+
+        AbsencesToAddToDb.Remove(absence);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private void AddAbsences()
+
+    {
+
+        foreach (var absence in AbsencesToAddToDb)
+
+        {
+
+            absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
+
+        }
+
+        AbsencesToAddToDb.Clear();
+
+    }
+
+
+
+    private void DeleteAbsences()
+    {
+
+        foreach (var absence in AbsencesToDelete)
+        {
+
+            absence.DeleteAbsence(absence.ID);
+
+        }
+
+        AbsencesToDelete.Clear();
+
+    }
+
+    private void UpdateAbsenceTimes()
+
+    {
+
+        List<Absence> changedAbsence = new List<Absence>();
+
+        foreach (var absence in Absences)
+
+        {
+
+            absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
+
+
+
+            absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
+
+
+
+            changedAbsence.Add(absence);
+
+        }
+
+        if (Absences.Count > 0)
+
+        {
+
+            absenc.EditAbsence(changedAbsence);
+
+        }
     }
 }

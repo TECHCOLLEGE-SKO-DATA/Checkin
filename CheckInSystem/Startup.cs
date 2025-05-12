@@ -3,8 +3,12 @@ using System.Diagnostics;
 using System.Windows;
 using CheckInSystem.CardReader;
 using CheckInSystem.Database;
+using CheckInSystem.Settings;
 using CheckInSystem.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
+using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using WpfScreenHelper;
 
@@ -12,27 +16,55 @@ namespace CheckInSystem;
 
 public class Startup
 {
+    private static IPlatform _platform;
     public static bool Run()
     {
+        DatabaseHelper dbHelper = new DatabaseHelper();
+
         if (!EnsureDatabaseAvailable()) return false;
-        ACR122U.StartReader();
-        ViewmodelBase.Employees = new ObservableCollection<Employee>(DatabaseHelper.GetAllEmployees());
-        ViewmodelBase.Groups =
-            new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewmodelBase.Employees)));
-        OpenEmployeeOverview();
+        //ACR122U.StartReader();
+        //ViewModelBase.Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
+        //ViewModelBase.Groups =
+        //    new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(ViewModelBase.Employees)));
+        //OpenEmployeeOverview();
         AddAdmin();
-        Database.Maintenance.CheckOutEmployeesIfTheyForgot();
-        Database.Maintenance.CheckForEndedOffSiteTime();
-        return true;
+
+        return true;   
     }
 
-    private static void OpenEmployeeOverview()
+    //public static void OpenEmployeeOverview()
+    //{
+    //    var screens = Screen.AllScreens.GetEnumerator();
+    //    screens.MoveNext();
+    //    screens.MoveNext();
+    //    Screen? screen = screens.Current;
+    //    EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(new WPFPlatform()));
+
+    //    if (screen != null)
+    //    {
+    //        employeeOverview.Top = screen.Bounds.Top;
+    //        employeeOverview.Left = screen.Bounds.Left;
+    //        employeeOverview.Height = screen.Bounds.Height;
+    //        employeeOverview.Width = screen.Bounds.Width;
+    //    }
+    //    employeeOverview.Show();
+    //}
+    public static void OpenEmployeeOverview(IPlatform _platform)
     {
+        SettingsControl settings = new SettingsControl();
+        int screenIndex = settings.GetEmployeeOverViewSettings();
+
         var screens = Screen.AllScreens.GetEnumerator();
         screens.MoveNext();
-        screens.MoveNext();
+        int selectedScreen = 1;
+        while (selectedScreen != screenIndex && selectedScreen <= screenIndex)
+        {
+            screens.MoveNext();
+            selectedScreen++;
+        }
+
         Screen? screen = screens.Current;
-        EmployeeOverview employeeOverview = new EmployeeOverview();
+        EmployeeOverview employeeOverview = new EmployeeOverview(new EmployeeOverviewViewModel(_platform));
 
         if (screen != null)
         {
@@ -46,13 +78,15 @@ public class Startup
 
     private static void AddAdmin() //Needs to be updated at somepoint
     {
-        var admins = AdminUser.GetAdminUsers();
+        DatabaseHelper databaseHelper = new();
+        var admins = databaseHelper.GetAdminUsers();
         if (admins.Count == 0)
         {
 
-            AdminUser.CreateUser("sko", "test123");
+            databaseHelper.CreateUser("sko", "test123");
         }
     }
+    
 
     private static bool EnsureDatabaseAvailable()
     {

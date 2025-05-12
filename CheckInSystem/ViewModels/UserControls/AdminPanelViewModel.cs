@@ -1,38 +1,96 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using CheckInSystem.Models;
-using CheckInSystem.Views.UserControls;
+using CheckInSystem.Platform;
+using CheckInSystem.Views.Dialog;
+using static Dapper.SqlMapper;
+using WpfScreenHelper;
+using CheckInSystem.Settings;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class AdminPanelViewModel : ViewmodelBase
-{
-    private ContentControl EmployeesControl { get; set; }
 
-    public Group? UpdateEmployeesControl
+public class AdminPanelViewModel : ViewModelBase
+{
+    public const int EMPLOYEE_LISTPAGE_TAB = 0;
+    public const int EMPLOYEE_TIME_TAB = 1;
+    public const int GROUP_LISTPAGE_TAB = 2;
+    ObservableCollection<Group> _groups = new();
+    public ObservableCollection<Group> Groups
+    {
+        get => _groups;
+        set => SetProperty(ref _groups, value, nameof(Groups));
+    }
+    /// <summary>
+    /// User filters a group. Render only employees in that group
+    /// </summary>
+    public Group? ChangeGroupList
     {
         set
         {
-            if (value == null)
+            SelectedTab = EMPLOYEE_LISTPAGE_TAB;
+            if (value != null)
             {
-                EmployeesControl.Content = new AdminEmployeeView(Employees);
+                AdminEmployeeViewModel.SelectedEmployeeGroup = value.Members;
             }
             else
             {
-                EmployeesControl.Content = new AdminEmployeeView(value.Members);
+                AdminEmployeeViewModel.SelectedEmployeeGroup.Clear();
             }
         }
     }
-    
-    public AdminPanelViewModel(ContentControl contentControl)
+    Control _adminPanelContent;
+    public Control AdminPanelContent
     {
-        EmployeesControl = contentControl;
-        EmployeesControl.Content = new AdminEmployeeView(Employees);
+        get => _adminPanelContent;
+        set => SetProperty(ref _adminPanelContent, value, nameof(AdminPanelContent));
+    }
+    AdminEmployeeViewModel _adminEmployeeViewModel;
+    public AdminEmployeeViewModel AdminEmployeeViewModel 
+    {
+        get => _adminEmployeeViewModel;
+        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
+    }
+    AdminGroupViewModel _adminGroupViewModel;
+    public AdminEmployeeViewModel AdminGroupViewModel 
+    {
+        get => _adminEmployeeViewModel;
+        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminGroupViewModel));
+    }
+    EmployeeTimeViewModel _employeeTimeViewModel;
+    public EmployeeTimeViewModel EmployeeTimeViewModel
+    {
+        get => _employeeTimeViewModel;
+        set => SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+    }
+
+    int _selectedTab = 0;
+    public int SelectedTab
+    {
+        get => _selectedTab;
+        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
+    }
+    
+    public AdminPanelViewModel(IPlatform platform) : base(platform)
+    {
+        AdminEmployeeViewModel = new(platform);
+        EmployeeTimeViewModel = new(platform);
+
+
+        platform.DataLoaded += (sender, args) =>
+        {
+            Groups = platform.MainWindowViewModel.Groups;
+        };
+
+        Screen = settings.GetEmployeeOverViewSettings();
     }
 
     public void Logout()
     {
-        MainContentControl.Content = new LoginScreen();
+        SelectedTab = EMPLOYEE_LISTPAGE_TAB;
+        _platform.MainWindowViewModel.RequestView(typeof(LoginScreenViewModel));
     }
 
     public void EditNextScannedCard()
@@ -43,17 +101,18 @@ public class AdminPanelViewModel : ViewmodelBase
 
     public void SwitchToGroups()
     {
-        MainContentControl.Content = new AdminGroupView();
+        SelectedTab = GROUP_LISTPAGE_TAB;
+        _platform.MainWindowViewModel.RequestView(typeof(AdminGroupViewModel));
     }
 
     public void DeleteEmployee(Employee employee)
     {
         employee.DeleteFromDb();
-        foreach (Group group in Groups)
+        foreach (Group group in _platform.MainWindowViewModel.Groups)
         {
             group.Members.Remove(employee);
         }
-        Employees.Remove(employee);
+        _platform.MainWindowViewModel.Employees.Remove(employee);
     }
 
     public void DeleteEmployee(ObservableCollection<Employee> employees)
@@ -71,11 +130,17 @@ public class AdminPanelViewModel : ViewmodelBase
         employee.UpdateDb();
     }
     
-    public void UpdateOffsite(ObservableCollection<Employee> employees, bool isOffsite, DateTime? offsiteUntil)
+    public void UpdateOffsite(ObservableCollection<Employee> employees, /*bool isOffsite, DateTime? offsiteUntil,*/
+        DateTime FromDate, DateTime ToDate,string Note, Absence.absenceReason AbsenceReason)
     {
+        Absence absence = new();
+        absence.ToTime = absence.ToTime.AddHours(23);
         foreach (Employee employee in employees)
         {
-            UpdateOffsite(employee, isOffsite, offsiteUntil);
+            absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
+
+            //UpdateOffsite(employee, isOffsite, offsiteUntil);
+            //employee.IsOffSite = true;
         }
     }
 
@@ -93,4 +158,24 @@ public class AdminPanelViewModel : ViewmodelBase
             group.RemoveEmployee(employee);
         }
     }
+
+    public void EditGroupsForEmployees()
+    {
+        EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
+
+        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+        {
+            if (editGroupsForEmployees.AddGroup) AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+            if (editGroupsForEmployees.RemoveGroup) RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+        }
+    }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
+    public int Screen { get; set; }
+    SettingsControl settings = new();
+
+    public void setscreen()
+    {
+        settings.SetEmployeeOverViewSettings(Screen);
+    }
+    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
 }

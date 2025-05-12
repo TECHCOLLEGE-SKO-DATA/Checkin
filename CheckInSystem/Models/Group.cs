@@ -28,17 +28,19 @@ public class Group : INotifyPropertyChanged
         get => _isvisible;
         set => SetProperty(ref _isvisible, value);
     }
-    
-    public ObservableCollection<Employee> Members { get; private set; }
+
+    public ObservableCollection<Employee> Members { get; private set; } = new();
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {
-        return DatabaseHelper.GetAllGroups(employees);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.GetAllGroups(employees);
     }
 
     public static Group NewGroup(String name)
     {
-        return DatabaseHelper.NewGroup(name);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.NewGroup(name);
     }
 
     public void RemoveGroupDb()
@@ -46,14 +48,15 @@ public class Group : INotifyPropertyChanged
         databaseHelper.RemoveGroupDb(ID);
     }
 
-    public void UpdateName(string name)
+    public void UpdateName(string name, int id)
     {
+        this.ID = id;
         this.Name = databaseHelper.UpdateName(name, ID);
     }
 
     public void Updatevisibility(bool visibility)
     {
-        databaseHelper.Updatevisibility(visibility,Isvisible,ID);
+        databaseHelper.UpdateVisibility(visibility,Isvisible,ID);
     }
     
     public void AddEmployee(Employee employee)

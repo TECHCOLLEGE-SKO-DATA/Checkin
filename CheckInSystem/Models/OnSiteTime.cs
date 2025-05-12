@@ -8,8 +8,6 @@ namespace CheckInSystem.Models;
 
 public class OnSiteTime : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper;
-
     private int _id;
     public int Id
     {
@@ -64,14 +62,15 @@ public class OnSiteTime : INotifyPropertyChanged
     }
 
     public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
-    {       
-        return DatabaseHelper.GetOnsiteTimesForEmployee(employee);
+    {     
+        DatabaseHelper databaseHelper = new ();
+        return databaseHelper.GetOnsiteTimesForEmployee(employee);
     }
 
     public bool IsChanged()
     {
-        if (_oldArrivalTime == ArrivalTime) return true;
-        if (_oldDepartureTime == DepartureTime) return true;
+        if (_oldArrivalTime != ArrivalTime) return true;
+        if (_oldDepartureTime != DepartureTime) return true;
         return false;
     }
 
@@ -83,17 +82,21 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public void DeleteFromDb()
     {
+        DatabaseHelper databaseHelper = new();
         databaseHelper.DeleteFromDbOnSiteTime(Id);
+            
     }
 
     public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
-        DatabaseHelper.UpdateMutipleSiteTimes(siteTimes);
+        DatabaseHelper databaseHelper = new();
+        databaseHelper.UpdateMutipleSiteTimes(siteTimes);
     }
 
     public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
-        return DatabaseHelper.AddTimeToDb(employeeId, arrivalTime, departureTime);
+        DatabaseHelper databaseHelper = new();
+        return databaseHelper.AddTimeToDb(employeeId, arrivalTime, departureTime);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -1,23 +1,37 @@
 ﻿using CheckInSystem.Models;
-using CheckInSystem.Views.UserControls;
+using CheckInSystem.Platform;
+using System.Collections.ObjectModel;
 
 namespace CheckInSystem.ViewModels.UserControls;
 
-public class AdminGroupViewModel : ViewmodelBase
+public class AdminGroupViewModel : ViewModelBase
 {
-    public AdminGroupViewModel()
+    ObservableCollection<Group> _groups = new();
+    public ObservableCollection<Group> Groups
     {
-        
+        get => _groups;
+        set => SetProperty(ref _groups, value, nameof(Groups));
+    }
+    public AdminGroupViewModel(IPlatform platform) : base(platform)
+    {
+        platform.DataLoaded += (sender, args) =>
+        {
+            Groups = platform.MainWindowViewModel.Groups;
+            //foreach (var group in platform.MainWindowViewModel.Groups)
+            //{
+            //    group.Add(employee);
+            //}
+        };
     }
     
     public void Logout()
     {
-        MainContentControl.Content = new LoginScreen();
+        _platform.MainWindowViewModel.RequestView(typeof(LoginScreenViewModel));
     }
 
-    public void SwtichToEmployees()
+    public void SwitchToEmployees()
     {
-        MainContentControl.Content = new AdminPanel();
+        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));        
     }
 
     public void AddNewGroup(string name)
@@ -27,7 +41,7 @@ public class AdminGroupViewModel : ViewmodelBase
 
     public void EditGroupName(Group group, string name)
     {
-        group.UpdateName(name);
+        group.UpdateName(name,group.ID);
     }
 
     public void DeleteGroup(Group group)

@@ -11,12 +11,10 @@ namespace CheckInSystem.Views.UserControls;
 
 public partial class AdminEmployeeView : UserControl
 {
-    private AdminEmployeeViewModel vm;
+    public AdminEmployeeViewModel _vm => (AdminEmployeeViewModel) DataContext;
     
-    public AdminEmployeeView(ObservableCollection<Employee> employees)
+    public AdminEmployeeView()
     {
-        vm = new AdminEmployeeViewModel(employees);
-        DataContext = vm;
         InitializeComponent();
     }
 
@@ -24,28 +22,22 @@ public partial class AdminEmployeeView : UserControl
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        vm.EditEmployee(employee);
+        _vm.EditEmployee(employee);
     }
 
     private void BtnSeeEmployeeTime(object sender, RoutedEventArgs e)
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        EmployeeTimeView timeView = new EmployeeTimeView(employee);
-        ViewmodelBase.MainContentControl.Content = timeView;
+        _vm.SeeEmployeeTime(employee);
     }
 
     private void BtnEditEmployeeGroup(object sender, RoutedEventArgs e)
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        
-        EditGroupsForEmployees editGroupsForEmployees = new (ViewmodelBase.Groups);
-        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
-        {
-            if (editGroupsForEmployees.AddGroup) editGroupsForEmployees.SelectedGroup.AddEmployee(employee);
-            if (editGroupsForEmployees.RemoveGroup) editGroupsForEmployees.SelectedGroup.RemoveEmployee(employee);
-        }
+
+        _vm.EditEmployeeGroup(employee);
     }
 
     private void CbSelected(object sender, RoutedEventArgs e)
@@ -76,7 +68,7 @@ public partial class AdminEmployeeView : UserControl
                 MessageBoxImage.Warning);
         if (result == MessageBoxResult.Yes)
         {
-            vm.DeleteEmployee(employee);
+            _vm.DeleteEmployee(employee);
         }
     }
 }

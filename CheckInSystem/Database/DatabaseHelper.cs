@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
 using CheckInSystem.CardReader;
+using static CheckInSystem.Models.Absence;
 
-public class DatabaseHelper
+public class DatabaseHelper : IDatabaseHelper
 {
     //From ACR122U CardScanned
 
@@ -30,7 +31,7 @@ public class DatabaseHelper
     //From ACR122U CardScanned
 
     //From Admin User
-    public static void CreateUser(string username, string password)
+    public void CreateUser(string username, string password)
     {
         string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
 
@@ -44,7 +45,7 @@ public class DatabaseHelper
         connection.Query(insertQuery, new { username = username, passwordHash = passwordHash });
     }
 
-    public static AdminUser? Login(string username, string password)
+    public AdminUser? Login(string username, string password)
     {
         string passwordHashQuery = @"SELECT hashedPassword FROM adminUser WHERE username = @username";
         string selectQuery = @"SELECT ID, username FROM adminUser WHERE username = @username";
@@ -61,7 +62,7 @@ public class DatabaseHelper
         return adminUser;
     }
 
-    public static List<AdminUser> GetAdminUsers()
+    public List<AdminUser> GetAdminUsers()
     {
         string selectQuery = @"SELECT * FROM adminUser";
 
@@ -73,7 +74,7 @@ public class DatabaseHelper
         return adminUsers;
     }
 
-    public static void Delete(int ID)
+    public void Delete(int ID)
     {
         string deletionQuery = @"DELETE FROM adminUser WHERE ID = @id";
 
@@ -87,7 +88,7 @@ public class DatabaseHelper
     //From Admin User
 
     //From Employee
-    public static List<Employee> GetAllEmployees()
+    public List<Employee> GetAllEmployees()
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -125,7 +126,7 @@ public class DatabaseHelper
         connection.Query(updateQuery, new { CardID = cardID, FirstName = firstName, MiddleName = middleName, LastName = lastName, IsOffSite = isOffSite, OffSiteUntil = offSiteUntil, ID = id });
     }
 
-    public static Employee? GetFromCardId(string cardID)
+    public Employee? GetFromCardId(string cardID)
     {
         string selectQuery = @"SELECT employee.ID, cardid, firstname, middlename, lastname, isoffsite, offsiteuntil, arrivaltime, departuretime,
             [dbo].[IsEmployeeCheckedIn](employee.ID) as IsCheckedIn
@@ -214,7 +215,7 @@ public class DatabaseHelper
         return name;
     }
 
-    public void Updatevisibility(bool visibility, bool Isvisible, int ID)
+    public void UpdateVisibility(bool visibility, bool Isvisible, int ID)
     {
         string updateQuery = @"UPDATE [group] 
             SET isvisible = @isvisible
@@ -255,7 +256,7 @@ public class DatabaseHelper
         return true;
     }
 
-    public static List<Group> GetAllGroups(List<Employee> employees)
+    public List<Group> GetAllGroups(List<Employee> employees)
     {
         string selectQueryGroups = @"SELECT * FROM [group]";
         string selectQueryEmployeesInGroup = @"SELECT employeeID FROM employeeGroup WHERE groupID = {0}";
@@ -294,7 +295,7 @@ public class DatabaseHelper
 
 
 
-    public static Group NewGroup(string name)
+    public Group NewGroup(string name)
     {
         string insertQuery = @"INSERT INTO [group] (name) VALUES (@name);
                            SELECT SCOPE_IDENTITY();";
@@ -308,18 +309,16 @@ public class DatabaseHelper
         var tempGroup = new { ID = newGroupId, Name = name, Members = new ObservableCollection<Employee>() };
 
         var newGroup = new Group();
-        newGroup.UpdateName(tempGroup.Name);
-        newGroup.AddEmployee(new Employee()); 
+        newGroup.UpdateName(tempGroup.Name, tempGroup.ID);
+        //newGroup.AddEmployee(new Employee()); 
 
         return newGroup;
     }
 
-
-
     //From Group
 
     //From OnSiteTime
-    public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
+    public List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
     {
         string selectQuery = @"SELECT * FROM onSiteTime 
             where employeeID = @employeeID";
@@ -345,7 +344,7 @@ public class DatabaseHelper
         connection.Query(deletionQuery, new { id = Id });
     }
 
-    public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
+    public void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
         string UpdateQuery = @"UPDATE onSiteTime SET 
                       arrivalTime = @ArrivalTime,
@@ -359,7 +358,7 @@ public class DatabaseHelper
         connection.Execute(UpdateQuery, siteTimes);
     }
 
-    public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
+    public OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
         string insertQuery = @"INSERT INTO onSiteTime (employeeID, arrivalTime, departureTime)
                         VALUES (@employeeId, @arrivalTime, @departureTime)
@@ -375,4 +374,86 @@ public class DatabaseHelper
     }
 
     //From OnSiteTime
+
+    //From Absence
+    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, absenceReason _reason)
+    {
+        string insertQuery = @"
+        INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
+        VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
+        SELECT SCOPE_IDENTITY();";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var absenceId = connection.ExecuteScalar<int>(insertQuery, new
+        {
+            employeeId = _employeeId,
+            fromDate = _fromDate,
+            toDate = _toDate,
+            note = _note,
+            reason = (int)_reason
+        });
+
+        return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
+    }
+
+    public void EditAbsence(List<Absence> absences)
+    {
+        string editQuery = @"UPDATE Absence SET 
+        fromDate = @FromDate, 
+        toDate = @ToDate, 
+        note = @Note, 
+        AbsenceReason = @AbsenceReason
+        WHERE ID = @ID";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(editQuery, absences);
+    }
+
+    public void DeleteAbsence(int _id)
+    {
+        string deletQuery = @"DELETE FROM Absence WHERE ID = @id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish databas connection!");
+
+        connection.Query(deletQuery, new { id = _id });
+    }
+
+    public List<Absence> GetAllAbsence(Employee employee)
+    {
+        string selectQuery = @"SELECT * FROM Absence
+                       WHERE employeeId = @employeeId";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
+        .Select(t =>
+        {
+            t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Syg;
+
+            // Ensure that FromTime and ToTime are populated based on FromDate and ToDate
+            if (t.FromDate != null)
+            {
+                t.FromTime = TimeOnly.FromDateTime(t.FromDate);
+            }
+            if (t.ToDate != null)
+            {
+                t.ToTime = TimeOnly.FromDateTime(t.ToDate);
+            }
+
+            return t;
+        })
+        .ToList();
+
+        return absences;
+    }
 }

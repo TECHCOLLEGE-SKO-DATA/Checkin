@@ -17,9 +17,11 @@
             <ComboBox x:Name="SelectedGroup" 
                       ItemsSource="{Binding Path=Groups}"
                       DisplayMemberPath="Name"
-                      SelectedItem="{Binding UpdateEmployeesControl}"
+                      SelectedItem="{Binding ChangeGroupList}"
+
                       Width="150"
-                      FontSize="15"/>
+                      FontSize="15"
+                      />
             <Button Content="Alle Brugere"
                     Click="BtnResetGroup"
                     Margin="10 0 0 0"
@@ -36,7 +38,17 @@
                 Margin="0 0 5 0"
                 FontSize="15"/>
         <!-- End of top bar -->
-        <ContentControl Grid.Row="1" x:Name="EmployeesControl"/>
+        <!-- <ContentControl Grid.Row="1" Content="{Binding AdminPanelContent}"/> -->
+        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TabControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type TabItem}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                </TabControl.ItemContainerStyle>
+                <TabItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <local:AdminEmployeeView DataContext="{Binding AdminEmployeeViewModel}" />
+                </TabItem>
+        </TabControl>
         <!-- Bottom bar -->
         <StackPanel Grid.Row="2" Background="Gold" Orientation="Horizontal">
             <Button Content="Tilføj/Fjern valgte brugere fra gruppe"
