@@ -86,11 +86,15 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             Btn_AddGroup = ReactiveCommand.Create(async () =>
             { 
                 InputDialog inputDialog = new InputDialog("Indtast navn til gruppen");
+
+                //opens and waits for answer from the window before continueing
                 var result = await inputDialog.ShowDialog<bool>(_platform.MainWindow);
+
                 if (result == true)
                 {
                     if(inputDialog.Answer != "") 
                     {
+                        //runs both newgroup to add to db but also adds to local collection groups 
                         Groups.Add(Group.NewGroup(inputDialog.Answer));
                     }
                 }
