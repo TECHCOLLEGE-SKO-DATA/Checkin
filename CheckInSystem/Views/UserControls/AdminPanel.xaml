@@ -18,8 +18,10 @@
                       ItemsSource="{Binding Path=Groups}"
                       DisplayMemberPath="Name"
                       SelectedItem="{Binding ChangeGroupList}"
+
                       Width="150"
-                      FontSize="15"/>
+                      FontSize="15"
+                      />
             <Button Content="Alle Brugere"
                     Click="BtnResetGroup"
                     Margin="10 0 0 0"

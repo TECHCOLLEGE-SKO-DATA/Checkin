@@ -9,11 +9,25 @@ using System.Collections.ObjectModel;
 using PCSC.Interop;
 using CheckInSystem.Views.Windows;
 using CheckInSystem.Background_tasks;
+using System.Reflection;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
     AdminPanelViewModel _adminPanelViewModel;
+
+    public string AppVersion
+    {
+        get
+        {
+            string? version = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .InformationalVersion;
+
+            // Remove anything after '+' to keep it clean
+            return "v" + (version?.Split('+')[0] ?? "Unknown");
+        }
+    }
     public AdminPanelViewModel AdminPanelViewModel
     {
         get => _adminPanelViewModel;
