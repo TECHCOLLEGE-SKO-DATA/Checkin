@@ -17,7 +17,8 @@
             <ComboBox x:Name="SelectedGroup" 
                       ItemsSource="{Binding Path=Groups}"
                       DisplayMemberPath="Name"
-                      SelectedItem="{Binding CurrentGroup}"
+                      SelectedItem="{Binding ChangeGroupList}"
+
                       Width="150"
                       FontSize="15"
                       />
