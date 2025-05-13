@@ -9,9 +9,7 @@
 	d:DesignHeight="450"
 	x:Class="CheckInSystemAvalonia.EmployeeOverviewWindow"
 	Title="EmployeeOverviewWindow"
-	x:DataType="vm:EmployeeOverviewViewModel"
-	WindowStartupLocation="Manual"
-	WindowState="{Binding WindowState}">
+	x:DataType="vm:EmployeeOverviewViewModel">
 
 	<Grid>
 		<Grid.RowDefinitions>

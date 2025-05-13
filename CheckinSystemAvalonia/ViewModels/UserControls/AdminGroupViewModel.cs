@@ -4,6 +4,7 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
@@ -24,8 +25,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> Btn_HideAll { get; }
 
         public ReactiveCommand<Unit,Unit> Btn_ShowAll { get; }
-
-        public ReactiveCommand<Unit, Unit> Btn_DeletGroup { get; }
 
         public ReactiveCommand<Unit,Task> Btn_AddGroup { get; }
 
@@ -65,14 +64,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 }
             });
 
-            //Delete Groups by removing from database and the local list
-            Btn_DeletGroup = ReactiveCommand.Create(() =>
-            {
-                /*
-                group.RemoveGroupDb();
-                Groups.Remove(group);*/
-            });
-
             //opens window to add group to db
             Btn_AddGroup = ReactiveCommand.Create(async () =>
             { 
@@ -90,6 +81,24 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                     }
                 }
             });
+        }
+
+        public void DeleteGroup(Group group)
+        {
+            group.RemoveGroupDb();
+            Groups.Remove(group);
+        }
+        public async Task EditGroupNameAsync(Group group, InputDialog input)
+        {
+            var result = await input.ShowDialog<bool>(_platform.MainWindow);
+
+            if (result == true)
+            {
+                if (input.Answer != "")
+                {
+                    group.UpdateName(input.Answer, group.ID);
+                }
+            }
         }
     }
 }

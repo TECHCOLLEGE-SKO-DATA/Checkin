@@ -84,6 +84,7 @@ public class MainWindowViewModel : ViewModelBase
             LoadDataFromDatabase();
         }
 
+
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
@@ -97,6 +98,9 @@ public class MainWindowViewModel : ViewModelBase
 
     public void LoadDataFromDatabase()
     {
+        if (Design.IsDesignMode)
+            return;
+
         AbsencBackGroundService absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())

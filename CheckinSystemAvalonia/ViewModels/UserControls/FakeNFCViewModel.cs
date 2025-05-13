@@ -1,4 +1,5 @@
-﻿using CheckinLibrary.Database;
+﻿using Avalonia.Controls;
+using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystemAvalonia.CardReader;
 using CheckInSystemAvalonia.Platform;
@@ -45,8 +46,11 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             NewCardId = RandomCardGen();
 
-            foreach (var emp in dbHelper.GetAllEmployees())
+            if (!Design.IsDesignMode)
+            {
+                foreach (var emp in dbHelper.GetAllEmployees())
                 Employees.Add(emp);
+            }
 
             ScanNewCardCommand = ReactiveCommand.Create(ScanNewCard);
             GetFromDatabaseCommand = ReactiveCommand.Create(RefreshEmployees);
