@@ -11,7 +11,7 @@ local Microsoft SQL Server database.
     1. Choose the basic installation.
 2. Clone the repository.
 3. Run the [Database Setup Script](Database_SQL/SetUpDB.bat).
-4. Build the program or download it from [releases](https://github.com/Matkip0/CheckInSystem/releases).
+4. Build the program or download it from [releases](https://github.com/TECHCOLLEGE-SKO-DATA/Checkin/releases).
 
 ## Documentation
 

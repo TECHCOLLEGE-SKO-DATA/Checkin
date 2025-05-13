@@ -12,7 +12,7 @@ namespace CheckInSystem.Models
     {
         public enum absenceReason
         {
-            Syg,
+            Syg,            
             Skole,
             Ferie,
             SøgeDag,
