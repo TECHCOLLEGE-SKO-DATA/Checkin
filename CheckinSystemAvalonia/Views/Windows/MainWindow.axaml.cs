@@ -1,10 +1,10 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
-using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
 using System.ComponentModel;
 
-namespace CheckinSystemAvalonia.Views;
+namespace CheckInSystemAvalonia.Views;
 
 public partial class MainWindow : Window
 {

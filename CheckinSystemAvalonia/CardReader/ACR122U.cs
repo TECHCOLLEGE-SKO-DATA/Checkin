@@ -1,16 +1,16 @@
 ﻿//using System.Data.SqlClient;
 //using System.Diagnostics;
 //using System.Windows;
-//using CheckinLib.Models;
-//using CheckinLib.ViewModels;
-//using CheckinLib.Views.Windows;
+//using CheckinLibrary.Models;
+//using CheckinLibrary.ViewModels;
+//using CheckinLibrary.Views.Windows;
 //using Dapper;
 //using FrApp42.ACR122U;
 //using PCSC;
 //using PCSC.Iso7816;
 
 
-//namespace CheckinLib.CardReader;
+//namespace CheckinLibrary.CardReader;
 
 //using Database;
 

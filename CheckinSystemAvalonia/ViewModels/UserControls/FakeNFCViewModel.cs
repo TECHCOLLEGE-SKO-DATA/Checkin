@@ -1,14 +1,14 @@
-﻿using CheckinLib.Database;
-using CheckinLib.Models;
-using CheckinSystemAvalonia.CardReader;
-using CheckinSystemAvalonia.Platform;
+﻿using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using CheckInSystemAvalonia.CardReader;
+using CheckInSystemAvalonia.Platform;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Text;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class FakeNFCViewModel : ViewModelBase
     {

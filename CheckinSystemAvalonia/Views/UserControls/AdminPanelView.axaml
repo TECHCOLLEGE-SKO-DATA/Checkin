@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="550"
-			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
-             x:Class="CheckinSystemAvalonia.Views.UserControls.AdminPanelView"
+			 xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.UserControls"
+             x:Class="CheckInSystemAvalonia.Views.UserControls.AdminPanelView"
 			 x:DataType="vm:AdminPanelViewModel"
-			 xmlns:Views="clr-namespace:CheckinSystemAvalonia.Views.UserControls">
+			 xmlns:Views="clr-namespace:CheckInSystemAvalonia.Views.UserControls">
 
 	<Grid>
 

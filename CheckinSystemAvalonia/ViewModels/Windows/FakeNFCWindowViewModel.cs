@@ -1,5 +1,6 @@
-﻿using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.UserControls;
+﻿using Avalonia.Controls;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckinSystemAvalonia.ViewModels.Windows
+namespace CheckInSystemAvalonia.ViewModels.Windows
 {
     public class FakeNFCWindowViewModel : ViewModelBase
     {

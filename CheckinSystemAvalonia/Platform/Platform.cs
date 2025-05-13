@@ -1,10 +1,10 @@
-using CheckinSystemAvalonia.CardReader;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views;
+using CheckInSystemAvalonia.CardReader;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
 using PCSC.Interop;
 using System;
 
-namespace CheckinSystemAvalonia.Platform;
+namespace CheckInSystemAvalonia.Platform;
 public class Platform : IPlatform
 {
     ICardReader _cardReader;

@@ -1,9 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
-using CheckinLib.Models;
-using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views.UserControls;
+using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views.UserControls;
 using PCSC;
 using PCSC.Interop;
 using ReactiveUI;
@@ -14,9 +14,8 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Automation;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminPanelViewModel : ViewModelBase
     {

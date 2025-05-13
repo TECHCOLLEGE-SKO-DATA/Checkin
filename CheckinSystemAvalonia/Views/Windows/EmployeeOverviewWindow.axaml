@@ -3,11 +3,11 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.Windows"
+	xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.Windows"
 	mc:Ignorable="d"
 	d:DesignWidth="800"
 	d:DesignHeight="450"
-	x:Class="CheckinSystemAvalonia.EmployeeOverviewWindow"
+	x:Class="CheckInSystemAvalonia.EmployeeOverviewWindow"
 	Title="EmployeeOverviewWindow"
 	x:DataType="vm:EmployeeOverviewViewModel"
 	WindowStartupLocation="Manual"
@@ -32,7 +32,7 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 
-						<StackPanel IsVisible="{Binding IsVisible}"
+						<StackPanel IsVisible="{Binding Isvisible}"
 									RenderTransformOrigin="0.5,0.5">
 							<!-- Group Name -->
 							<TextBlock Text="{Binding Name}"

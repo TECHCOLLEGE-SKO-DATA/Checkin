@@ -1,16 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using CheckinSystemAvalonia.ViewModels;
-using CheckinSystemAvalonia.Views;
-using CheckinSystemAvalonia;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinLib;
+using CheckInSystemAvalonia.ViewModels;
+using CheckInSystemAvalonia.Views;
+using CheckInSystemAvalonia;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckinLibrary;
 using System;
 using System.IO;
-using CheckinSystemAvalonia.Platform;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
 
-namespace CheckinSystemAvalonia;
+namespace CheckInSystemAvalonia;
 
 public partial class App : Application
 {
@@ -26,7 +28,7 @@ public partial class App : Application
 
             Platform.Start();
 
-            if (!Startup.Run(Platform)) 
+            if (!Startup.Run(Platform))
             {
             }
 

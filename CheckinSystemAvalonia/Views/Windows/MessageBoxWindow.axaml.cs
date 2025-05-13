@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System;
 
-namespace CheckinSystemAvalonia.Views;
+namespace CheckInSystemAvalonia.Views;
 
 public partial class MessageBoxWindow : Window
 {

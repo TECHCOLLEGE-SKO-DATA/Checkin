@@ -1,9 +1,9 @@
-using CheckinSystemAvalonia.Platform;
+using CheckInSystemAvalonia.Platform;
 using FrApp42.ACR122U;
 using PCSC;
 using PCSC.Iso7816;
 using System;
-namespace CheckinSystemAvalonia.CardReader;
+namespace CheckInSystemAvalonia.CardReader;
 
 public class ACR122UCardReader : Platform.ICardReader
 {

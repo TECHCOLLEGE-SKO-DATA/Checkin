@@ -1,15 +1,14 @@
-﻿using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.Windows;
+﻿using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
 using System.Reactive;
-using CheckinLib.ViewModels.UserControls;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminLoginViewModel : ViewModelBase
     {
-        LoginScreenViewModel loginScreenViewModel = new();
-
         private string _userName;
         public string Username
         {
@@ -38,9 +37,13 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 
         private void Login(string username, string passWord)
         {
-            bool status = loginScreenViewModel.AdminLogin(username, passWord);
-            
-            if (status)
+            DatabaseHelper databaseHelper = new();
+            AdminUser? adminUser = databaseHelper.Login(Username, PassWord);
+            if (adminUser == null)
+            {
+                //MessageBox.Show("Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
             {
                 _platform.MainWindowViewModel.SwitchToAdminPanel();
             }

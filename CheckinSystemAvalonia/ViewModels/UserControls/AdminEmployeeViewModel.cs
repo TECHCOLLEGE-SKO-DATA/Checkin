@@ -1,5 +1,5 @@
-﻿using CheckinLib.Models;
-using CheckinSystemAvalonia.Platform;
+﻿using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Platform;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminEmployeeViewModel : ViewModelBase
     {

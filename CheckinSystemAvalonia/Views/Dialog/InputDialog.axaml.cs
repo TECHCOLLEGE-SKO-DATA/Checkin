@@ -4,7 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
 
-namespace CheckinSystemAvalonia;
+namespace CheckInSystemAvalonia;
 
 public partial class InputDialog : Window
 {

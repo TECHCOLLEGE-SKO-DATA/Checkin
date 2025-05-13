@@ -5,24 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using CheckinLib.Models;
+using CheckinLibrary.Models;
 using System.Reactive;
 using System.ComponentModel;
-using System.Windows.Data;
 using System.Windows;
-using CheckinLib.Database;
-using CheckinSystemAvalonia.Platform;
+using CheckinLibrary.Database;
+using CheckInSystemAvalonia.Platform;
 using Avalonia.Controls;
 
-namespace CheckinSystemAvalonia.ViewModels.Windows
+namespace CheckInSystemAvalonia.ViewModels.Windows
 {
     public class EmployeeOverviewViewModel : ViewModelBase
     {
         private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
-        private ResizeMode _resizeMode = ResizeMode.NoResize;
-        private WindowStyle _windowStyle = WindowStyle.None;
-        Avalonia.Controls.WindowState _windowState;
+        WindowState _windowState;
 
         public string AppVersion
         {
@@ -50,17 +47,8 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
             set => this.RaiseAndSetIfChanged(ref _scaleSize, value);
         }
 
-        public ResizeMode ResizeMode
-        {
-            get => _resizeMode;
-            set => this.RaiseAndSetIfChanged(ref _resizeMode, value);
-        }
-        public WindowStyle WindowStyle
-        {
-            get => _windowStyle;
-            set => this.RaiseAndSetIfChanged(ref _windowStyle, value);
-        }
-        public Avalonia.Controls.WindowState WindowState
+        
+        public WindowState WindowState
         {
             get => _windowState;
             set => this.RaiseAndSetIfChanged(ref _windowState, value);
@@ -79,18 +67,7 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
 
         public void ToggleFullscreen()
         {
-            if (ResizeMode == ResizeMode.NoResize)
-            {
-                ResizeMode = ResizeMode.CanResizeWithGrip;
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                WindowState = 0;
-            }
-            else
-            {
-                ResizeMode = ResizeMode.NoResize;
-                WindowStyle = WindowStyle.None;
-                WindowState = (Avalonia.Controls.WindowState)2;
-            }
+            
         }
 
         public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
@@ -162,14 +139,21 @@ namespace CheckinSystemAvalonia.ViewModels.Windows
 
         private void SortEmployees()
         {
-            // Apply sorting to each group's Members
             foreach (var group in Groups)
             {
-                var view = CollectionViewSource.GetDefaultView(group.Members);
-                view.SortDescriptions.Clear();
-                view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending)); // Checked-in first
-                view.SortDescriptions.Add(new SortDescription(nameof(Employee.FirstName), ListSortDirection.Ascending));    // Alphabetical
+                // Sort using LINQ and recreate the collection
+                var sorted = group.Members
+                    .OrderByDescending(e => e.IsCheckedIn)
+                    .ThenBy(e => e.FirstName)
+                    .ToList();
+
+                group.Members.Clear();
+                foreach (var employee in sorted)
+                {
+                    group.Members.Add(employee);
+                }
             }
         }
+
     }
 }

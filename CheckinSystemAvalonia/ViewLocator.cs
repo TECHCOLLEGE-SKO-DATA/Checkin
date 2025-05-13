@@ -2,9 +2,9 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using CheckinSystemAvalonia.ViewModels;
+using CheckInSystemAvalonia.ViewModels;
 
-namespace CheckinSystemAvalonia
+namespace CheckInSystemAvalonia
 {
     public class ViewLocator : IDataTemplate
     {

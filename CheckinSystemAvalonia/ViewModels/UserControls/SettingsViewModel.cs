@@ -1,11 +1,11 @@
-﻿using CheckinSystemAvalonia.Platform;
+﻿using CheckInSystemAvalonia.Platform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class SettingsViewModel : ViewModelBase
     {

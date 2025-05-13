@@ -1,7 +1,7 @@
-﻿using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.UserControls;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views.UserControls;
+﻿using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.UserControls;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 
 
-namespace CheckinSystemAvalonia.ViewModels;
+namespace CheckInSystemAvalonia.ViewModels;
 
 public class ViewModelBase : ReactiveObject
 {

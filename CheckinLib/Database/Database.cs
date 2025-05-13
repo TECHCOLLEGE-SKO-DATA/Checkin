@@ -67,8 +67,10 @@ public static class Database
 
             if (!EnsureSqlServiceRunning())
             {
+                /*
                 MessageBox.Show("Kunne ikke starte SQL Serveren, kontakt IT support!",
                     "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+                */
                 return false;
             }
 
@@ -77,9 +79,10 @@ public static class Database
         catch (Exception e)
         {
             Debug.WriteLine(e);
-
+            /*
             MessageBox.Show($"Database opstartsfejl: {e.Message}",
                 "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            */
             return false;
         }
     }

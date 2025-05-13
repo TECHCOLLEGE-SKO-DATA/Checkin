@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace CheckinSystemAvalonia.Views.UserControls;
+namespace CheckInSystemAvalonia.Views.UserControls;
 
 public partial class EmployeeTimeView : UserControl
 {

@@ -1,25 +1,14 @@
-﻿using Avalonia.Controls;
-using CheckinLib.Models;
-using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views;
+﻿using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Platform;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace CheckinSystemAvalonia.ViewModels.UserControls
+namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminGroupViewModel : ViewModelBase
     {
-        MainWindow main;
-
         ObservableCollection<Group> _groups = new();
         public ObservableCollection<Group> Groups
         {
@@ -36,12 +25,13 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
 
         public ReactiveCommand<Unit,Unit> Btn_ShowAll { get; }
 
-        public ReactiveCommand<Group, Unit> Btn_DeletGroup { get; }
+        public ReactiveCommand<Unit, Unit> Btn_DeletGroup { get; }
 
         public ReactiveCommand<Unit,Task> Btn_AddGroup { get; }
 
         public AdminGroupViewModel(IPlatform platform) : base(platform)
         {
+
             platform.DataLoaded += (sender, args) =>
             {
                 Groups = platform.MainWindowViewModel.Groups;
@@ -76,10 +66,11 @@ namespace CheckinSystemAvalonia.ViewModels.UserControls
             });
 
             //Delete Groups by removing from database and the local list
-            Btn_DeletGroup = ReactiveCommand.Create<Group>(group =>
+            Btn_DeletGroup = ReactiveCommand.Create(() =>
             {
+                /*
                 group.RemoveGroupDb();
-                Groups.Remove(group);
+                Groups.Remove(group);*/
             });
 
             //opens window to add group to db

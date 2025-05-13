@@ -1,6 +1,6 @@
 using System;
 
-namespace CheckinSystemAvalonia.Platform;
+namespace CheckInSystemAvalonia.Platform;
 public class ReaderEventArgs : EventArgs
 {
     public string Value = "";

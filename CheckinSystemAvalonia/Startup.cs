@@ -1,12 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia;
-using CheckinSystemAvalonia;
-using CheckinLib.Database;
-using CheckinLib.Settings;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views;
-using CheckinSystemAvalonia.Platform;
+using CheckInSystemAvalonia;
+using CheckinLibrary.Database;
+using CheckinLibrary.Settings;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
+using CheckInSystemAvalonia.Platform;
 
 public class Startup
 {

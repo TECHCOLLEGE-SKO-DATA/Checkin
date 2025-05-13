@@ -1,8 +1,8 @@
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.Views;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
 using System;
 
-namespace CheckinSystemAvalonia.Platform;
+namespace CheckInSystemAvalonia.Platform;
 
 public delegate void DataLoadedEventHandler(object sender, EventArgs e);
 

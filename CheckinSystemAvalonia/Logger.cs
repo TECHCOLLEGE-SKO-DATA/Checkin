@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CheckinSystemAvalonia;
+namespace CheckInSystemAvalonia;
 
 public class Logger
 {

@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 xmlns:vm="clr-namespace:CheckinSystemAvalonia.ViewModels.UserControls"
-			 x:Class="CheckinSystemAvalonia.Views.UserControls.FakeNFCView"
+			 xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.UserControls"
+			 x:Class="CheckInSystemAvalonia.Views.UserControls.FakeNFCView"
              x:DataType="vm:FakeNFCViewModel">
 			 <!--xmlns:vm holds the refrense to where
 				 the VeiwModel is x:Datatype holds 
@@ -23,9 +23,9 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding FirstName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
-							<TextBlock Text="{Binding MiddleName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
-							<TextBlock Text="{Binding LastName}" FontWeight="{Binding FontBoldNormal}" Margin="5"/>
+							<TextBlock Text="{Binding FirstName}" Margin="5"/>
+							<TextBlock Text="{Binding MiddleName}" Margin="5"/>
+							<TextBlock Text="{Binding LastName}" Margin="5"/>
 						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>

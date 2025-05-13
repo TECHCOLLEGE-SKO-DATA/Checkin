@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="120"
 		Height="120"
 		Width="300"
-        x:Class="CheckinSystemAvalonia.InputDialog"
+        x:Class="CheckInSystemAvalonia.InputDialog"
         Title="InputDialog"
 		CanResize="False">
 	<Grid Margin="15">

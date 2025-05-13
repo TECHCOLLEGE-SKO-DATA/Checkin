@@ -1,11 +1,11 @@
 ﻿
 using Avalonia.Controls;
-using CheckinLib.Database;
-using CheckinLib.Models;
-using CheckinSystemAvalonia.Platform;
-using CheckinSystemAvalonia.ViewModels.Windows;
-using CheckinSystemAvalonia.ViewModels.UserControls;
-using CheckinSystemAvalonia.Views.UserControls;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.ViewModels.UserControls;
+using CheckInSystemAvalonia.Views.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -14,11 +14,13 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
-using CheckinLib.Background_tasks;
+using CheckinLibrary.Background_tasks;
 using System.Windows;
-using CheckinSystemAvalonia.CardReader;
+using CheckInSystemAvalonia.CardReader;
+using Avalonia;
+using Avalonia.Threading;
 
-namespace CheckinSystemAvalonia.ViewModels.Windows;
+namespace CheckInSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
 
@@ -170,9 +172,11 @@ public class MainWindowViewModel : ViewModelBase
             var dbEmployee = databaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
-                Application.Current.Dispatcher.Invoke(() => {
+                Dispatcher.UIThread.Post(() =>
+                {
                     Employees.Add(dbEmployee);
                 });
+
             }
         }
     }
