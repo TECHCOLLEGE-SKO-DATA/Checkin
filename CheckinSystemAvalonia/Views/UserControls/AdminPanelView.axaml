@@ -58,8 +58,8 @@
 		<!-- Main tab content -->
 		<TabControl Grid.Row="1"
                     SelectedIndex="{Binding SelectedTab}"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch">
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
 			<TabControl.Styles>
 				<Style Selector="TabItem">
 					<Setter Property="IsVisible" Value="False"/>

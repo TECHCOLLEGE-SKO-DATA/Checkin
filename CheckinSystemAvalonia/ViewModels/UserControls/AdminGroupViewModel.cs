@@ -49,6 +49,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                     if (group.Isvisible)
                     {
                         group.Isvisible = false;
+                        group.Updatevisibility(false);
                     }
                 }
             });
@@ -60,6 +61,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                     if (!group.Isvisible)
                     {
                         group.Isvisible = true;
+                        group.Updatevisibility(true);
                     }
                 }
             });

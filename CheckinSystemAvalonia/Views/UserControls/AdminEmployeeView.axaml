@@ -6,80 +6,87 @@
              xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.UserControls"
 			 x:Class="CheckInSystemAvalonia.Views.UserControls.AdminEmployeeView"
 			 x:DataType="vm:AdminEmployeeViewModel">
-	<Grid>
+	<StackPanel>
 		<ScrollViewer>
 			<!--Item Control for Employees-->
 			<ItemsControl ItemsSource="{Binding SelectedEmployeeGroup}">
 				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<WrapPanel Orientation="Vertical"/>
+					<ItemsPanelTemplate >
+						<StackPanel HorizontalAlignment="Stretch"/>
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Border BorderThickness="3"
 								Background="Gray"
-								BorderBrush="Black">
-							<StackPanel Orientation="Horizontal">
-								<WrapPanel VerticalAlignment="Center"
-										   Margin="0 4 0 0">
+								BorderBrush="Black"
+								Margin="0 5"
+								>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
 
-									<CheckBox Margin="10 0 0 0"/>
+								<!--First midle and last name-->
+								<WrapPanel Grid.Column="0"
+										   VerticalAlignment="Center"
+										   HorizontalAlignment="Left"
+										   Margin="10 4">
+									<CheckBox Margin="0 0 10 0"/>
+									<TextBlock Text="{Binding FirstName}"
+											   FontSize="20"
+											   Margin="0 0 10 0"/>
 
-									<TextBlock Margin="10 0 0 0"
-											   Text="{Binding FirstName}"
-											   FontSize="20"/>
-									
-									<TextBlock Margin="10 0 0 0"
-											   Text="{Binding MiddleName}"
-											   FontSize="20"/>
-									
-									<TextBlock Margin="10 0 0 0"
-											   Text="{Binding LastName}"
-											   FontSize="20"/>
+									<TextBlock Text="{Binding MiddleName}"
+											   FontSize="20"
+											   Margin="0 0 10 0"/>
 
+									<TextBlock Text="{Binding LastName}"
+											   FontSize="20"
+											   Margin="0 0 10 0"/>
 								</WrapPanel>
 
-								<WrapPanel VerticalAlignment="Center"
+								<WrapPanel Grid.Column="1"
+										   VerticalAlignment="Center"
 										   HorizontalAlignment="Center">
 
-									<Button Margin="10 0 0 0"
-											Content="Rediger"
+									<Button Content="Rediger"
 											Background="Black"
-											Foreground="White"/>
+											Foreground="White"
+											Margin="5 0"/>
 
-									<Button Margin="10 0 0 0"
-											Content="Se tider"
+									<Button Content="Se tider"
 											Background="Black"
-											Foreground="White"/>
+											Foreground="White"
+											Margin="5 0"/>
 
-									<Button Margin="10 0 0 0"
-											Content="Ændre Grupper"
+									<Button Content="Ændre Grupper"
 											Background="Black"
-											Foreground="White"/>
+											Foreground="White"
+											Margin="5 0"/>
 
-									<Button Margin="10 0 0 0"
-											Content="Slet"
+									<Button Content="Slet"
 											Background="Black"
-											Foreground="White"/>
+											Foreground="White"
+											Margin="5 0"/>
 
 								</WrapPanel>
 
-								<WrapPanel VerticalAlignment="Center" 
-										   Width="300"
-										   Margin="10 0 0 0">
-									
-										<TextBlock Text="{Binding Path=ArrivalTime, StringFormat=HH:mm}" FontSize="30" Margin="0 0 20 0"/>
-									
-										<TextBlock Text="{Binding Path=DepartureTime, StringFormat=HH:mm}" FontSize="30"/>
-									
+								<WrapPanel Grid.Column="2"
+										   HorizontalAlignment="Center">
+									<TextBlock Text="{Binding Path=ArrivalTime, StringFormat=HH:mm}"
+											   FontSize="30"
+											   Margin="0 0 20 0"/>
+									<TextBlock Text="{Binding Path=DepartureTime, StringFormat=HH:mm}"
+											   FontSize="30"/>
 								</WrapPanel>
-							</StackPanel>
+							</Grid>
 						</Border>
-
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 		</ScrollViewer>
-	</Grid>
+	</StackPanel>
 </UserControl>

@@ -28,68 +28,90 @@
 				Command="{Binding Btn_LoginView}"/>
 
 		<ItemsControl Grid.Row="1"
-					  ItemsSource="{Binding Groups}">	
+              ItemsSource="{Binding Groups}"
+              HorizontalAlignment="Stretch">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Border BorderThickness="4"
 							Background="Gray"
-							BorderBrush="Black">
-						<WrapPanel Orientation="Horizontal">
-						
-							<TextBlock Margin="3"
+							BorderBrush="Black"
+							Margin="0 5">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+
+							<!-- Group Name -->
+							<TextBlock Grid.Column="0"
+									   Margin="3"
 									   Text="{Binding Path=Name}"
-									   FontSize="30"/>
+									   FontSize="30"
+									   VerticalAlignment="Center"/>
 
-							<Border BorderThickness="2"
-									BorderBrush="Black">
+							<StackPanel Grid.Column="1"
+										Orientation="Horizontal"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center">
+
+								<!-- member Count -->
+								<Border BorderThickness="2"
+										BorderBrush="Black"
+										Margin="0 0 10 0">
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Margin="2"
+												   Text="Antal medlemmer:"
+												   FontSize="30"/>
+										<TextBlock Text="{Binding Path=Members.Count}"
+												   FontSize="30"/>
+									</StackPanel>
+								</Border>
+
+								<!-- visability -->
+								<Border BorderThickness="2"
+										BorderBrush="Black">
+									<WrapPanel>
+										<TextBlock Text="Synlighed"
+												   FontSize="30"
+												   Margin="0 0 20 0"/>
+										<CheckBox VerticalAlignment="Center"
+												  IsChecked="{Binding Path=Isvisible}"
+												  Click="UpdateVisibility">
+											<CheckBox.RenderTransform>
+												<ScaleTransform ScaleX="2" ScaleY="2"/>
+											</CheckBox.RenderTransform>
+										</CheckBox>
+									</WrapPanel>
+								</Border>
+							</StackPanel>
+
+							<StackPanel Grid.Column="2"
+										Orientation="Horizontal"
+										HorizontalAlignment="Right"
+										VerticalAlignment="Center"
+										Margin="0 0 10 0">
 								
-								<StackPanel Orientation="Horizontal">
-
-									<TextBlock Margin="2"
-											   Text="Antal medlemmer:"
-											   FontSize="30"/>
-									
-									<TextBlock  Text="{Binding Path=Members.Count}"
-												FontSize="30"/>
-									
-									
-								</StackPanel>
-							</Border>
-							
-							<Border BorderThickness="2"
-									BorderBrush="Black">
-								<WrapPanel>
-									<TextBlock Text="Synlighed"
-											   FontSize="30"
-											   Margin="10 5 20 0"/>
-
-									<CheckBox VerticalAlignment="Center"
-											  IsChecked="{Binding Path=Isvisible}">
-										<CheckBox.RenderTransform>
-											<ScaleTransform ScaleX="2" ScaleY="2" />
-										</CheckBox.RenderTransform>
-									</CheckBox>
-								</WrapPanel>
-							</Border>
-
-							<Button Content="Rediger Navn" 
-									Click="BtnEditName"
-									Height="40"
-									FontSize="20"
-									Background="Black"
-									Margin="10 0 10 0"/>
-							
-							<Button Content="Slet" 
-									Click="BtnDeleteGroup"
-                                    FontSize="20"
-									Height="40"
-									Background="Black"/>
-						</WrapPanel>
+								<Button Content="Rediger Navn"
+										Click="BtnEditName"
+										Height="40"
+										FontSize="20"
+										Background="Black"
+										Margin="10 0 10 0"/>
+								
+								<Button Content="Slet"
+										Click="BtnDeleteGroup"
+										FontSize="20"
+										Height="40"
+										Background="Black"/>
+								
+							</StackPanel>
+						</Grid>
 					</Border>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-
+		
 		<WrapPanel Grid.Row="2"
 				   Background="Blue">
 			
