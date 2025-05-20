@@ -11,7 +11,10 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
     {
         public EmployeeTimeViewModel(IPlatform platform) : base(platform)
         {
-        
+            platform.DataLoaded += (sender, args) =>
+            {
+                
+            };
         }
     }
 }

@@ -55,7 +55,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void SeeEmployeeTime(Employee employee)
         {
-            //_platform.MainWindowViewModel.SeeEmployeeTime(employee);
+            EmployeeTimeViewModel model = new(_platform);
+            _platform.MainWindowViewModel.CurrentViewModel = model;
         }
 
         public void SeeAbsence(Employee employee)

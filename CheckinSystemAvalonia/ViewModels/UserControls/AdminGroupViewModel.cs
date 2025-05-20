@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminGroupViewModel : ViewModelBase

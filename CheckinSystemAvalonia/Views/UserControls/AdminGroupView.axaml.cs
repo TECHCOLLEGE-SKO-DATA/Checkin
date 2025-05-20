@@ -35,6 +35,7 @@ public partial class AdminGroupView : UserControl
         Group group = (Group)checkBox.DataContext;
         _vm.DeleteGroup(group);
     }
+
     private void UpdateVisibility(object sender, RoutedEventArgs e)
     {
         CheckBox checkBox = (CheckBox)sender;

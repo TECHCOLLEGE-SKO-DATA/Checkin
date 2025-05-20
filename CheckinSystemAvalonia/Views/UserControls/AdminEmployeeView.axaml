@@ -34,7 +34,10 @@
 										   VerticalAlignment="Center"
 										   HorizontalAlignment="Left"
 										   Margin="10 4">
-									<CheckBox Margin="0 0 10 0"/>
+									<CheckBox Margin="0 0 10 0"
+											  Checked="CbSelected" 
+											  Unchecked="CbUnSelected"/>
+									
 									<TextBlock Text="{Binding FirstName}"
 											   FontSize="20"
 											   Margin="0 0 10 0"/>
@@ -55,22 +58,26 @@
 									<Button Content="Rediger"
 											Background="Black"
 											Foreground="White"
-											Margin="5 0"/>
+											Margin="5 0"
+											Click="BtnOpenEmployeeEdit"/>
 
 									<Button Content="Se tider"
 											Background="Black"
 											Foreground="White"
-											Margin="5 0"/>
+											Margin="5 0"
+											Click="BtnSeeEmployeeTime"/>
 
 									<Button Content="Ændre Grupper"
 											Background="Black"
 											Foreground="White"
-											Margin="5 0"/>
+											Margin="5 0"
+											Click="BtnEditEmployeeGroup"/>
 
 									<Button Content="Slet"
 											Background="Black"
 											Foreground="White"
-											Margin="5 0"/>
+											Margin="5 0"
+											Click="BtnDeleteEmployee"/>
 
 								</WrapPanel>
 
