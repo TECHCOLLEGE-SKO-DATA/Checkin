@@ -199,6 +199,13 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     //switching methods for changing the View and ViewModel 
+
+    public void SwitchToEmployeeTime(Employee employee)
+    {
+        _employeeTimeViewModel.SelectedEmployee = employee;
+        _platform.MainWindowViewModel.CurrentViewModel = EmployeeTimeViewModel;
+    }
+
     public void SwitchToAdminPanel()
     {   
         CurrentViewModel = AdminPanelViewModel;

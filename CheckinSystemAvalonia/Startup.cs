@@ -24,7 +24,7 @@ public class Startup
     public static void OpenEmployeeOverview(IPlatform iplatform)
     {
 
-        Screens screenRetriver = new Screens(screenImpl);
+        //Screen screenRetriver = new();
 
         SettingsControl settings = new SettingsControl();
         int screenIndex = settings.GetEmployeeOverViewSettings();
@@ -35,10 +35,12 @@ public class Startup
             DataTemplates = { new ViewLocator() },
             DataContext = employeeOverviewViewModel
         };
-
-        var screensCount = screenRetriver.ScreenCount;
-        var screens = screenRetriver.All;
-
+        if (false == true)
+        { 
+        }
+        //var screensCount = screenRetriver.ScreenCount;
+        //var screens = screenRetriver.All;
+        /*
         if (screenIndex >= 0 && screenIndex < screensCount)
         {
             var targetScreen = screens[screenIndex];
@@ -48,7 +50,7 @@ public class Startup
             employeeOverview.Position = new PixelPoint(bounds.X, bounds.Y);
             employeeOverview.Width = bounds.Width;
             employeeOverview.Height = bounds.Height;
-        }
+        }*/
         else
         {
             employeeOverview.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;

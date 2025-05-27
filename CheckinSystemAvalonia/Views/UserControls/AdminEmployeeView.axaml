@@ -6,6 +6,7 @@
              xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.UserControls"
 			 x:Class="CheckInSystemAvalonia.Views.UserControls.AdminEmployeeView"
 			 x:DataType="vm:AdminEmployeeViewModel">
+	
 	<StackPanel>
 		<ScrollViewer>
 			<!--Item Control for Employees-->
@@ -20,8 +21,7 @@
 						<Border BorderThickness="3"
 								Background="Gray"
 								BorderBrush="Black"
-								Margin="0 5"
-								>
+								Margin="0 5">
 							<Grid>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="*"/>

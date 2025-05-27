@@ -25,7 +25,6 @@
 			<!-- ItemsControl for Groups -->
 			<ItemsControl ItemsSource="{Binding Groups}"
 						  Grid.Row="0"
-						  Background="#363737"
 						  RenderTransform="{Binding ScaleSize}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
