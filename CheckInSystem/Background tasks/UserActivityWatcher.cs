@@ -5,7 +5,7 @@ using System.Windows.Threading;
 
 public static class UserActivityWatcher
 {
-    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(40);
+    private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(20);
     private static DispatcherTimer _timer;
     private static Func<int> _getSelectedTabIndex;
     private static Func<Window> _getMainWindow;
