@@ -18,6 +18,11 @@ public partial class LoginScreen : UserControl
     {
         _vm.AdminLogin();
     }
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        _vm.ResetFields();
+        PasswordInput.Password = "";
+    }
 
     private void PasswordChanged(object sender, RoutedEventArgs e)
     {
