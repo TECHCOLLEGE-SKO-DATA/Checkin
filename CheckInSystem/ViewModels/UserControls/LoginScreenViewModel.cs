@@ -33,6 +33,13 @@ public class LoginScreenViewModel : ViewModelBase
         
     }
 
+    public void ResetFields()
+    {
+        Username = "";
+        Password = "";
+    }
+
+
     public void AdminLogin()
     {
         DatabaseHelper databaseHelper = new ();
