@@ -32,6 +32,17 @@ namespace CheckinLibrary.Models
         public DateTime ToDate { get; set; }
         public absenceReason AbsenceReason { get; set; } 
         public string? Note { get; set; }
+        public DateTimeOffset FromDateOffset
+        {
+            get => new DateTimeOffset(FromDate);
+            set => FromDate = value.DateTime;
+        }
+
+        public DateTimeOffset ToDateOffset
+        {
+            get => new DateTimeOffset(ToDate);
+            set => ToDate = value.DateTime;
+        }
 
         public Absence(Absence absence)
         {
@@ -84,7 +95,7 @@ namespace CheckinLibrary.Models
         public void SetIsOffSite(Employee employee)
         {
             List<Absence> absences = GetAllAbsence(employee);
-
+             
             foreach (var absence in absences)
             {
                 if (absence.FromDate <= DateTime.Now && absence.ToDate > DateTime.Now)

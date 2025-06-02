@@ -52,22 +52,23 @@
 
 		
 		<DataGrid Grid.Row="3" ItemsSource="{Binding Path=Absences}"
-				  AutoGenerateColumns="False">
+				  AutoGenerateColumns="False"
+				  CanUserResizeColumns="True">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Starts Dato">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<DatePicker SelectedDate="{Binding FromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<DatePicker SelectedDate="{Binding FromDateOffset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-
+				
 				<DataGridTextColumn Header="Starts Tid" Binding="{Binding FromTime, StringFormat=\{0:HH:mm\}}" />
 
 				<DataGridTemplateColumn Header="Sluts Dato">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<DatePicker SelectedDate="{Binding ToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<DatePicker SelectedDate="{Binding ToDateOffset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

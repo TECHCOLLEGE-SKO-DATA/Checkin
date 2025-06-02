@@ -19,7 +19,6 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Border BorderThickness="3"
-								Background="Gray"
 								BorderBrush="Black"
 								Margin="0 5">
 							<Grid>
@@ -56,26 +55,18 @@
 										   HorizontalAlignment="Center">
 
 									<Button Content="Rediger"
-											Background="Black"
-											Foreground="White"
 											Margin="5 0"
 											Click="BtnOpenEmployeeEdit"/>
 
 									<Button Content="Se tider"
-											Background="Black"
-											Foreground="White"
 											Margin="5 0"
 											Click="BtnSeeEmployeeTime"/>
 
 									<Button Content="Ændre Grupper"
-											Background="Black"
-											Foreground="White"
 											Margin="5 0"
 											Click="BtnEditEmployeeGroup"/>
 
 									<Button Content="Slet"
-											Background="Black"
-											Foreground="White"
 											Margin="5 0"
 											Click="BtnDeleteEmployee"/>
 

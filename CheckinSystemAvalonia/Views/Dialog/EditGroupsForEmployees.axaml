@@ -2,10 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CheckInSystemAvalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CheckInSystemAvalonia.EditGroupsForEmployees"
         Title="EditGroupsForEmployees">
-	
+
 	<Grid ShowGridLines="True">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="30"/>
@@ -14,27 +15,23 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel Grid.Row="1"
-					Margin="10">
-			
-			<RadioButton Content="Tilføj til Gruppe"
-						 IsChecked="true"/>
-			
-			<RadioButton Content="Fjern fra Gruppe"/>
-			
-			<ComboBox MinWidth="200"
-					  Margin="0 10 0 10">
-				
-			</ComboBox>
-			
+					Margin="10"
+					x:DataType="local:EditGroupsForEmployees">
+
+			<RadioButton x:Name="RdAddGroup" Content="Tilføj til gruppe" IsChecked="True"/>
+			<RadioButton x:Name="RdRemoveGroup" Content="Fjern fra gruppe"/>
+			<ComboBox ItemsSource="{Binding Groups}"
+                      SelectedItem="{Binding SelectedGroup}"
+					  DisplayMemberBinding="{Binding Name}"/>
 			<StackPanel Orientation="Horizontal">
-
-				<Button Content="Bekræft"
-						Margin="0 0 10 0"/>
-
-				<Button Content="Annuler"/>
-				
+				<Button IsDefault="True"
+                        Content="Bekræft"
+                        Click="BtnConfrimed"
+                        MinWidth="60"
+                        Margin="0,0,10,0"/>
+				<Button IsCancel="True" MinWidth="60" Content="Annuller"/>
 			</StackPanel>
 		</StackPanel>
-		
+
 	</Grid>
 </Window>

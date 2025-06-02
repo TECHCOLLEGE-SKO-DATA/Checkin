@@ -33,14 +33,13 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Border BorderThickness="4"
-							Background="Gray"
 							BorderBrush="Black"
 							Margin="0 5">
 						<Grid>
 							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto"/>
+								<ColumnDefinition Width="auto"/>
+								<ColumnDefinition Width="auto"/>
 							</Grid.ColumnDefinitions>
 
 							<!-- Group Name -->
@@ -96,14 +95,12 @@
 										Click="BtnEditName"
 										Height="40"
 										FontSize="20"
-										Background="Black"
 										Margin="10 0 10 0"/>
 								
 								<Button Content="Slet"
 										Click="BtnDeleteGroup"
 										FontSize="20"
-										Height="40"
-										Background="Black"/>
+										Height="40"/>
 								
 							</StackPanel>
 						</Grid>

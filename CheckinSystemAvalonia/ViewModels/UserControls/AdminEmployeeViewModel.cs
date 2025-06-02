@@ -63,15 +63,15 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         }
 
-        public void EditEmployeeGroup(Employee employee)
-        { 
-            /*
+        public async Task EditEmployeeGroup(Employee employee)
+        {
             EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
-            if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+            var result = await editGroupsForEmployees.ShowDialog<bool>(_platform.MainWindow);
+            if (result == true && editGroupsForEmployees.SelectedGroup != null)
             {
                 if (editGroupsForEmployees.AddGroup) editGroupsForEmployees.SelectedGroup.AddEmployee(employee);
                 if (editGroupsForEmployees.RemoveGroup) editGroupsForEmployees.SelectedGroup.RemoveEmployee(employee);
-            }*/
+            }
         }
     }
 }

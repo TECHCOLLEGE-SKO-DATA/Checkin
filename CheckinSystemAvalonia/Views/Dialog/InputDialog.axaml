@@ -8,6 +8,7 @@
         x:Class="CheckInSystemAvalonia.InputDialog"
         Title="InputDialog"
 		CanResize="False">
+	
 	<Grid Margin="15">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
