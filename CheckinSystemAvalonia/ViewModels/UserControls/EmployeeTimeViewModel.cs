@@ -133,7 +133,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             foreach (var siteTime in SiteTimesToDelete)
             {
-
                 siteTime.DeleteFromDb();
             }
             SiteTimesToDelete.Clear();
@@ -150,100 +149,59 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             }
             SiteTimesToAddToDb.Clear();
         }
+
         public void AppendAbsenceToAddToDb(Absence absence)
-
         {
-
             Absences.Add(absence);
 
             AbsencesToAddToDb.Add(absence);
-
         }
 
-
-
         public void AppendAbsenceToDelete(Absence absence)
-
         {
-
             AbsencesToDelete.Add(absence);
 
             Absences.Remove(absence);
 
             AbsencesToAddToDb.Remove(absence);
-
         }
 
-
-
-
-
-
-
-
-
-
-
         private void AddAbsences()
-
         {
-
             foreach (var absence in AbsencesToAddToDb)
-
             {
-
                 absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
-
             }
-
             AbsencesToAddToDb.Clear();
-
         }
 
 
 
         private void DeleteAbsences()
         {
-
             foreach (var absence in AbsencesToDelete)
             {
-
                 absence.DeleteAbsence(absence.ID);
-
             }
-
             AbsencesToDelete.Clear();
-
         }
 
         private void UpdateAbsenceTimes()
-
         {
-
             List<Absence> changedAbsence = new List<Absence>();
 
             foreach (var absence in Absences)
-
             {
-
                 absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
-
-
 
                 absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
 
-
-
                 changedAbsence.Add(absence);
-
             }
 
             if (Absences.Count > 0)
-
             {
-
                 absenc.EditAbsence(changedAbsence);
-
             }
         }
     }
