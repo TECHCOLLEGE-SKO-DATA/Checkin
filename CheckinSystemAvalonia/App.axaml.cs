@@ -28,7 +28,7 @@ public partial class App : Application
 
             Platform.Start();
 
-            if (!Startup.Run(Platform))
+            if (!Startup.Run())
             {
             }
 

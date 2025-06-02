@@ -58,9 +58,21 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         private void ScanNewCard()
         {
-            var cardId = (NewCardId?.Length == 11) ? NewCardId : RandomCardGen();
-            _cardReader.TriggerCardInserted(cardId);
-            RefreshEmployees();
+            if (NewCardId.Length == 11)
+            {
+                //Add the Actual method for scaning new car
+                _cardReader.TriggerCardInserted(NewCardId);
+            }
+            else
+            {
+
+                _cardReader.TriggerCardInserted(RandomCardGen());
+            }
+            Employees.Clear();
+            foreach (var employee in dbHelper.GetAllEmployees())
+            {
+                Employees.Add(employee);
+            }
         }
 
         private void CheckIn(Employee employee)

@@ -20,7 +20,7 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
         private string ConfigFilePath = "";
         private decimal _scaleSize = 1.0M;
         WindowState _windowState;
-
+        
         public string AppVersion
         {
             get

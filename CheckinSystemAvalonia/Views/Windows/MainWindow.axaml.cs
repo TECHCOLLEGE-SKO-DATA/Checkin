@@ -8,12 +8,11 @@ namespace CheckInSystemAvalonia.Views;
 
 public partial class MainWindow : Window
 {
-    static readonly Platform.Platform platform = new();
     MainWindowViewModel _vm { get => (MainWindowViewModel)DataContext; set => DataContext = value; }
 
     public MainWindowViewModel MainWindowViewModel { get => _vm; set => _vm = value; }
 
-    public MainWindow()
+    public MainWindow(IPlatform platform)
     {
         //platform.Start();
         InitializeComponent();
@@ -26,14 +25,14 @@ public partial class MainWindow : Window
         LoadingStartup.Instance?.Close();
 
 #if DEBUG
-        OpenFakeNFCWindow();
+        OpenFakeNFCWindow(platform);
 #endif
     }
     public void OnWindowClosing(object sender, CancelEventArgs e)
     {
     }
 
-    private static void OpenFakeNFCWindow()
+    private static void OpenFakeNFCWindow(IPlatform platform)
     {
 
         var fakeNFCWindow = new FakeNFCWindow

@@ -32,7 +32,7 @@ public class Platform : IPlatform
         _mainWindowViewModel = new(this);
         DataLoaded?.Invoke(this, EventArgs.Empty);
 
-        _mainWindow = new MainWindow
+        _mainWindow = new MainWindow(this)
         {
             DataTemplates = { new ViewLocator() },
             DataContext = _mainWindowViewModel

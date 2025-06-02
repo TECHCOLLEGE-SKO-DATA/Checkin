@@ -4,12 +4,17 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.Windows"
+	xmlns:Customcontrols="clr-namespace:CheckInSystemAvalonia.Customcontrols"
 	mc:Ignorable="d"
 	d:DesignWidth="800"
 	d:DesignHeight="450"
 	x:Class="CheckInSystemAvalonia.EmployeeOverviewWindow"
 	Title="EmployeeOverviewWindow"
 	x:DataType="vm:EmployeeOverviewViewModel">
+
+	<Window.Resources>
+		<Customcontrols:BoolToBrushConverter x:Key="CheckInToBrushConverter"/>
+	</Window.Resources>
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -49,7 +54,7 @@
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 
-											<StackPanel Background="#d55e00"
+											<StackPanel Background="{Binding Path=IsCheckedIn, Converter={StaticResource CheckInToBrushConverter}}"
 														Margin="5">
 												<StackPanel Orientation="Horizontal"
 															Margin="10">

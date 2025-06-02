@@ -12,7 +12,7 @@ public class Startup
 {
     private static IScreenImpl screenImpl;
 
-    public static bool Run(IPlatform platform)
+    public static bool Run()
     {
 
         if (!EnsureDatabaseAvailable()) return false;
