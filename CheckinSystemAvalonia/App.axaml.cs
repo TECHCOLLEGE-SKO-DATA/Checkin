@@ -43,16 +43,6 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    public bool OpenMessageBox(string title, string errormessage)
-    {
-        var messageBoxWindow = new MessageBoxWindow
-        {
-            DataContext = new MessageBoxViewModel(Platform, title, errormessage)
-        };
-        messageBoxWindow.Show();
-        return true;
-    }
-
     private static void log(object sender, UnhandledExceptionEventArgs e)
     {
         string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");

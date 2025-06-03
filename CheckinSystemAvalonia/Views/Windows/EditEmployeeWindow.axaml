@@ -2,84 +2,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:converters="clr-namespace:CheckInSystemAvalonia.Converters"
+		xmlns:ToolTip="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
         x:Class="CheckInSystemAvalonia.Views.EditEmployeeWindow"
-        Title="EditEmployeeWindow"
 		xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.Windows"
-		x:DataType="vm:EditEmployeeViewModel">
-	
+		x:DataType="vm:EditEmployeeViewModel"
+		Title="EditEmployee" Height="450" Width="410"
+        WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<converters:VisibleIfTrueConverter x:Key="VisibleIfTrue" />
+	</Window.Resources>
+
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="30"/>
-			<RowDefinition Height="1*"/>
-			<RowDefinition Height="30"/>
-		</Grid.RowDefinitions>
-		
-		<StackPanel Grid.Row="1">
-			
-			<StackPanel HorizontalAlignment="Center"
-						Margin="0 0 0 30">
-			
-				<TextBlock Text="Rediger"
-						   FontSize="30"/>
-			
+		<StackPanel Margin="10 0 10 0">
+			<TextBlock Text="Rediger"
+                       FontSize="30"
+                       TextAlignment="Center"
+                       Margin="0 0 0 20"/>
+			<StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+				<TextBlock Text="Fornavn" Width="80"/>
+				<TextBox Width="175" Text="{Binding Path=EditEmployee.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
-
-			<StackPanel HorizontalAlignment="Center">
-
-				<StackPanel Orientation="Horizontal"
-							Margin="3">
-
-					<TextBlock Text="Fornavn:"
-							   Margin="-30 5 36 0"/>
-
-					<TextBox Width="150"/>
-
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal"
-							Margin="3">
-
-					<TextBlock Text="Mellemnavn:"
-							   Margin="-30 5 10 0"/>
-
-					<TextBox Width="150"/>
-
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal"
-							Margin="3">
-
-					<TextBlock Text="Efternavn:"
-							   Margin="-30 5 26 0"/>
-
-					<TextBox Width="150"/>
-
-				</StackPanel>
-			
+			<StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+				<TextBlock Text="Mellemnavn" Width="80"/>
+				<TextBox Width="175" Text="{Binding Path=EditEmployee.MiddleName, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
-
-			
-
-			<Button Content="Skift kort"
-					Width="250"
-					HorizontalAlignment="Center"
-					HorizontalContentAlignment="Center"
-					Margin="0 40 0 0"/>
-
-			<TextBlock Text="Venter på at et nyt kortet bliver scannet"
+			<StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+				<TextBlock Text="Efternavn" Width="80"/>
+				<TextBox Width="175" Text="{Binding Path=EditEmployee.LastName, UpdateSourceTrigger=PropertyChanged}"/>
+			</StackPanel>
+			<Button Content="Skift kort" Click="UpdateCardId" ToolTip.Tip="Opdatere det fysiske kort for personen"/>
+			<TextBlock Name="UpdateCardMessage"
+                       Text="Venter på at et nyt kortet bliver scannet"
                        Background="Yellow"
                        Margin="0 10 0 0"
-					   Width="290"
-					   HorizontalAlignment="Center"
-					   TextAlignment="Center"/>
-			
-			<Button Content="Luk vinduet og gem"
-					Width="250"
-					HorizontalAlignment="Center"
-					HorizontalContentAlignment="Center"
-					Margin="0 10 0 0"/>
-			
+					   IsVisible="{Binding WaitingForCard, Converter={StaticResource VisibleIfTrue}}" />
+			<Button Content="Luk vinduet og gem" Margin="0 10 0 0" Click="Close"/>
 		</StackPanel>
 	</Grid>
 </Window>

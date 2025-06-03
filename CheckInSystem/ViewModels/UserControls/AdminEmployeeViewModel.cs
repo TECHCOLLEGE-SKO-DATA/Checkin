@@ -4,6 +4,8 @@ using CheckInSystem.Platform;
 using CheckInSystem.Views.Windows;
 using PCSC.Interop;
 using CheckInSystem.Views.Dialog;
+using CheckInSystem.Views.UserControls;
+using CheckInSystem.ViewModels.Windows;
 
 namespace CheckInSystem.ViewModels.UserControls;
 

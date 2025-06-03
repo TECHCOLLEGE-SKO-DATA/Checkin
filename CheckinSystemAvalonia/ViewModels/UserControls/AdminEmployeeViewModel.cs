@@ -1,5 +1,8 @@
 ﻿using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Controls;
 using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,7 +43,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void EditEmployee(Employee employee)
         {
-            //EditEmployeeWindow.Open(employee);
+            EditEmployeeWindow.Open(employee);
         }
 
         public void DeleteEmployee(Employee employee)
@@ -56,6 +59,19 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public void SeeEmployeeTime(Employee employee)
         {
             _platform.MainWindowViewModel.SwitchToEmployeeTime(employee);
+        }
+        public async Task OpenMessageBoxDeleteAsync(Employee employee)
+        {
+            var result = await MessageBox.Show(
+            _platform.MainWindow,
+            $"Er du sikker på at du vil slette {employee.FirstName} {employee.MiddleName} {employee.LastName}?",
+            "Sletning",
+            MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                DeleteEmployee(employee);
+            }
         }
 
         public void SeeAbsence(Employee employee)
@@ -73,5 +89,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 if (editGroupsForEmployees.RemoveGroup) editGroupsForEmployees.SelectedGroup.RemoveEmployee(employee);
             }
         }
+        
     }
 }

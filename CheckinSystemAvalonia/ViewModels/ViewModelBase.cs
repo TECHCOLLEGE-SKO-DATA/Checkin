@@ -2,6 +2,7 @@
 using CheckInSystemAvalonia.ViewModels.UserControls;
 using CheckInSystemAvalonia.ViewModels.Windows;
 using CheckInSystemAvalonia.Views.UserControls;
+using DynamicData.Binding;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -14,20 +15,11 @@ namespace CheckInSystemAvalonia.ViewModels;
 
 public class ViewModelBase : ReactiveObject
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     protected IPlatform _platform;
 
     public ViewModelBase(IPlatform platform)
     {
         _platform = platform;
-    }
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        if (PropertyChanged != null)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 
     protected void SetProperty<T>(ref T variable, T value, [CallerMemberName] string? propertyName = null)
@@ -35,7 +27,7 @@ public class ViewModelBase : ReactiveObject
         if (!EqualityComparer<T>.Default.Equals(variable, value))
         {
             variable = value;
-            OnPropertyChanged(propertyName);
+            this.RaisePropertyChanged(propertyName);
         }
     }
 }

@@ -5,12 +5,17 @@ using Avalonia.Markup.Xaml;
 using System.Diagnostics;
 using CheckInSystemAvalonia.ViewModels.UserControls;
 using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Controls;
+using CheckInSystemAvalonia.Platform;
+using CheckInSystemAvalonia.ViewModels.Windows;
 
 namespace CheckInSystemAvalonia.Views.UserControls;
 
 public partial class AdminEmployeeView : UserControl
 {
     public AdminEmployeeViewModel _vm => (AdminEmployeeViewModel)DataContext;
+
+    IPlatform _platform;
 
     public AdminEmployeeView()
     {
@@ -58,20 +63,12 @@ public partial class AdminEmployeeView : UserControl
         Debug.WriteLine($"{employee.FirstName} Unchecked");
     }
 
-    private void BtnDeleteEmployee(object sender, RoutedEventArgs e)
+    private async void BtnDeleteEmployee(object sender, RoutedEventArgs e)
     {
-        /*
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;
-        MessageBoxResult result =
-            MessageBox.Show(
-                $"Er du sikker på at du vil slette {employee.FirstName} {employee.MiddleName} {employee.LastName}",
-                "Sletning",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-        if (result == MessageBoxResult.Yes)
-        {
-            _vm.DeleteEmployee(employee);
-        }*/
+
+        _vm.OpenMessageBoxDeleteAsync(employee);
     }
+
 }

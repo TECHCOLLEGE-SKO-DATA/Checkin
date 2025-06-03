@@ -9,18 +9,14 @@
 		Width="400" Height="200"
 		CanResize="False"
 		Title="{Binding Title}">
-	
-	<Grid>
-		<StackPanel Margin="20" Spacing="10">
-			<TextBlock Text="{Binding ErrorMessage}" 
-					   TextWrapping="Wrap" 
-					   FontSize="16"/>
-			
-			<Button Content="Ok" 
-					HorizontalAlignment="Right" 
-					Width="80" 
-					Command="{Binding Btn_Ok}"/>
+
+	<StackPanel Margin="20" VerticalAlignment="Center">
+		<TextBlock Text="{Binding Message}" FontSize="16" TextWrapping="Wrap" Margin="0 0 0 20"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+			<Button Content="Yes" Command="{Binding YesCommand}" IsVisible="{Binding ShowYes}" Width="80"/>
+			<Button Content="No" Command="{Binding NoCommand}" IsVisible="{Binding ShowNo}" Width="80"/>
+			<Button Content="OK" Command="{Binding OKCommand}" IsVisible="{Binding ShowOK}" Width="80"/>
+			<Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding ShowCancel}" Width="80"/>
 		</StackPanel>
-	</Grid>
-	
+	</StackPanel>
 </Window>
