@@ -48,8 +48,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                         SiteTimes.Add(siteTime);
                     }
 
-                    OnPropertyChanged(nameof(Absences));
-                    OnPropertyChanged(nameof(SiteTimes));
+                    this.RaisePropertyChanged(nameof(Absences));
+                    this.RaisePropertyChanged(nameof(SiteTimes));
                 }
             }
         }
