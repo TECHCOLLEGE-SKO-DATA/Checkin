@@ -8,7 +8,9 @@
         Title="Venter på kort" 
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Width="320">
+    
     <Grid>
         <Border BorderBrush="Black" BorderThickness="2">
             <StackPanel Margin="10">

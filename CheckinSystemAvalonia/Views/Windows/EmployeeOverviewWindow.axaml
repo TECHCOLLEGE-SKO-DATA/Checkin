@@ -10,7 +10,8 @@
 	d:DesignHeight="450"
 	x:Class="CheckInSystemAvalonia.EmployeeOverviewWindow"
 	Title="EmployeeOverviewWindow"
-	x:DataType="vm:EmployeeOverviewViewModel">
+	x:DataType="vm:EmployeeOverviewViewModel"
+	Icon="/Assets/avalonia-logo.ico">
 
 	<Window.Resources>
 		<Customcontrols:BoolToBrushConverter x:Key="CheckInToBrushConverter"/>

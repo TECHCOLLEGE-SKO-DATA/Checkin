@@ -24,8 +24,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public const int EMPLOYEE_TIME_TAB = 1;
         public const int GROUP_LISTPAGE_TAB = 2;
 
-        private IPlatform _platform;
-
         public ObservableCollection<Group> Groups { get; private set; } = new();
 
         private Control _adminPanelContent;
@@ -36,7 +34,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         }
 
         AdminEmployeeViewModel _adminEmployeeViewModel;
-        public AdminEmployeeViewModel AdminEmployeeViewModel
+        public AdminEmployeeViewModel adminEmployeeViewModel
         {
             get => _adminEmployeeViewModel;
             set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
@@ -66,7 +64,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> MarkAsOffsiteCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteEmployeesCommand { get; }
         public ReactiveCommand<Unit, Unit> EditNextScannedCardCommand { get; }
-        public ReactiveCommand<Unit, Unit> ResetGroupCommand { get; }
         public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
         public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
         public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
@@ -77,23 +74,35 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 Groups = platform.MainWindowViewModel.Groups;
             };
 
-            AdminEmployeeViewModel = new(platform);
+            adminEmployeeViewModel = new(platform);
 
             Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
             Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());
             Btn_SettingsView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToSettingsView());
-            EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployees);
-            MarkAsOffsiteCommand = ReactiveCommand.Create(() =>
+
+            EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployeesAsync);
+
+            MarkAsOffsiteCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                // Replace with actual SelectedEmployees when reintroducing AdminEmployeeViewModel
-                var selected = new ObservableCollection<Employee>();
-                UpdateOffsite(selected, DateTime.Today, DateTime.Today.AddDays(1), "Orlov", Absence.absenceReason.Ferie);
+                var editOffsiteDialog = new EditOffsiteDialog();
+    
+                var result = await editOffsiteDialog.ShowDialog<bool>(platform.MainWindow);
+
+                if (result)
+                {
+                    var fromDate = editOffsiteDialog.FromDate ?? DateTime.Today;
+                    var toDate = editOffsiteDialog.ToDate ?? DateTime.Today;
+                    var note = editOffsiteDialog.Note ?? string.Empty;
+                    var reason = editOffsiteDialog.AbsenceReason ?? Absence.absenceReason.Ferie; // Fallback if none selected
+
+                    UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, fromDate.Date, toDate.Date, note, reason);
+                }
             });
+
 
             DeleteEmployeesCommand = ReactiveCommand.Create(() =>
             {
-                var selected = new ObservableCollection<Employee>();
-                DeleteEmployee(selected);
+                DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
@@ -105,8 +114,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void EditNextScannedCard()
         {
-            //CardReader.State.UpdateNextEmployee = true;
-            //Views.Dialog.WaitingForCardDialog.Open();
+            CardReader.State.UpdateNextEmployee = true;
+            WaitingForCardDialog.Open();
         }
 
         public void DeleteEmployee(Employee employee)
@@ -124,6 +133,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             foreach (Employee employee in employees)
             {
                 DeleteEmployee(employee);
+                _platform.MainWindowViewModel.Employees.Remove(employee);
             }
         }
 
@@ -147,33 +157,32 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void AddSelectedUsersToGroup(Group group)
         {
-            /*foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
             {
                 group.AddEmployee(employee);
-            }*/
+            }
         }
 
         public void RemoveSelectedUsersToGroup(Group group)
         {
-            /*foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
             {
                 group.RemoveEmployee(employee);
-            }*/
+            }
         }
 
-        public void EditGroupsForEmployees()
+        public async void EditGroupsForEmployeesAsync()
         {
-            /*
-            var editGroupsForEmployees = new EditGroupsForEmployees(_mainWindowViewModel.Groups);
-
-            if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
+            EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
+            var result = await editGroupsForEmployees.ShowDialog<bool>(_platform.MainWindow);
+            if (result == true && editGroupsForEmployees.SelectedGroup != null)
             {
                 if (editGroupsForEmployees.AddGroup)
                     AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
 
                 if (editGroupsForEmployees.RemoveGroup)
                     RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-            }*/
+            }
         }
     }
 }

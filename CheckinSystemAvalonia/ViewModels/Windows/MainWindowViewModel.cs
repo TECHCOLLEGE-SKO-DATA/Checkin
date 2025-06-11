@@ -19,6 +19,7 @@ using System.Windows;
 using CheckInSystemAvalonia.CardReader;
 using Avalonia;
 using Avalonia.Threading;
+using CheckInSystemAvalonia.Views;
 
 namespace CheckInSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -153,13 +154,12 @@ public class MainWindowViewModel : ViewModelBase
             }
             Employees.Add(editEmployee);
         }
-        
-        /*if ( != null)
-            Application.Current.Dispatcher.Invoke(() => {
-                Views.Dialog.WaitingForCardDialog.Instance.Close();
-            });
 
-        EditEmployeeWindow.Open(editEmployee);*/
+        if (WaitingForCardDialog.Instance != null)
+            Dispatcher.UIThread.Post(() => {
+                WaitingForCardDialog.Instance.Close();
+            });
+        EditEmployeeWindow.Open(editEmployee);
     }
 
     void UpdateEmployeeLocal(string cardID)

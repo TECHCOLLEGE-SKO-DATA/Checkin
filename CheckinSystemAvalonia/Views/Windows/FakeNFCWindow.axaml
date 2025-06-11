@@ -6,7 +6,8 @@
         xmlns:vm="using:CheckInSystemAvalonia.ViewModels"
 		x:DataType="vm:Windows.FakeNFCWindowViewModel"
 		x:Class="CheckInSystemAvalonia.Views.FakeNFCWindow"
-        Title="FakeNFCWindow">
+        Title="FakeNFCWindow"
+		Icon="/Assets/avalonia-logo.ico">
 	
 	<Grid>
 		<ContentControl Content="{Binding CurrentViewModel}" ContentTemplate="{DynamicResource ViewLocator}"/>

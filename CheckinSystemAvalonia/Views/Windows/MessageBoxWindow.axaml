@@ -8,7 +8,8 @@
 		x:DataType="vm:MessageBoxViewModel"
 		Width="400" Height="200"
 		CanResize="False"
-		Title="{Binding Title}">
+		Title="{Binding Title}"
+		Icon="/Assets/avalonia-logo.ico">
 
 	<StackPanel Margin="20" VerticalAlignment="Center">
 		<TextBlock Text="{Binding Message}" FontSize="16" TextWrapping="Wrap" Margin="0 0 0 20"/>
