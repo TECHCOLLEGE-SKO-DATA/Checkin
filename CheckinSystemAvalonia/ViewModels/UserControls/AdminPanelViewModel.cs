@@ -84,8 +84,12 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
             MarkAsOffsiteCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var editOffsiteDialog = new EditOffsiteDialog();
-    
+                var editOffsiteDialog = new EditOffsiteDialog(
+                         _platform.MainWindowViewModel.absenceReasons.ToList(),
+                         selectedReason: _platform.MainWindowViewModel.absenceReasons.FirstOrDefault(r => r.Reason == "Ferie")
+                     );
+
+
                 var result = await editOffsiteDialog.ShowDialog<bool>(platform.MainWindow);
 
                 if (result)
@@ -93,7 +97,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                     var fromDate = editOffsiteDialog.FromDate ?? DateTime.Today;
                     var toDate = editOffsiteDialog.ToDate ?? DateTime.Today;
                     var note = editOffsiteDialog.Note ?? string.Empty;
-                    var reason = editOffsiteDialog.AbsenceReason ?? Absence.absenceReason.Ferie; // Fallback if none selected
+                    var reason = editOffsiteDialog.AbsenceReason ?? platform.MainWindowViewModel.absenceReasons.FirstOrDefault(r => r.Reason == "Ferie");                    // Fallback if none selected
 
                     UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, fromDate.Date, toDate.Date, note, reason);
                 }
@@ -145,13 +149,13 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         }
 
         public void UpdateOffsite(ObservableCollection<Employee> employees,
-            DateTime FromDate, DateTime ToDate, string Note, Absence.absenceReason AbsenceReason)
+            DateTime FromDate, DateTime ToDate, string Note, AbsenceReason AbsenceReason)
         {
             Absence absence = new();
             absence.ToTime = absence.ToTime.AddHours(23);
             foreach (Employee employee in employees)
             {
-                absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
+                absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason.Id);
             }
         }
 

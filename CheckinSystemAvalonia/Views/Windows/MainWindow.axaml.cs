@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Platform;
 using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
@@ -19,11 +20,8 @@ public partial class MainWindow : Window
 
         _vm = platform.MainWindowViewModel;
 
-        LoadingStartup loading = new();
-
         Closing += OnWindowClosing;
-        LoadingStartup.Instance?.Close();
-
+        
 #if DEBUG
         OpenFakeNFCWindow(platform);
 #endif

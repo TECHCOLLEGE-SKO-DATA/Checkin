@@ -149,22 +149,10 @@ public class EmployeeTimeViewModel : ViewModelBase
 
     }
 
-
-
-
-
-
-
-
-
-
-
     private void AddAbsences()
-
     {
 
         foreach (var absence in AbsencesToAddToDb)
-
         {
 
             absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);

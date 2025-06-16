@@ -8,9 +8,6 @@ using CheckInSystemAvalonia.ViewModels.Windows;
 using CheckinLibrary;
 using System;
 using System.IO;
-using CheckInSystemAvalonia.Platform;
-using CheckInSystemAvalonia.ViewModels.Windows;
-using CheckInSystemAvalonia.Views;
 
 namespace CheckInSystemAvalonia;
 
@@ -23,16 +20,11 @@ public partial class App : Application
         AppDomain.CurrentDomain.UnhandledException += log;
         try
         {
-            LoadingStartup loadingStartup = new();
-            loadingStartup.Show();
-
             Platform.Start();
 
             if (!Startup.Run())
             {
             }
-
-            loadingStartup.Close();
         }
         catch (Exception exception)
         {

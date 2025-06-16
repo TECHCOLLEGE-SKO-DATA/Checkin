@@ -40,7 +40,7 @@ namespace CheckinLibrary.Database
         Group NewGroup(string name);
 
         // 🔹 Absence Management
-        Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason);
+        Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, int reason);
         void EditAbsence(List<Absence> absences);
         void DeleteAbsence(int id);
         List<Absence> GetAllAbsence(Employee employee);

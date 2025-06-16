@@ -1,25 +1,31 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using CheckinLibrary.Models;
 using System;
+using System.Collections.Generic;
 
 namespace CheckInSystemAvalonia;
 
 public partial class EditOffsiteDialog : Window
 {
-    public EditOffsiteDialog(bool isOffsite = false, DateTime? offsiteUntil = null, DateTime? FromDate = null,
-        DateTime? ToDate = null, Absence.absenceReason? AbsenceReason = null, string? Note = null)
+    public EditOffsiteDialog(List<AbsenceReason> absenceReasons, AbsenceReason? selectedReason = null,
+    DateTime? fromDate = null, DateTime? toDate = null, string? note = null)
     {
         InitializeComponent();
-        // CbIsOffsite.IsChecked = isOffsite;
-        //DpOffsiteUntil.SelectedDate = offsiteUntil;
-        _FromDate.SelectedDate = FromDate;
-        _ToDate.SelectedDate = ToDate;
-        _Note.Text = Note;
 
-        ComboBoxAbsenceReason.ItemsSource = Enum.GetValues(typeof(Absence.absenceReason));
+        _FromDate.SelectedDate = fromDate;
+        _ToDate.SelectedDate = toDate;
+        _Note.Text = note;
+        
+        ComboBoxAbsenceReason.ItemsSource = absenceReasons;
+        ComboBoxAbsenceReason.ItemTemplate = new FuncDataTemplate<AbsenceReason>((item, _) =>
+        {
+            return new TextBlock { Text = item.Reason };
+        });
+        ComboBoxAbsenceReason.SelectedItem = selectedReason;
     }
 
     public string? Note
@@ -36,10 +42,7 @@ public partial class EditOffsiteDialog : Window
     {
         get => _ToDate.SelectedDate;
     }
-    public Absence.absenceReason? AbsenceReason
-    {
-        get => (Absence.absenceReason)ComboBoxAbsenceReason.SelectedIndex;
-    }
+    public AbsenceReason? AbsenceReason => ComboBoxAbsenceReason.SelectedItem as AbsenceReason;
 
     /*public bool Isoffsite
     {

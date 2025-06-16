@@ -20,10 +20,12 @@ using CheckInSystemAvalonia.CardReader;
 using Avalonia;
 using Avalonia.Threading;
 using CheckInSystemAvalonia.Views;
+using CheckinLibrary.Settings;
 
 namespace CheckInSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
+    public List<AbsenceReason> absenceReasons { get; set; }
 
     AdminPanelViewModel _adminPanelViewModel;
     public AdminPanelViewModel AdminPanelViewModel
@@ -92,6 +94,9 @@ public class MainWindowViewModel : ViewModelBase
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
 
+        SettingsControl settingsControl = new();
+
+        absenceReasons = settingsControl.GetAbsenceReasons();
 
         //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
@@ -203,8 +208,11 @@ public class MainWindowViewModel : ViewModelBase
     public void SwitchToEmployeeTime(Employee employee)
     {
         _employeeTimeViewModel.SelectedEmployee = employee;
+        //exists because for some reason i cant get avalonia to keep the reasonId when going in and out and then back into an employee's 
+        _employeeTimeViewModel.RefreshAbsences(); 
         _platform.MainWindowViewModel.CurrentViewModel = EmployeeTimeViewModel;
     }
+
 
     public void SwitchToAdminPanel()
     {   

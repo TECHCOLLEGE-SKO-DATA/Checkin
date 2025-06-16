@@ -375,10 +375,10 @@ public class DatabaseHelper : IDatabaseHelper
     //From OnSiteTime
 
     //From Absence
-    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, absenceReason _reason)
+    public Absence InsertAbsence(int _employeeId, DateTime _fromDate, DateTime _toDate, string _note, int _reasonId)
     {
         string insertQuery = @"
-        INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReason)
+        INSERT INTO Absence (employeeId, fromDate, toDate, note, AbsenceReasonId)
         VALUES (@employeeId, @fromDate, @toDate, @note, @reason);
         SELECT SCOPE_IDENTITY();";
 
@@ -392,19 +392,20 @@ public class DatabaseHelper : IDatabaseHelper
             fromDate = _fromDate,
             toDate = _toDate,
             note = _note,
-            reason = (int)_reason
+            reason = _reasonId
         });
 
-        return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reason);
+        return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reasonId);
     }
 
     public void EditAbsence(List<Absence> absences)
     {
-        string editQuery = @"UPDATE Absence SET 
+        string editQuery = @"
+        UPDATE Absence SET 
         fromDate = @FromDate, 
         toDate = @ToDate, 
         note = @Note, 
-        AbsenceReason = @AbsenceReason
+        AbsenceReasonId = @AbsenceReasonId
         WHERE ID = @ID";
 
         using var connection = Database.GetConnection();
@@ -416,42 +417,41 @@ public class DatabaseHelper : IDatabaseHelper
 
     public void DeleteAbsence(int _id)
     {
-        string deletQuery = @"DELETE FROM Absence WHERE ID = @id";
+        string deleteQuery = @"DELETE FROM Absence WHERE ID = @id";
 
         using var connection = Database.GetConnection();
         if (connection == null)
-            throw new Exception("Could not establish databas connection!");
+            throw new Exception("Could not establish database connection!");
 
-        connection.Query(deletQuery, new { id = _id });
+        connection.Query(deleteQuery, new { id = _id });
     }
 
     public List<Absence> GetAllAbsence(Employee employee)
     {
-        string selectQuery = @"SELECT * FROM Absence
-                       WHERE employeeId = @employeeId";
+        string selectQuery = @"
+        SELECT * FROM Absence
+        WHERE employeeId = @employeeId";
 
         using var connection = Database.GetConnection();
         if (connection == null)
             throw new Exception("Could not establish database connection!");
 
         var absences = connection.Query<Absence>(selectQuery, new { employeeId = employee.ID })
-        .Select(t =>
-        {
-            t.AbsenceReason = Enum.TryParse<absenceReason>(t.AbsenceReason.ToString(), out var reason) ? reason : absenceReason.Syg;
-
-            // Ensure that FromTime and ToTime are populated based on FromDate and ToDate
-            if (t.FromDate != null)
+            .Select(t =>
             {
-                t.FromTime = TimeOnly.FromDateTime(t.FromDate);
-            }
-            if (t.ToDate != null)
-            {
-                t.ToTime = TimeOnly.FromDateTime(t.ToDate);
-            }
+                // FromDate and ToDate -> FromTime and ToTime
+                if (t.FromDate != null)
+                {
+                    t.FromTime = TimeOnly.FromDateTime(t.FromDate);
+                }
+                if (t.ToDate != null)
+                {
+                    t.ToTime = TimeOnly.FromDateTime(t.ToDate);
+                }
 
-            return t;
-        })
-        .ToList();
+                return t;
+            })
+            .ToList();
 
         return absences;
     }

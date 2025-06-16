@@ -1,6 +1,8 @@
 ﻿using CheckinLibrary.Database;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -10,17 +12,6 @@ namespace CheckinLibrary.Models
 {
     public class Absence
     {
-        public enum absenceReason
-        {
-            Syg,
-            Skole,
-            Ferie,
-            SøgeDag,
-            VirksomhedSamtale,
-            Læge,
-            Miscellaneous
-        }
-
         private DatabaseHelper dbHelper = new();
 
         public TimeOnly FromTime { get; set; }
@@ -30,8 +21,12 @@ namespace CheckinLibrary.Models
         public int EmployeeId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public absenceReason AbsenceReason { get; set; } 
+        public int AbsenceReasonId { get; set; }
+
+        public AbsenceReason AbsenceReason => AbsenceReason.GetById(AbsenceReasonId);
+
         public string? Note { get; set; }
+
         public DateTimeOffset FromDateOffset
         {
             get => new DateTimeOffset(FromDate);
@@ -44,6 +39,8 @@ namespace CheckinLibrary.Models
             set => ToDate = value.DateTime;
         }
 
+        public Absence() { }
+
         public Absence(Absence absence)
         {
             ID = absence.ID;
@@ -51,29 +48,29 @@ namespace CheckinLibrary.Models
             FromDate = absence.FromDate;
             ToDate = absence.ToDate;
             Note = absence.Note;
-            AbsenceReason = absence.AbsenceReason;
+            AbsenceReasonId = absence.AbsenceReasonId;
+            FromTime = absence.FromTime;
+            ToTime = absence.ToTime;
         }
-        public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
+
+        public Absence(int id, int employeeId, DateTime fromDate, DateTime toDate, string note, int reasonId)
         {
             ID = id;
             EmployeeId = employeeId;
-
             FromDate = fromDate;
             ToDate = toDate;
             Note = note;
-            AbsenceReason = reason;
-
+            AbsenceReasonId = reasonId;
             FromTime = TimeOnly.FromDateTime(fromDate);
             ToTime = TimeOnly.FromDateTime(toDate);
         }
 
-        public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, absenceReason reason)
+        public Absence InsertAbsence(int employeeId, DateTime fromDate, DateTime toDate, string note, int reasonId)
         {
             DateTime fromDateWithTime = fromDate.Date.Add(FromTime.ToTimeSpan());
-
             DateTime toDateWithTime = toDate.Date.Add(ToTime.ToTimeSpan());
 
-            return dbHelper.InsertAbsence(employeeId, fromDateWithTime, toDateWithTime, note, reason);
+            return dbHelper.InsertAbsence(employeeId, fromDateWithTime, toDateWithTime, note, reasonId);
         }
 
         public void EditAbsence(List<Absence> absence)
@@ -85,28 +82,44 @@ namespace CheckinLibrary.Models
         {
             dbHelper.DeleteAbsence(id);
         }
-        
+
         public static List<Absence> GetAllAbsence(Employee employee)
         {
-            DatabaseHelper databHelper = new ();
-
+            DatabaseHelper databHelper = new();
             return databHelper.GetAllAbsence(employee);
         }
+
         public void SetIsOffSite(Employee employee)
         {
             List<Absence> absences = GetAllAbsence(employee);
-             
+
             foreach (var absence in absences)
             {
                 if (absence.FromDate <= DateTime.Now && absence.ToDate > DateTime.Now)
                 {
                     employee.IsOffSite = true;
-                    return; 
+                    return;
                 }
             }
         }
-        public Absence()
+    }
+
+    public class AbsenceReason
+    {
+        public int Id { get; private set; }
+        public string Reason { get; set; }
+        public Color HexColor { get; set; }
+
+        public AbsenceReason(int id, string reason, Color hexColor)
         {
+            Id = id;
+            Reason = reason;
+            HexColor = hexColor;
         }
+
+        public static List<AbsenceReason> Reasons = new();
+
+        public static AbsenceReason GetById(int id) => Reasons.FirstOrDefault(r => r.Id == id);
     }
 }
+

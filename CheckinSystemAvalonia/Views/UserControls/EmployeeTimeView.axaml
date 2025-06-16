@@ -5,7 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CheckInSystemAvalonia.Views.UserControls.EmployeeTimeView"
 			 xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.UserControls"
-			 x:DataType="vm:EmployeeTimeViewModel">
+			 x:DataType="vm:EmployeeTimeViewModel"
+			 x:Name="root">
 	
 	<Grid>
 		<Grid.RowDefinitions>
@@ -62,8 +63,21 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				
-				<DataGridTextColumn Header="Starts Tid" Binding="{Binding FromTime, StringFormat=\{0:HH:mm\}}" />
+
+				<DataGridTemplateColumn Header="Starts Tid">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock HorizontalAlignment="Center" 
+									   VerticalAlignment="Center" 
+									   Text="{Binding FromTime, StringFormat=HH\\:mm}" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+					<DataGridTemplateColumn.CellEditingTemplate>
+						<DataTemplate>
+							<TextBox Text="{Binding FromTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellEditingTemplate>
+				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn Header="Sluts Dato">
 					<DataGridTemplateColumn.CellTemplate>
@@ -73,12 +87,31 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTextColumn Header="Sluts Tid" Binding="{Binding ToTime, StringFormat=\{0:HH:mm\}}" />
+				<DataGridTemplateColumn Header="Sluts Tid">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							
+							<TextBlock HorizontalAlignment="Center" 
+									   VerticalAlignment="Center" 
+									   Text="{Binding ToTime, StringFormat=HH\\:mm}" />
+							
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+					<DataGridTemplateColumn.CellEditingTemplate>
+						<DataTemplate>
+							
+							<TextBox Text="{Binding ToTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							
+						</DataTemplate>
+					</DataGridTemplateColumn.CellEditingTemplate>
+				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Content="X" Click="BtnDeleteAbsence"/>
+							<Button Content="X" 
+									Click="BtnDeleteAbsence"/>
+							
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -86,9 +119,16 @@
 				<DataGridTemplateColumn Header="Fravær">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{x:Static vm:EmployeeTimeViewModel.StaticAbsenceReasons}"
-								      SelectedItem="{Binding AbsenceReason, Mode=TwoWay}" 
-									  Width="100"/>
+							<ComboBox ItemsSource="{Binding #root.DataContext.AbsenceReasons}"
+									  SelectedIndex="{Binding AbsenceReasonId, Mode=TwoWay}"
+									  Width="100">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Reason}" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -104,7 +144,8 @@
 
 			<Button Background="Gray"
 					Content="Tilføj Fravær"
-					Margin="2"/>
+					Margin="2"
+					Click="BtnAddAbsence"/>
 
 		</StackPanel>
 
