@@ -14,8 +14,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class EmployeeTimeViewModel : ViewModelBase
     {
-        public static IEnumerable<Absence.absenceReason> StaticAbsenceReasons => Enum.GetValues(typeof(Absence.absenceReason)).Cast<Absence.absenceReason>();
 
+        public List<AbsenceReason> AbsenceReasons { get; set; } = new();
 
         Absence absenc = new();
         public ObservableCollection<Absence> Absences { get; set; } = new();
@@ -54,6 +54,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             }
         }
 
+        public ReactiveCommand<Unit, Unit> Btn_AddAbsence {  get; set; }
+
         public ReactiveCommand<Unit, Unit> Btn_LogOut { get; set; }
 
         public ReactiveCommand<Unit, Unit> Btn_Cancel { get; set; }
@@ -64,6 +66,10 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public EmployeeTimeViewModel(IPlatform platform) : base(platform)
         {
+            platform.DataLoaded += (sender, args) =>
+            {
+                AbsenceReasons = platform.MainWindowViewModel.absenceReasons;
+            };
 
             SiteTimesToDelete = new ();
             SiteTimesToAddToDb = new();
@@ -73,7 +79,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             Btn_Cancel = ReactiveCommand.Create(() => RevertSiteTimes()); 
 
             Btn_Save = ReactiveCommand.Create(() => SaveChanges());
-
+            
         }
 
         public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -170,7 +176,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             foreach (var absence in AbsencesToAddToDb)
             {
-                absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
+                absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReasonId);
             }
             AbsencesToAddToDb.Clear();
         }
@@ -204,5 +210,23 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 absenc.EditAbsence(changedAbsence);
             }
         }
+
+        //added this since for some reason it would forget the Index of the absence for the reason of absence
+        public void RefreshAbsences()
+        {
+            if (SelectedEmployee == null)
+                return;
+
+            Absences.Clear();
+
+            var freshAbsences = Absence.GetAllAbsence(SelectedEmployee);
+            foreach (var absence in freshAbsences)
+            {
+                Absences.Add(absence);
+            }
+
+            this.RaisePropertyChanged(nameof(Absences));
+        }
+
     }
 }
