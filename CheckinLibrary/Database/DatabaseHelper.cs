@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
 using static CheckinLibrary.Models.Absence;
+using CheckinLibrary.Background_tasks;
 
 public class DatabaseHelper : IDatabaseHelper
 {
@@ -394,6 +395,9 @@ public class DatabaseHelper : IDatabaseHelper
             note = _note,
             reason = _reasonId
         });
+
+        AbsencBackGroundService absenceservice = new();
+        absenceservice.AbsenceTask();
 
         return new Absence(absenceId, _employeeId, _fromDate, _toDate, _note, _reasonId);
     }

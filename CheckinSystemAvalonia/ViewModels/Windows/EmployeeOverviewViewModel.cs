@@ -57,21 +57,47 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
         public void ZoomIn()
         {
             ScaleSize += 0.1M;
+            UpdateConfig();
         }
 
         public void ZoomOut()
         {
             ScaleSize -= 0.1M;
             if (ScaleSize < 0.1M) ScaleSize = 0.1M;
+            UpdateConfig();
         }
 
         public void ToggleFullscreen()
         {
-            
+            if (WindowState == WindowState.FullScreen)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else 
+            {
+                WindowState = WindowState.FullScreen;
+            }
         }
+
+        //buttons
+        public ReactiveCommand<Unit, Unit> Btn_ZoomIn {  get; set; }
+
+        public ReactiveCommand<Unit, Unit> Btn_ZoomOut { get; set; }
+
+        public ReactiveCommand<Unit, Unit> Btn_ToggleFullscreen {  get; set; }
 
         public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
+            //button bindings
+            Btn_ZoomIn = ReactiveCommand.Create(() => ZoomIn());
+
+            Btn_ZoomOut = ReactiveCommand.Create(() => ZoomOut());
+
+            Btn_ToggleFullscreen = ReactiveCommand.Create(() => ToggleFullscreen());
+
+            //toggles fullscreen to start in fullscreen
+            ToggleFullscreen();
+
             string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
             if (!Directory.Exists(filePath))
             {

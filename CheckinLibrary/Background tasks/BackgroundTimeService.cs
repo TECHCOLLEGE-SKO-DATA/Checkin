@@ -37,16 +37,21 @@ public class BackgroundTimeService
         _cts?.Cancel();
     }
 
-    public void CheckTime()
+    public async void CheckTime()
     {
         var currentTime = _timeProvider().TimeOfDay;
 
         if ((currentTime >= _startTime || currentTime < _endTime) && !_hasLoggedToday)
         {
-            absence.AbsenceTask();
-
             _hasLoggedToday = true;
             PerformMaintenanceAction.Invoke();
+
+            // Run absence check 8 hours later (approx. 01:00–04:00)
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(TimeSpan.FromHours(8));
+                absence.AbsenceTask();
+            });
         }
         else if (_timeProvider().Hour == 5 || _timeProvider().Hour == 6)
         {
@@ -54,20 +59,21 @@ public class BackgroundTimeService
             OnDailyReset?.Invoke();
         }
     }
+
 }
 
 
-    //private void LogSuccess(string today)
-    //{
-    //    try
-    //    {
-    //        string logEntry = $"{today} Success";
-    //        File.AppendAllText(_logFilePath, logEntry + Environment.NewLine);
-    //        Console.WriteLine($"[LOGGED] {logEntry}");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine($"[ERROR] Logging failed: {ex.Message}");
-    //    }
-    //}
+//private void LogSuccess(string today)
+//{
+//    try
+//    {
+//        string logEntry = $"{today} Success";
+//        File.AppendAllText(_logFilePath, logEntry + Environment.NewLine);
+//        Console.WriteLine($"[LOGGED] {logEntry}");
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"[ERROR] Logging failed: {ex.Message}");
+//    }
+//}
 

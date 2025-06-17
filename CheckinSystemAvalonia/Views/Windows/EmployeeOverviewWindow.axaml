@@ -11,10 +11,11 @@
 	x:Class="CheckInSystemAvalonia.EmployeeOverviewWindow"
 	Title="EmployeeOverviewWindow"
 	x:DataType="vm:EmployeeOverviewViewModel"
-	Icon="/Assets/avalonia-logo.ico">
+	Icon="/Assets/avalonia-logo.ico"
+	WindowState="{Binding WindowState}">
 
 	<Window.Resources>
-		<Customcontrols:BoolToBrushConverter x:Key="CheckInToBrushConverter"/>
+		<Customcontrols:EmployeeStatusToBrushConverter x:Key="EmployeeStatusToBrushConverter"/>
 	</Window.Resources>
 
 	<Grid>
@@ -55,8 +56,13 @@
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 
-											<StackPanel Background="{Binding Path=IsCheckedIn, Converter={StaticResource CheckInToBrushConverter}}"
-														Margin="5">
+											<StackPanel Margin="5">
+												<StackPanel.Background>
+													<MultiBinding Converter="{StaticResource EmployeeStatusToBrushConverter}">
+														<Binding Path="IsOffSite"/>
+														<Binding Path="IsCheckedIn"/>
+													</MultiBinding>
+												</StackPanel.Background>
 												<StackPanel Orientation="Horizontal"
 															Margin="10">
 													<TextBlock Text="{Binding FirstName}"
@@ -112,7 +118,7 @@
                     Height="30"
                     FontSize="40"
                     Padding="0 -10 0 0"
-                    Command="{Binding ToggleFullscreen}"
+                    Command="{Binding Btn_ToggleFullscreen}"
                     Margin="3,0,20,0"/>
 		</StackPanel>
 	</Grid>

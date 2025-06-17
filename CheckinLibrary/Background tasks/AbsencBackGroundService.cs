@@ -11,7 +11,7 @@ public class AbsencBackGroundService
 {
     Absence absence = new();
 
-    private TimeSpan waitTime = TimeSpan.FromMinutes(10);
+    private TimeSpan waitTime = TimeSpan.FromMinutes(2);
 
     public List<Employee> employees = new List<Employee>();
 
@@ -23,7 +23,7 @@ public class AbsencBackGroundService
         foreach (var employee in employeesCopy)
         {
             var activeAbsences = Absence.GetAllAbsence(employee)
-                .Where(a => a.ToDate > DateTime.Now)
+                .Where(a => a.FromDate.Date == DateTime.Now.Date)
                 .ToList();
 
             if (activeAbsences.Any())
@@ -49,41 +49,51 @@ public class AbsencBackGroundService
 
     public async Task<Employee> OffsiteTimer(Employee employee, List<Absence> activeAbsences)
     {
-
+        activeAbsences = activeAbsences
+            .OrderBy(a => a.FromDate)
+            .ToList();
 
         foreach (var activeAbsence in activeAbsences)
         {
-            TimeSpan delayTime = activeAbsence.FromDate - DateTime.Now;
+            bool hasStarted = false;
 
-            if (delayTime > TimeSpan.Zero) // Ensure the delay is only applied if it's in the future
+            while (true)
             {
-                await Task.Delay(delayTime);
-            }
+                var currentAbsences = Absence.GetAllAbsence(employee)
+                                             .Where(a => a.ID == activeAbsence.ID)
+                                             .ToList();
 
-
-
-            employee.IsOffSite = true;
-
-            while (activeAbsence.ToDate > DateTime.Now)
-            {
-                var CurrentAbsences = Absence.GetAllAbsence(employee)
-                            .Where(a => a.ID == activeAbsence.ID);
-
-                foreach (var absence in CurrentAbsences)
-                    activeAbsence.FromDate = absence.FromDate;
-
-                if (!CurrentAbsences.Any(a => a.ID == activeAbsence.ID))
+                if (!currentAbsences.Any())
+                {
+                    // Absence was deleted before or during
+                    employee.IsOffSite = false;
                     break;
+                }
 
-                var timeUntilStart = activeAbsence.FromDate - DateTime.Now;
+                var currentAbsence = currentAbsences[0];
 
-                //it uses whatever time is shortest for the constent checking if the absence still exist
-                await Task.Delay(timeUntilStart < waitTime ? timeUntilStart : waitTime);
+                // Update dates in case they've changed
+                activeAbsence.FromDate = currentAbsence.FromDate;
+                activeAbsence.ToDate = currentAbsence.ToDate;
+
+                if (!hasStarted && DateTime.Now >= activeAbsence.FromDate)
+                {
+                    hasStarted = true;
+                    employee.IsOffSite = true;
+                }
+
+                if (hasStarted && DateTime.Now >= activeAbsence.ToDate)
+                {
+                    employee.IsOffSite = false;
+                    break;
+                }
+
+                await Task.Delay(waitTime);
             }
 
-            employee.IsOffSite = false;
             break;
         }
+
         return employee;
     }
 

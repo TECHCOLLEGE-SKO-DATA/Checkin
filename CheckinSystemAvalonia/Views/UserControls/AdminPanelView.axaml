@@ -22,8 +22,9 @@
                       Margin="3"
                       MinWidth="200"
                       BorderBrush="Black"
-                      ItemsSource="{Binding Groups}"
-					  DisplayMemberBinding="{Binding Path=Name}"/>
+                      ItemsSource="{Binding GroupsWithAll}"
+                      SelectedItem="{Binding SelectedGroup, Mode=TwoWay}"
+                      DisplayMemberBinding="{Binding Name}" />
 
 			<Button Content="Rediger næste scannet kort"
                     Margin="10 0 0 0"

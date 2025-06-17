@@ -4,6 +4,7 @@ using CheckinLibrary.Models;
 using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
 using CheckInSystemAvalonia.Views.UserControls;
+using DynamicData;
 using PCSC;
 using PCSC.Interop;
 using ReactiveUI;
@@ -51,12 +52,45 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
         }
 
-        // Add this field
+
         private Group _selectedGroup;
         public Group SelectedGroup
         {
             get => _selectedGroup;
             set => this.RaiseAndSetIfChanged(ref _selectedGroup, value);
+        }
+
+        public ObservableCollection<Group> GroupsWithAll
+        {
+            get
+            {
+                var withAll = new ObservableCollection<Group>();
+
+                // Create "All" group without affecting core Groups collection
+                var allGroup = new Group
+                {
+                    Name = "All",
+                    Isvisible = false
+                };
+
+                // Optionally populate members
+                var allMembers = Groups
+                    .SelectMany(g => g.Members)
+                    .GroupBy(e => e.ID)
+                    .Select(g => g.First())
+                    .ToList();
+
+                allGroup.InitializeMembers(allMembers);
+
+                withAll.Add(allGroup);
+
+                foreach (var group in Groups)
+                {
+                    withAll.Add(group);
+                }
+
+                return withAll;
+            }
         }
 
         // ReactiveCommands for actions
@@ -67,14 +101,16 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
         public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
         public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
+
         public AdminPanelViewModel(IPlatform platform) : base(platform)
         {
             platform.DataLoaded += (sender, args) =>
             {
                 Groups = platform.MainWindowViewModel.Groups;
+                SelectedGroup = GroupsWithAll.FirstOrDefault();
             };
 
-            adminEmployeeViewModel = new(platform);
+            adminEmployeeViewModel = new(platform, this);
 
             Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
             Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());

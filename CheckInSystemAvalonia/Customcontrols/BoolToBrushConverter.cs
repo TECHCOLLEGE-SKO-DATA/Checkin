@@ -2,23 +2,30 @@
 using Avalonia.Media;
 using System;
 using System.Globalization;
+using CheckinLibrary.Models;
+using System.Collections.Generic;
 
 namespace CheckInSystemAvalonia.Customcontrols
 {
-    public class BoolToBrushConverter : IValueConverter
+    public class EmployeeStatusToBrushConverter : IMultiValueConverter
     {
-        public IBrush TrueBrush { get; set; } = Brushes.Green;
-        public IBrush FalseBrush { get; set; } = new SolidColorBrush(Color.Parse("#d55e00"));
+        public IBrush CheckedInBrush { get; set; } = Brushes.Green;
+        public IBrush NotCheckedInBrush { get; set; } = new SolidColorBrush(Color.Parse("#d55e00"));
+        public IBrush OffsiteBrush { get; set; } = Brushes.Blue;
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool b)
-                return b ? TrueBrush : FalseBrush;
+            if (values.Count == 2 &&
+                values[0] is bool isOffsite &&
+                values[1] is bool isCheckedIn)
+            {
+                if (isOffsite)
+                    return OffsiteBrush;
 
-            return FalseBrush;
+                return isCheckedIn ? CheckedInBrush : NotCheckedInBrush;
+            }
+
+            return NotCheckedInBrush;
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-            throw new NotSupportedException();
     }
 }

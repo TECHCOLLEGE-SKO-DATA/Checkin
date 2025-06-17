@@ -10,8 +10,6 @@ using CheckInSystemAvalonia.Platform;
 
 public class Startup
 {
-    private static IScreenImpl screenImpl;
-
     public static bool Run()
     {
 
@@ -23,8 +21,7 @@ public class Startup
 
     public static void OpenEmployeeOverview(IPlatform iplatform)
     {
-
-        //Screen screenRetriver = new();
+        Window window = new Window();
 
         SettingsControl settings = new SettingsControl();
         int screenIndex = settings.GetEmployeeOverViewSettings();
@@ -35,26 +32,27 @@ public class Startup
             DataTemplates = { new ViewLocator() },
             DataContext = employeeOverviewViewModel
         };
-        if (false == true)
-        { 
-        }
-        //var screensCount = screenRetriver.ScreenCount;
-        //var screens = screenRetriver.All;
-        /*
-        if (screenIndex >= 0 && screenIndex < screensCount)
+
+        var screens = window.Screens;
+
+        if (screens is not null && screenIndex > 0 && screenIndex <= screens.All.Count)
         {
-            var targetScreen = screens[screenIndex];
+            //make sure the screenindex aligns with how it counts screens being 0 for screen 1 and 1 for screen 2
+            screenIndex = screenIndex - 1;
+
+            var targetScreen = screens.All[screenIndex];
             var bounds = targetScreen.Bounds;
 
-            employeeOverview.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.Manual;
+            employeeOverview.WindowStartupLocation = WindowStartupLocation.Manual;
             employeeOverview.Position = new PixelPoint(bounds.X, bounds.Y);
             employeeOverview.Width = bounds.Width;
             employeeOverview.Height = bounds.Height;
-        }*/
+        }
         else
         {
-            employeeOverview.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
+            employeeOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
+
         employeeOverview.Show();
     }
 

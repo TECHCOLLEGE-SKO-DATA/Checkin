@@ -3,10 +3,12 @@ using CheckInSystemAvalonia.Controls;
 using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
 using CheckInSystemAvalonia.Views;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +16,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class AdminEmployeeViewModel : ViewModelBase
     {
+        private readonly AdminPanelViewModel _adminPanelViewModel;
+
         ObservableCollection<Employee> _selectedEmployeeGroup = new();
         public ObservableCollection<Employee> SelectedEmployeeGroup
         {
@@ -22,24 +26,26 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         }
         public static ObservableCollection<Employee> SelectedEmployees { get; set; }
 
-        public AdminEmployeeViewModel(IPlatform platform) : base(platform)
+        public AdminEmployeeViewModel(IPlatform platform, AdminPanelViewModel adminPanelViewModel) : base(platform)
         {
-            platform.DataLoaded += (sender, args) =>
-            {
-                SelectedEmployeeGroup = platform.MainWindowViewModel.Employees;
-                var sortedList = SelectedEmployeeGroup.OrderBy(emp => emp.FirstName).ToList();
-                SelectedEmployeeGroup.Clear();
-                foreach (var employee in sortedList)
+            _adminPanelViewModel = adminPanelViewModel;
+
+            // Reactive update whenever selected group changes
+            adminPanelViewModel.WhenAnyValue(x => x.SelectedGroup)
+                .Where(group => group != null)
+                .Subscribe(group =>
                 {
-                    SelectedEmployeeGroup.Add(employee);
-                }
-                //foreach (var employee in platform.MainWindowViewModel.Employees)
-                //{
-                //    SelectedEmployeeGroup.Add(employee);
-                //}
-            };
+                    var sortedList = group.Members.OrderBy(emp => emp.FirstName).ToList();
+                    SelectedEmployeeGroup.Clear();
+                    foreach (var employee in sortedList)
+                    {
+                        SelectedEmployeeGroup.Add(employee);
+                    }
+                });
+
             SelectedEmployees = new();
         }
+
 
         public void EditEmployee(Employee employee)
         {
