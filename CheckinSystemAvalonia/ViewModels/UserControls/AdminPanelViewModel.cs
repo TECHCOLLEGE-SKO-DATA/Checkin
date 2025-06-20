@@ -74,11 +74,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 };
 
                 // Optionally populate members
-                var allMembers = Groups
-                    .SelectMany(g => g.Members)
-                    .GroupBy(e => e.ID)
-                    .Select(g => g.First())
-                    .ToList();
+                var allMembers = _platform.MainWindowViewModel.Employees;
 
                 allGroup.InitializeMembers(allMembers);
 
