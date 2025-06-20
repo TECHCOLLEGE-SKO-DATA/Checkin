@@ -21,10 +21,9 @@ public class Maintenance
             
             if (!Equals(lastCheckInDate, currentDate) && employee.DepartureTime == null)
             {
-                /*Application.Current.Dispatcher.Invoke( () => {
-                    employee.DepartureTime = lastCheckInDate.ToDateTime(TimeOnly.Parse("23:50"));
-                    employee.IsCheckedIn = false;
-                });*/
+                employee.DepartureTime = lastCheckInDate.ToDateTime(TimeOnly.Parse("23:50"));
+                employee.IsCheckedIn = false;
+
                 updatedEmployees.Add(employee);
             }
         }

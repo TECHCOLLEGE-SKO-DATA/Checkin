@@ -97,29 +97,37 @@
 
 		<StackPanel Grid.Row="1"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-			<TextBlock Text="⌕" FontSize="30"/>
+                    HorizontalAlignment="Right"
+					Height="80">
+			<TextBlock Text="⌕" FontSize="30"
+					   VerticalAlignment="Center"/>
+			
 			<Button Content="-"
-                    Width="35"
-                    Height="30"
-                    FontSize="40"
+                    Width="40"
+                    Height="40"
+                    FontSize="50"
                     Padding="6 -12 0 0"
                     Command="{Binding ZoomOut}"
-                    Margin="3"/>
+                    VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Margin="5,0,5,0"/>
+			
 			<Button Content="+"
-                    Width="35"
-                    Height="30"
-                    FontSize="40"
+                    Width="40"
+                    Height="40"
+                    FontSize="50"
                     Padding="4 -13 0 0"
                     Command="{Binding ZoomIn}"
-                    Margin="3"/>
+                    VerticalAlignment="Center"
+					Margin="0,0,5,0"/>
+			
 			<Button Content="⛶"
                     Width="35"
-                    Height="30"
+                    Height="40"
                     FontSize="40"
                     Padding="0 -10 0 0"
                     Command="{Binding Btn_ToggleFullscreen}"
-                    Margin="3,0,20,0"/>
+                    VerticalAlignment="Center"/>
 		</StackPanel>
 	</Grid>
 </Window>

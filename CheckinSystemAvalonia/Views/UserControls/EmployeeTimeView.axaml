@@ -47,7 +47,8 @@
 
 			<Button Background="Gray"
 					Content="Tilføj Tid"
-					Margin="2"/>
+					Margin="2"
+					Click="BtnAddTime"/>
 
 		</StackPanel>
 

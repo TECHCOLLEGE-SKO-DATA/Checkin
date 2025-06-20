@@ -46,11 +46,13 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             NewCardId = RandomCardGen();
 
+
             if (!Design.IsDesignMode)
             {
                 foreach (var emp in dbHelper.GetAllEmployees())
-                Employees.Add(emp);
+                    Employees.Add(emp);
             }
+            
 
             ScanNewCardCommand = ReactiveCommand.Create(ScanNewCard);
             GetFromDatabaseCommand = ReactiveCommand.Create(RefreshEmployees);

@@ -88,6 +88,7 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
 
         public EmployeeOverviewViewModel(IPlatform platform) : base(platform)
         {
+            
             //button bindings
             Btn_ZoomIn = ReactiveCommand.Create(() => ZoomIn());
 
@@ -98,6 +99,7 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
             //toggles fullscreen to start in fullscreen
             ToggleFullscreen();
 
+            
             string filePath = Environment.ExpandEnvironmentVariables(@"%AppData%\checkInSystem");
             if (!Directory.Exists(filePath))
             {
@@ -123,6 +125,7 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
                 //Sort again
                 SortEmployees();
             };
+
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format

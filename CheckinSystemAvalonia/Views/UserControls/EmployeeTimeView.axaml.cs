@@ -7,6 +7,8 @@ using System;
 using CheckInSystemAvalonia.ViewModels.UserControls;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CheckInSystemAvalonia.Platform;
+using Avalonia.VisualTree;
 
 namespace CheckInSystemAvalonia.Views.UserControls;
 
@@ -30,14 +32,30 @@ public partial class EmployeeTimeView : UserControl
         _vm.AppendSiteTimesToDelete(siteTime);
     }
 
-    private void BtnAddTime(object sender, RoutedEventArgs e)
+    private async void BtnAddTime(object sender, RoutedEventArgs e)
     {
-        //InputOnSiteTimeDialog siteTimeDialog = new InputOnSiteTimeDialog(_vm.SelectedEmployee);
-        /*if (siteTimeDialog.ShowDialog() == true)
+        var mainWindow = this.GetVisualRoot() as Window;
+
+        InputOnSiteTimeDialog siteTimeDialog = new InputOnSiteTimeDialog(_vm.SelectedEmployee);
+
+        if (mainWindow != null)
         {
-            _vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
-        }*/
+            bool? result = await siteTimeDialog.ShowDialog<bool?>(mainWindow);
+            if (result == true)
+            {
+                _vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
+            }
+        }
+        else
+        {
+            bool? result = await siteTimeDialog.ShowDialog<bool?>(null);
+            if (result == true)
+            {
+                _vm.AppendSiteTimesToAddToDb(siteTimeDialog.NewSiteTime);
+            }
+        }
     }
+
 
     private void BtnAddAbsence(object sender, RoutedEventArgs e)
     {

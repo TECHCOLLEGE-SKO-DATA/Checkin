@@ -19,7 +19,7 @@
 		<StackPanel Orientation="Horizontal" Spacing="20">
 			<!-- Employee List -->
 			<ListBox ItemsSource="{Binding Employees}"
-					 SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
+					 SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" Width="200">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
