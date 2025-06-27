@@ -60,36 +60,10 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             set => this.RaiseAndSetIfChanged(ref _selectedGroup, value);
         }
 
-        public ObservableCollection<Group> GroupsWithAll
-        {
-            get
-            {
-                var withAll = new ObservableCollection<Group>();
-
-                // Create "All" group without affecting core Groups collection
-                var allGroup = new Group
-                {
-                    Name = "All",
-                    Isvisible = false
-                };
-
-                // Optionally populate members
-                var allMembers = _platform.MainWindowViewModel.Employees;
-
-                allGroup.InitializeMembers(allMembers);
-
-                withAll.Add(allGroup);
-
-                foreach (var group in Groups)
-                {
-                    withAll.Add(group);
-                }
-
-                return withAll;
-            }
-        }
+        public Group AllGroup { get; set; } = new();
 
         // ReactiveCommands for actions
+        public ReactiveCommand<Unit, Unit> Btn_Damn { get; }
         public ReactiveCommand<Unit, Unit> EditGroupsForEmployeesCommand { get; }
         public ReactiveCommand<Unit, Unit> MarkAsOffsiteCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteEmployeesCommand { get; }
@@ -102,8 +76,15 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             platform.DataLoaded += (sender, args) =>
             {
-                Groups = platform.MainWindowViewModel.Groups;
-                SelectedGroup = GroupsWithAll.FirstOrDefault();
+                AllGroup.Name = "All";
+                AllGroup.InitializeMembers(platform.MainWindowViewModel.Employees);
+                Groups.Add(AllGroup);
+
+                foreach (Group group in platform.MainWindowViewModel.Groups)
+                {
+                    Groups.Add(group);
+                }
+                SelectedGroup = Groups.FirstOrDefault();
             };
 
             adminEmployeeViewModel = new(platform, this);
@@ -142,12 +123,10 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
-           //ResetGroupCommand = ReactiveCommand.Create(() => SelectedGroup = null);
+            //ResetGroupCommand = ReactiveCommand.Create(() => SelectedGroup = null);
 
         }
-
-
-
+        
         public void EditNextScannedCard()
         {
             CardReader.State.UpdateNextEmployee = true;
@@ -161,7 +140,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             {
                 group.Members.Remove(employee);
             }
-            //_platform.MainWindowViewModel.Remove(employee);
+            _platform.MainWindowViewModel.Employees.Remove(employee);
         }
 
         public void DeleteEmployee(ObservableCollection<Employee> employees)
@@ -170,6 +149,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             {
                 DeleteEmployee(employee);
                 _platform.MainWindowViewModel.Employees.Remove(employee);
+                AllGroup.RemoveEmployee(employee);
             }
         }
 

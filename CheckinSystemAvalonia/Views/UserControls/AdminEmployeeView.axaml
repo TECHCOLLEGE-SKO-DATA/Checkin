@@ -7,8 +7,8 @@
 			 x:Class="CheckInSystemAvalonia.Views.UserControls.AdminEmployeeView"
 			 x:DataType="vm:AdminEmployeeViewModel">
 	
-	<StackPanel>
-		<ScrollViewer>
+	<StackPanel Width="1150" Height="450">
+		<ScrollViewer Width="1150" Height="450" AllowAutoHide="False" VerticalScrollBarVisibility="Visible">
 			<!--Item Control for Employees-->
 			<ItemsControl ItemsSource="{Binding SelectedEmployeeGroup}">
 				<ItemsControl.ItemsPanel>

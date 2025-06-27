@@ -7,7 +7,8 @@
 		x:DataType="vm:Windows.MainWindowViewModel"
         x:Class="CheckInSystemAvalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="CheckInSystemAvalonia">
+        Title="CheckInSystemAvalonia"
+		Width="1200" Height="550" CanResize="False">
 
 	<Grid>
 		<ContentControl Content="{Binding CurrentViewModel}" ContentTemplate="{DynamicResource ViewLocator}"/>

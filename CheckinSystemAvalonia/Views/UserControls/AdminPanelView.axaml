@@ -22,7 +22,7 @@
                       Margin="3"
                       MinWidth="200"
                       BorderBrush="Black"
-                      ItemsSource="{Binding GroupsWithAll}"
+                      ItemsSource="{Binding Groups}"
                       SelectedItem="{Binding SelectedGroup, Mode=TwoWay}"
                       DisplayMemberBinding="{Binding Name}" />
 
@@ -53,7 +53,8 @@
 		<TabControl Grid.Row="1"
                     SelectedIndex="{Binding SelectedTab}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                    VerticalAlignment="Stretch"
+					Width="1200">
 			<TabControl.Styles>
 				<Style Selector="TabItem">
 					<Setter Property="IsVisible" Value="False"/>

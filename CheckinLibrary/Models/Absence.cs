@@ -107,7 +107,7 @@ namespace CheckinLibrary.Models
 
     public class AbsenceReason
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string Reason { get; set; }
         public Color HexColor { get; set; }
 

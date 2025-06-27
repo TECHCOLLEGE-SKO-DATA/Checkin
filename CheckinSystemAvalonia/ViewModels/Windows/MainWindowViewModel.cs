@@ -59,6 +59,15 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
         }
     }
+    SettingsViewModel _settingsViewModel;
+    public SettingsViewModel SettingsViewModel
+    {
+        get => _settingsViewModel;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _settingsViewModel, value, nameof(SettingsViewModel));
+        }
+    }
 
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
@@ -93,6 +102,7 @@ public class MainWindowViewModel : ViewModelBase
         AdminPanelViewModel = new(platform);
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
+        SettingsViewModel = new(platform);
 
         SettingsControl settingsControl = new();
 
@@ -226,7 +236,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void SwitchToSettingsView()
     {
-        CurrentViewModel = new SettingsViewModel(_platform);
+        CurrentViewModel = SettingsViewModel;
     }
 
     public void SwitchToLoginView()

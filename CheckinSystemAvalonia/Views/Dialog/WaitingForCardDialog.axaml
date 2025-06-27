@@ -4,7 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="90"
         x:Class="CheckInSystemAvalonia.WaitingForCardDialog"
-        Title="WaitingForCardDialog">
+        Title="WaitingForCardDialog"
+		Width="350" Height="90" CanResize="False">
 	<Grid>
 		<Border BorderBrush="Black" BorderThickness="2">
 			<StackPanel Margin="10" HorizontalAlignment="Center">
