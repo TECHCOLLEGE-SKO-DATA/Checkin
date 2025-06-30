@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using CheckinLibrary.Models;
+using CheckinLibrary.Settings;
 using CheckInSystemAvalonia.Platform;
 using ReactiveUI;
 using System;
@@ -8,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Reactive;
+using static Dapper.SqlMapper;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
@@ -79,6 +81,11 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                     _platform.MainWindowViewModel.absenceReasons.Add(new AbsenceReason(item.Id, item.Reason, item.HexColor));
                 }
             }
+
+            SettingsControl settings = new();
+            settings.SetAbsenceReasons(AbsenceReasons.ToList());
+
+            _platform.MainWindowViewModel.SwitchToAdminPanel();
         }
     }
 }

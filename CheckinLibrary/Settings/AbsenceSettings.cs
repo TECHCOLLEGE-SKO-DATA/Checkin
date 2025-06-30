@@ -46,8 +46,9 @@ namespace CheckinLibrary.Settings
             foreach (var reason in reasons)
             {
                 absenceElement.Add(new XElement("type",
+                    new XAttribute("Id", reason.Id),
                     new XAttribute("reason", reason.Reason),
-                    new XAttribute("hexColor", reason.HexColor)));
+                    new XAttribute("hexColor", $"#{reason.HexColor.Name}")));
             }
 
             xmlDoc.Save(_filePath);

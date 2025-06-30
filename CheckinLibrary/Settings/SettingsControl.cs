@@ -41,13 +41,13 @@ namespace CheckinLibrary.Settings
                 <settings>
                     <screen>2</screen>
                     <absence>
-                        <type Id=""0"" reason=""Syg"" hexColor=""#ffffb900"" />
+                        <type Id=""0"" reason=""Miscellaneous"" hexColor=""#ffffb900"" />
                         <type Id=""1"" reason=""Skole"" hexColor=""#ffffb900"" />
                         <type Id=""2"" reason=""Ferie"" hexColor=""#ffffb900"" />
                         <type Id=""3"" reason=""SøgeDag"" hexColor=""#ffffb900"" />
                         <type Id=""4"" reason=""VirksomhedSamtale"" hexColor=""#ffffb900"" />
                         <type Id=""5"" reason=""Læge"" hexColor=""#ffffb900"" />
-                        <type Id=""6"" reason=""Miscellaneous"" hexColor=""#ffffb900"" />
+                        <type Id=""6"" reason=""Syg"" hexColor=""#ffffb900"" />
                     </absence>
                 </settings>";
         }
