@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckinLibrary.Settings;
 using CheckInSystemAvalonia.Platform;
@@ -50,9 +51,35 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void DeleteAbsenceReason(AbsenceReason absenceReason)
         {
+            DatabaseHelper dbHelper = new DatabaseHelper();
+            List<Absence> relatedAbsences = new();
+
+            foreach (var emp in _platform.MainWindowViewModel.Employees)
+            {
+                List<Absence> absences = dbHelper.GetAllAbsence(emp);
+
+                var effectedabsences = absences
+                    .Where(a => a.AbsenceReasonId == absenceReason.Id)
+                    .ToList();
+
+                foreach (var absence in effectedabsences)
+                {
+                    // Update AbsenceReasonId to 0
+                    absence.AbsenceReasonId = 0;
+
+                    // Prefix note if not already prefixed
+                    string reasonPrefix = $"({absenceReason.Reason}) ";
+                    if (!absence.Note.StartsWith(reasonPrefix))
+                    {
+                        absence.Note = reasonPrefix + absence.Note;
+                    }
+                    relatedAbsences.Add(absence);
+                }
+                dbHelper.EditAbsence(relatedAbsences);
+            }
+
             if (absenceReason != null && AbsenceReasons.Contains(absenceReason))
                 AbsenceReasons.Remove(absenceReason);
-
         }
 
         public void AddValidAbsence()

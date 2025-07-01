@@ -61,6 +61,7 @@
 													<MultiBinding Converter="{StaticResource EmployeeStatusToBrushConverter}">
 														<Binding Path="IsOffSite"/>
 														<Binding Path="IsCheckedIn"/>
+														<Binding Path="."/>
 													</MultiBinding>
 												</StackPanel.Background>
 												<StackPanel Orientation="Horizontal"

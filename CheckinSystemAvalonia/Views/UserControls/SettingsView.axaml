@@ -12,6 +12,8 @@
 	
 	<UserControl.Resources>
 		<conv:DrawingColorToAvaloniaColorConverter x:Key="DrawingToAvaloniaColorConverter"/>
+		<conv:IdZeroToBoolConverter x:Key="IdZeroToBoolConverter"/>
+		<conv:IdNotZeroToBoolConverter x:Key="IdNotZeroToBoolConverter"/>
 	</UserControl.Resources>
 
 	<Grid ShowGridLines="True">
@@ -79,25 +81,29 @@
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
-							
 									<StackPanel Orientation="Vertical" Spacing="5">
-										<TextBox Width="200" Height="25" Text="{Binding Reason}"/>
+										<TextBox Width="200" Height="25"
+												 Text="{Binding Reason}"
+												 IsReadOnly="{Binding Id, Converter={StaticResource IdZeroToBoolConverter}}"/>
+
 										<StackPanel Orientation="Horizontal">
+											<!-- Only show delete button if Id != 0 -->
 											<Button Width="30" Height="30"
 													Background="Transparent"
 													Command="{Binding DataContext.Btn_DeleteReason, ElementName=RootControl}"
-													CommandParameter="{Binding}">
+													CommandParameter="{Binding}"
+													IsVisible="{Binding Id, Converter={StaticResource IdNotZeroToBoolConverter}}">
 												<TextBlock Text="X" Foreground="Red" FontSize="16"
 														   HorizontalAlignment="Center" VerticalAlignment="Center" />
 											</Button>
-											
+
 											<color:ColorPicker Width="150" Height="30"
-															   Color="{Binding HexColor, Converter={StaticResource DrawingToAvaloniaColorConverter}, Mode=TwoWay}"/>
+															  Color="{Binding HexColor, Converter={StaticResource DrawingToAvaloniaColorConverter}, Mode=TwoWay}"/>
 										</StackPanel>
 									</StackPanel>
-							
 								</Border>
 							</DataTemplate>
+
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
 				</ScrollViewer>

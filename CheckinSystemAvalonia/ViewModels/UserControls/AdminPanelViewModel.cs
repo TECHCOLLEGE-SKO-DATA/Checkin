@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
+using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
@@ -24,6 +25,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public const int EMPLOYEE_LISTPAGE_TAB = 0;
         public const int EMPLOYEE_TIME_TAB = 1;
         public const int GROUP_LISTPAGE_TAB = 2;
+
+        DatabaseHelper databaseHelper = new();
 
         public ObservableCollection<Group> Groups { get; private set; } = new();
 
@@ -120,6 +123,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             DeleteEmployeesCommand = ReactiveCommand.Create(() =>
             {
                 DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
+                UpdateGroupAll();
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
@@ -199,6 +203,12 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 if (editGroupsForEmployees.RemoveGroup)
                     RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
             }
+        }
+
+        public void UpdateGroupAll()
+        {
+            AllGroup.Members.Clear();
+            AllGroup.InitializeMembers(databaseHelper.GetAllEmployees());
         }
     }
 }

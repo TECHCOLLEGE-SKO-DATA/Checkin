@@ -21,7 +21,8 @@
 			<RadioButton x:Name="RdAddGroup" Content="Tilføj til gruppe" IsChecked="True"/>
 			<RadioButton x:Name="RdRemoveGroup" Content="Fjern fra gruppe"/>
 			<ComboBox ItemsSource="{Binding Groups}"
-                      SelectedItem="{Binding SelectedGroup}"
+                      SelectedItem="{Binding 
+					  }"
 					  DisplayMemberBinding="{Binding Name}"/>
 			<StackPanel Orientation="Horizontal">
 				<Button IsDefault="True"

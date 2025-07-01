@@ -49,7 +49,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public void EditEmployee(Employee employee)
         {
-            EditEmployeeWindow.Open(employee);
+            EditEmployeeWindow.Open(employee, _platform);
         }
 
         public void DeleteEmployee(Employee employee)
@@ -66,6 +66,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         {
             _platform.MainWindowViewModel.SwitchToEmployeeTime(employee);
         }
+
         public async Task OpenMessageBoxDeleteAsync(Employee employee)
         {
             var result = await MessageBox.Show(
@@ -77,13 +78,12 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             if (result == MessageBoxResult.Yes)
             {
                 DeleteEmployee(employee);
+
+                _platform.MainWindowViewModel.AdminPanelViewModel.UpdateGroupAll();
             }
         }
 
-        public void SeeAbsence(Employee employee)
-        {
-
-        }
+        
 
         public async Task EditEmployeeGroup(Employee employee)
         {

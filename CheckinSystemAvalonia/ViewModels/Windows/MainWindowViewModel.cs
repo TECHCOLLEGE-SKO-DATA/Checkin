@@ -21,6 +21,7 @@ using Avalonia;
 using Avalonia.Threading;
 using CheckInSystemAvalonia.Views;
 using CheckinLibrary.Settings;
+using CheckInSystemAvalonia.Customcontrols;
 
 namespace CheckInSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -86,6 +87,8 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _mainContentControl, value, nameof(MainContentControl));
     }
 
+    public EmployeeStatusToBrushConverter brushConverter { get; set; }
+
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
         if (!Design.IsDesignMode)
@@ -95,7 +98,6 @@ public class MainWindowViewModel : ViewModelBase
             //loads data before making instances of ViewModels
             LoadDataFromDatabase();
         }
-
 
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
@@ -174,7 +176,7 @@ public class MainWindowViewModel : ViewModelBase
             Dispatcher.UIThread.Post(() => {
                 WaitingForCardDialog.Instance.Close();
             });
-        EditEmployeeWindow.Open(editEmployee);
+        EditEmployeeWindow.Open(editEmployee, _platform);
     }
 
     void UpdateEmployeeLocal(string cardID)

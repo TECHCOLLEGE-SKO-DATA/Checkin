@@ -12,7 +12,8 @@ namespace CheckInSystemAvalonia.Views;
 public partial class EditEmployeeWindow : Window
 {
     EditEmployeeViewModel _vm { get => (EditEmployeeViewModel)DataContext; set => DataContext = value; }
-    static IPlatform _platform;
+
+    private IPlatform _platform;
     public EditEmployeeWindow(IPlatform platform, EditEmployeeViewModel viewModel)
     {
         _vm = viewModel;
@@ -29,10 +30,10 @@ public partial class EditEmployeeWindow : Window
         _vm.UpdateCardId();
     }
 
-    public static void Open(Employee employee)
+    public static void Open(Employee employee, IPlatform platform)
     {
         Dispatcher.UIThread.Post(() => {
-            var editWindow = new EditEmployeeWindow(_platform, new EditEmployeeViewModel(_platform, employee));
+            var editWindow = new EditEmployeeWindow(platform, new EditEmployeeViewModel(platform, employee));
             editWindow.Show();
         });
     }
@@ -40,6 +41,7 @@ public partial class EditEmployeeWindow : Window
     private void Close(object sender, RoutedEventArgs e)
     {
         Close();
+        _platform.MainWindowViewModel.AdminPanelViewModel.UpdateGroupAll();
     }
 
     private void InitializeComponent()

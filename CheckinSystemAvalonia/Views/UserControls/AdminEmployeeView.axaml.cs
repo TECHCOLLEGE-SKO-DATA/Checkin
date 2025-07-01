@@ -63,7 +63,7 @@ public partial class AdminEmployeeView : UserControl
         Debug.WriteLine($"{employee.FirstName} Unchecked");
     }
 
-    private async void BtnDeleteEmployee(object sender, RoutedEventArgs e)
+    private void BtnDeleteEmployee(object sender, RoutedEventArgs e)
     {
         Button button = (Button)sender;
         Employee employee = (Employee)button.DataContext;

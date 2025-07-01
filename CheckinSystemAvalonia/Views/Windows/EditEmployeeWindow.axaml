@@ -9,7 +9,7 @@
 		xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.Windows"
 		x:DataType="vm:EditEmployeeViewModel"
 		Title="EditEmployee" Height="450" Width="410"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
 		Icon="/Assets/avalonia-logo.ico">
 	<Window.Resources>
 		<converters:VisibleIfTrueConverter x:Key="VisibleIfTrue" />
