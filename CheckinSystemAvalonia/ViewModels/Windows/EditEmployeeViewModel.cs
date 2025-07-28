@@ -23,6 +23,8 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
 
         public TextBlock? UpdateCardMessage { get; set; }
 
+        IPlatform Platform;
+
         public EditEmployeeViewModel(IPlatform platform, Employee editEmployee) : base(platform)
         {
             EditEmployee = editEmployee;
@@ -30,6 +32,7 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
             {
                 EditEmployee.PropertyChanged += UpdateWaitingForCard;
             }
+            Platform = platform;
         }
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
@@ -37,6 +40,13 @@ namespace CheckInSystemAvalonia.ViewModels.Windows
             this.PropertyChanged -= UpdateWaitingForCard;
             CardReader.State.ClearUpdateCard();
             EditEmployee.UpdateDb();
+
+            if (Platform.MainWindowViewModel.Employees.Any(e => e.ID == EditEmployee.ID))
+            {
+                Platform.MainWindowViewModel.GroupAll.Members.Clear();
+                
+                Platform.MainWindowViewModel.GroupAll.InitializeMembers(Platform.MainWindowViewModel.Employees);
+            }
         }
 
         public void UpdateCardId()

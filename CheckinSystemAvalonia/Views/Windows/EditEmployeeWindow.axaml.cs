@@ -41,7 +41,6 @@ public partial class EditEmployeeWindow : Window
     private void Close(object sender, RoutedEventArgs e)
     {
         Close();
-        _platform.MainWindowViewModel.AdminPanelViewModel.UpdateGroupAll();
     }
 
     private void InitializeComponent()

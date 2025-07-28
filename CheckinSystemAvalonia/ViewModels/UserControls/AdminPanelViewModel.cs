@@ -12,6 +12,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -63,8 +64,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             set => this.RaiseAndSetIfChanged(ref _selectedGroup, value);
         }
 
-        public Group AllGroup { get; set; } = new();
-
         // ReactiveCommands for actions
         public ReactiveCommand<Unit, Unit> Btn_Damn { get; }
         public ReactiveCommand<Unit, Unit> EditGroupsForEmployeesCommand { get; }
@@ -77,17 +76,15 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
         public AdminPanelViewModel(IPlatform platform) : base(platform)
         {
-            platform.DataLoaded += (sender, args) =>
+            _platform.DataLoaded += (sender, args) =>
             {
-                AllGroup.Name = "All";
-                AllGroup.InitializeMembers(platform.MainWindowViewModel.Employees);
-                Groups.Add(AllGroup);
-
-                foreach (Group group in platform.MainWindowViewModel.Groups)
+                Groups.Add(platform.MainWindowViewModel.GroupAll);
+                foreach (var group in platform.MainWindowViewModel.Groups)
                 {
                     Groups.Add(group);
                 }
-                SelectedGroup = Groups.FirstOrDefault();
+
+                SelectedGroup = Groups.First();
             };
 
             adminEmployeeViewModel = new(platform, this);
@@ -123,12 +120,9 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             DeleteEmployeesCommand = ReactiveCommand.Create(() =>
             {
                 DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
-                UpdateGroupAll();
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
-            //ResetGroupCommand = ReactiveCommand.Create(() => SelectedGroup = null);
-
         }
         
         public void EditNextScannedCard()
@@ -153,7 +147,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             {
                 DeleteEmployee(employee);
                 _platform.MainWindowViewModel.Employees.Remove(employee);
-                AllGroup.RemoveEmployee(employee);
+                _platform.MainWindowViewModel.GroupAll.Members.Remove(employee);
             }
         }
 
@@ -203,12 +197,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 if (editGroupsForEmployees.RemoveGroup)
                     RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
             }
-        }
-
-        public void UpdateGroupAll()
-        {
-            AllGroup.Members.Clear();
-            AllGroup.InitializeMembers(databaseHelper.GetAllEmployees());
         }
     }
 }

@@ -8,8 +8,8 @@
         x:Class="CheckInSystemAvalonia.Views.EditEmployeeWindow"
 		xmlns:vm="clr-namespace:CheckInSystemAvalonia.ViewModels.Windows"
 		x:DataType="vm:EditEmployeeViewModel"
-		Title="EditEmployee" Height="450" Width="410"
-        WindowStartupLocation="Manual"
+		Title="EditEmployee" Height="350" Width="310"
+        WindowStartupLocation="CenterScreen"
 		Icon="/Assets/avalonia-logo.ico">
 	<Window.Resources>
 		<converters:VisibleIfTrueConverter x:Key="VisibleIfTrue" />
@@ -33,13 +33,18 @@
 				<TextBlock Text="Efternavn" Width="80"/>
 				<TextBox Width="175" Text="{Binding Path=EditEmployee.LastName, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
-			<Button Content="Skift kort" Click="UpdateCardId" ToolTip.Tip="Opdatere det fysiske kort for personen"/>
+			<Button Content="Skift kort" Click="UpdateCardId" 
+					ToolTip.Tip="Opdatere det fysiske kort for personen" 
+					HorizontalAlignment="Center"/>
 			<TextBlock Name="UpdateCardMessage"
                        Text="Venter på at et nyt kortet bliver scannet"
                        Background="Yellow"
                        Margin="0 10 0 0"
 					   IsVisible="{Binding WaitingForCard, Converter={StaticResource VisibleIfTrue}}" />
-			<Button Content="Luk vinduet og gem" Margin="0 10 0 0" Click="Close"/>
+			<Button Content="Luk vinduet og gem" 
+					Margin="0 10 0 0" 
+					Click="Close"
+					HorizontalAlignment="Center"/>
 		</StackPanel>
 	</Grid>
 </Window>

@@ -22,6 +22,7 @@ using Avalonia.Threading;
 using CheckInSystemAvalonia.Views;
 using CheckinLibrary.Settings;
 using CheckInSystemAvalonia.Customcontrols;
+using DynamicData;
 
 namespace CheckInSystemAvalonia.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -72,6 +73,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
+    public Group GroupAll { get; private set; } = new();
 
     int _selectedTab = 0;
     public int SelectedTab
@@ -131,6 +133,11 @@ public class MainWindowViewModel : ViewModelBase
 
             Employees.Add(employee);
         }
+
+        GroupAll = new Group(0, "All");
+
+        GroupAll.InitializeMembers(Employees);
+
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));
 
         List<Employee> employees = new List<Employee>(Employees);

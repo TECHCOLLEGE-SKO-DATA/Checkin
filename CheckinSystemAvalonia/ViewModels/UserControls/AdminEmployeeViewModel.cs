@@ -11,12 +11,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
+    using System.Collections.Specialized; // For INotifyCollectionChanged
+
     public class AdminEmployeeViewModel : ViewModelBase
     {
         private readonly AdminPanelViewModel _adminPanelViewModel;
+        private INotifyCollectionChanged? _currentGroupMembersSubscription;
 
         ObservableCollection<Employee> _selectedEmployeeGroup = new();
         public ObservableCollection<Employee> SelectedEmployeeGroup
@@ -24,26 +28,53 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             get => _selectedEmployeeGroup;
             set => SetProperty(ref _selectedEmployeeGroup, value, nameof(SelectedEmployeeGroup));
         }
+
         public static ObservableCollection<Employee> SelectedEmployees { get; set; }
 
         public AdminEmployeeViewModel(IPlatform platform, AdminPanelViewModel adminPanelViewModel) : base(platform)
         {
             _adminPanelViewModel = adminPanelViewModel;
 
-            // Reactive update whenever selected group changes
             adminPanelViewModel.WhenAnyValue(x => x.SelectedGroup)
                 .Where(group => group != null)
                 .Subscribe(group =>
                 {
-                    var sortedList = group.Members.OrderBy(emp => emp.FirstName).ToList();
-                    SelectedEmployeeGroup.Clear();
-                    foreach (var employee in sortedList)
+                    // Unsubscribe from previous group
+                    if (_currentGroupMembersSubscription != null)
                     {
-                        SelectedEmployeeGroup.Add(employee);
+                        _currentGroupMembersSubscription.CollectionChanged -= OnGroupMembersChanged;
+                        _currentGroupMembersSubscription = null;
                     }
+
+                    // Subscribe to new group's member changes
+                    if (group.Members is INotifyCollectionChanged notifyCollection)
+                    {
+                        _currentGroupMembersSubscription = notifyCollection;
+                        notifyCollection.CollectionChanged += OnGroupMembersChanged;
+                    }
+
+                    RefreshSelectedEmployeeGroup(group);
                 });
 
             SelectedEmployees = new();
+        }
+
+        private void OnGroupMembersChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_adminPanelViewModel.SelectedGroup != null)
+            {
+                RefreshSelectedEmployeeGroup(_adminPanelViewModel.SelectedGroup);
+            }
+        }
+
+        private void RefreshSelectedEmployeeGroup(Group group)
+        {
+            var sortedList = group.Members.OrderBy(emp => emp.FirstName).ToList();
+            SelectedEmployeeGroup.Clear();
+            foreach (var employee in sortedList)
+            {
+                SelectedEmployeeGroup.Add(employee);
+            }
         }
 
 
@@ -60,6 +91,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 group.Members.Remove(employee);
             }
             _platform.MainWindowViewModel.Employees.Remove(employee);
+
+            _platform.MainWindowViewModel.GroupAll.Members.Remove(employee);
         }
 
         public void SeeEmployeeTime(Employee employee)
@@ -78,8 +111,6 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             if (result == MessageBoxResult.Yes)
             {
                 DeleteEmployee(employee);
-
-                _platform.MainWindowViewModel.AdminPanelViewModel.UpdateGroupAll();
             }
         }
 

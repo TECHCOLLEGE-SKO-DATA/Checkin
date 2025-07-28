@@ -33,6 +33,7 @@
 										   VerticalAlignment="Center"
 										   HorizontalAlignment="Left"
 										   Margin="10 4">
+									
 									<CheckBox Margin="0 0 10 0"
 											  Checked="CbSelected" 
 											  Unchecked="CbUnSelected"/>

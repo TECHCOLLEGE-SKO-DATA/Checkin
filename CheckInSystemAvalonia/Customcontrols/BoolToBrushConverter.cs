@@ -41,8 +41,7 @@ namespace CheckInSystemAvalonia.Customcontrols
                         int reasonId = currentAbsence.AbsenceReasonId;
                         AbsenceReason absencereason = AbsenceReason.GetById(reasonId);
 
-                        System.Drawing.Color drawingColor = absencereason.HexColor;
-                        var avaloniaColor = Avalonia.Media.Color.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
+                        var avaloniaColor = Avalonia.Media.Color.FromArgb(absencereason.HexColor.A, absencereason.HexColor.R, absencereason.HexColor.G, absencereason.HexColor.B);
 
                         absenceColor = new SolidColorBrush(avaloniaColor);
 
