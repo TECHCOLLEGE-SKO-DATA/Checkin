@@ -250,6 +250,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public void SwitchToLoginView()
     {
+        LoginScreenViewModel.Username = "";
+        LoginScreenViewModel.PassWord = "";
         CurrentViewModel = LoginScreenViewModel;
     }
 }

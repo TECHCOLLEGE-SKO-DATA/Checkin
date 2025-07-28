@@ -10,13 +10,16 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Reactive;
-using static Dapper.SqlMapper;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
     public class SettingsViewModel : ViewModelBase
     {
         public ObservableCollection<AbsenceReason> AbsenceReasons { get; set; } = new();
+
+        public SettingsControl SettingsControl = new();
+
+        public string ScreenEmployeeOVerviewOpenOn { get; set; }
 
         //Buttons
         public ReactiveCommand<Unit, Unit> Btn_AddValidAbsence { get; }
@@ -47,6 +50,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             Btn_Logout = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
 
             Btn_Save = ReactiveCommand.Create(() => SaveChanges());
+
+            ScreenEmployeeOVerviewOpenOn = SettingsControl.GetEmployeeOverViewSettings().ToString();
         }
 
         public void DeleteAbsenceReason(AbsenceReason absenceReason)
@@ -113,6 +118,11 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             settings.SetAbsenceReasons(AbsenceReasons.ToList());
 
             _platform.MainWindowViewModel.SwitchToAdminPanel();
+
+            if (int.TryParse(ScreenEmployeeOVerviewOpenOn, out int screenIndex))
+            {
+                settings.SetEmployeeOverViewSettings(screenIndex);
+            }
         }
     }
 }

@@ -59,56 +59,71 @@
 
 				<TextBox Margin="10 10 0 0" 
 						 MinWidth="100"
-						 HorizontalAlignment="Left"/>
+						 HorizontalAlignment="Left"
+						 Text="{Binding ScreenEmployeeOVerviewOpenOn}"/>
 				
 			</StackPanel>
 			
 		</WrapPanel>
 
-		<WrapPanel Grid.Column="2"
+		<StackPanel Grid.Column="2"
 				   Grid.Row="1"
 				   HorizontalAlignment="Right"
-				   Margin="0 0 10 0">
+				   Margin="0 10 10 0">
 			
-			<Button Content="Add Valid Absence" 
-					VerticalAlignment="Top"
-					Margin="0 5 10 0"
-					Command="{Binding Btn_AddValidAbsence}"/>
+			<TextBlock FontSize="20"
+					   Text="Absence Settings"
+					   Margin="0 0 0 10">
+			</TextBlock>
 			
-			<Border BorderBrush="Black" BorderThickness="3">
-				<ScrollViewer>
-					<ItemsControl ItemsSource="{Binding AbsenceReasons}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
-									<StackPanel Orientation="Vertical" Spacing="5">
-										<TextBox Width="200" Height="25"
-												 Text="{Binding Reason}"
-												 IsReadOnly="{Binding Id, Converter={StaticResource IdZeroToBoolConverter}}"/>
+			<TextBlock Text="List over Valid reasons for absence">
+			</TextBlock>
 
-										<StackPanel Orientation="Horizontal">
-											<!-- Only show delete button if Id != 0 -->
-											<Button Width="30" Height="30"
-													Background="Transparent"
-													Command="{Binding DataContext.Btn_DeleteReason, ElementName=RootControl}"
-													CommandParameter="{Binding}"
-													IsVisible="{Binding Id, Converter={StaticResource IdNotZeroToBoolConverter}}">
-												<TextBlock Text="X" Foreground="Red" FontSize="16"
-														   HorizontalAlignment="Center" VerticalAlignment="Center" />
-											</Button>
+			<WrapPanel>
 
-											<color:ColorPicker Width="150" Height="30"
-															  Color="{Binding HexColor, Converter={StaticResource DrawingToAvaloniaColorConverter}, Mode=TwoWay}"/>
+				<Button Content="Add Valid Absence"
+						VerticalAlignment="Top"
+						Margin="0 5 10 0"
+						Command="{Binding Btn_AddValidAbsence}"/>
+
+				<Border BorderBrush="Black" 
+						BorderThickness="3" 
+						MaxHeight="360">
+					<ScrollViewer AllowAutoHide="False">
+						<ItemsControl ItemsSource="{Binding AbsenceReasons}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
+										<StackPanel Orientation="Vertical" Spacing="5">
+											<TextBox Width="200" Height="25"
+													 Text="{Binding Reason}"
+													 IsReadOnly="{Binding Id, Converter={StaticResource IdZeroToBoolConverter}}"/>
+
+											<StackPanel Orientation="Horizontal">
+												<!-- Only show delete button if Id != 0 -->
+												<Button Width="30" Height="30"
+														Background="Transparent"
+														Command="{Binding DataContext.Btn_DeleteReason, ElementName=RootControl}"
+														CommandParameter="{Binding}"
+														IsVisible="{Binding Id, Converter={StaticResource IdNotZeroToBoolConverter}}">
+													<TextBlock Text="X" Foreground="Red" FontSize="16"
+															   HorizontalAlignment="Center" VerticalAlignment="Center" />
+												</Button>
+
+												<color:ColorPicker Width="150" Height="30"
+																   Color="{Binding HexColor, Converter={StaticResource DrawingToAvaloniaColorConverter}, Mode=TwoWay}"
+																   />
+											</StackPanel>
 										</StackPanel>
-									</StackPanel>
-								</Border>
-							</DataTemplate>
+									</Border>
+								</DataTemplate>
 
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</ScrollViewer>
-			</Border>
-		</WrapPanel>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Border>
+			</WrapPanel>
+		</StackPanel>
 
 		<WrapPanel Background="Blue"
 				   Grid.Row="2" Grid.ColumnSpan="2">
