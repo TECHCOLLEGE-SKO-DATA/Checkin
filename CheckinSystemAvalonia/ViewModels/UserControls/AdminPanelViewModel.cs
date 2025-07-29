@@ -167,6 +167,7 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             {
                 absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason.Id);
             }
+            _platform.MainWindowViewModel.absencBackGroundService.AbsenceTask();
         }
 
         public void AddSelectedUsersToGroup(Group group)

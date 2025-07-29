@@ -89,6 +89,8 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _mainContentControl, value, nameof(MainContentControl));
     }
 
+    public AbsencBackGroundService absencBackGroundService = new();
+
     public EmployeeStatusToBrushConverter brushConverter { get; set; }
 
     public MainWindowViewModel(IPlatform platform) : base(platform)
@@ -121,15 +123,14 @@ public class MainWindowViewModel : ViewModelBase
         if (Design.IsDesignMode)
             return;
 
-        AbsencBackGroundService absence = new();
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
             //Adds Employees to a list in AbsenceBackgroundService.cs
-            absence.AddEmployeesToAbsenceCheck(employee);
+            absencBackGroundService.AddEmployeesToAbsenceCheck(employee);
 
             //runs a inital check on if people have upcoming absence
-            absence.AbsenceTask();
+            absencBackGroundService.AbsenceTask();
 
             Employees.Add(employee);
         }

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Models;
 using CheckInSystemAvalonia.Platform;
 using ReactiveUI;
@@ -113,6 +114,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             UpdateAbsenceTimes();
             DeleteAbsences();
             AddAbsences();
+
+            _platform.MainWindowViewModel.absencBackGroundService.AbsenceTask();
 
             SelectedEmployee.GetUpdatedSiteTimes();
 

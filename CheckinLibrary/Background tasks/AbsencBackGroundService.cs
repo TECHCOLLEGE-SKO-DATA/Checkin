@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 
 namespace CheckinLibrary.Background_tasks;
@@ -15,9 +16,12 @@ public class AbsencBackGroundService
 
     public List<Employee> employees = new List<Employee>();
 
+    private DatabaseHelper databaseHelper = new();
+
     public void AbsenceTask()
     {
         List<Task> offsiteTasks = new();
+
         var employeesCopy = employees.ToList(); 
 
         foreach (var employee in employeesCopy)
