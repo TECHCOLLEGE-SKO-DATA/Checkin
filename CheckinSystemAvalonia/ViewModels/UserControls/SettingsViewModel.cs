@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using Avalonia.Styling;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckinLibrary.Settings;
@@ -10,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
@@ -20,6 +22,28 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         public SettingsControl SettingsControl = new();
 
         public string ScreenEmployeeOVerviewOpenOn { get; set; }
+
+        private bool _darkMode;
+        public bool DarkMode
+        {
+            get => _darkMode;
+            set
+            {
+                if (value == true)
+                {
+                    _darkMode = value;
+
+                    ThemeChange();
+                }
+                else if(value == false)
+                {
+                    _darkMode = value;
+
+                    ThemeChange();
+                }
+            }
+
+        }
 
         //Buttons
         public ReactiveCommand<Unit, Unit> Btn_AddValidAbsence { get; }
@@ -39,6 +63,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 AbsenceReasons.Clear();
                 foreach (var reason in platform.MainWindowViewModel.absenceReasons)
                     AbsenceReasons.Add(reason);
+
+                DarkMode = platform.MainWindowViewModel.DarkMode;
             };
 
             Btn_DeleteReason = ReactiveCommand.Create<AbsenceReason>(DeleteAbsenceReason);
@@ -52,6 +78,11 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             Btn_Save = ReactiveCommand.Create(() => SaveChanges());
 
             ScreenEmployeeOVerviewOpenOn = SettingsControl.GetEmployeeOverViewSettings().ToString();
+        }
+
+        public void ThemeChange()
+        {
+            App.BackGroundTheme(DarkMode);
         }
 
         public void DeleteAbsenceReason(AbsenceReason absenceReason)
@@ -116,6 +147,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
 
             SettingsControl settings = new();
             settings.SetAbsenceReasons(AbsenceReasons.ToList());
+
+            settings.SetDarkMode(DarkMode);
 
             _platform.MainWindowViewModel.SwitchToAdminPanel();
 

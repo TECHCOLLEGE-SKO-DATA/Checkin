@@ -63,6 +63,21 @@
 						 Text="{Binding ScreenEmployeeOVerviewOpenOn}"/>
 				
 			</StackPanel>
+			<StackPanel>
+				<TextBlock Margin="10"
+						   FontSize="20">
+					Light/Dark Mode
+				</TextBlock>
+
+				<TextBlock Margin="10 0 0 0">
+					Experimental featuere to swap colors used for background
+				</TextBlock>
+
+				<CheckBox Margin="10"
+						  IsChecked="{Binding DarkMode, Mode=TwoWay}">
+					Dark mode
+				</CheckBox>
+			</StackPanel>
 			
 		</WrapPanel>
 

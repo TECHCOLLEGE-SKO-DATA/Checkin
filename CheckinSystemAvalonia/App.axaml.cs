@@ -1,11 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using CheckInSystemAvalonia.ViewModels;
-using CheckInSystemAvalonia.Views;
-using CheckInSystemAvalonia;
-using CheckInSystemAvalonia.ViewModels.Windows;
+using Avalonia.Styling;
 using CheckinLibrary;
+using CheckInSystemAvalonia;
+using CheckInSystemAvalonia.ViewModels;
+using CheckInSystemAvalonia.ViewModels.Windows;
+using CheckInSystemAvalonia.Views;
 using System;
 using System.IO;
 
@@ -22,6 +24,8 @@ public partial class App : Application
         {
             Platform.Start();
 
+            BackGroundTheme(Platform.MainWindowViewModel.DarkMode);
+
             if (!Startup.Run())
             {
             }
@@ -33,6 +37,21 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    public static void BackGroundTheme(bool darkMode)
+    {
+        if (Application.Current is { } app)
+        {
+            if (darkMode)
+            {
+                app.RequestedThemeVariant = ThemeVariant.Dark;
+            }
+            else
+            {
+                app.RequestedThemeVariant = ThemeVariant.Light;
+            }
+        }
     }
 
     private static void log(object sender, UnhandledExceptionEventArgs e)

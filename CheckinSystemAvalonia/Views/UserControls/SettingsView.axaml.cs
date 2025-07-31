@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using System.Diagnostics;
 
 namespace CheckInSystemAvalonia.Views.UserControls;
 

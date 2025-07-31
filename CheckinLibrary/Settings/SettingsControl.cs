@@ -40,6 +40,7 @@ namespace CheckinLibrary.Settings
                 @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <settings>
                     <screen>2</screen>
+                    <DarkMode>false</DarkMode>
                     <absence>
                         <type Id=""0"" reason=""Miscellaneous"" hexColor=""#ffffb900"" />
                         <type Id=""1"" reason=""Skole"" hexColor=""#ffffb900"" />

@@ -71,6 +71,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public bool DarkMode { get; set; }
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
     public Group GroupAll { get; private set; } = new();
@@ -102,7 +103,7 @@ public class MainWindowViewModel : ViewModelBase
             //loads data before making instances of ViewModels
             LoadDataFromDatabase();
         }
-
+        
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
@@ -113,6 +114,8 @@ public class MainWindowViewModel : ViewModelBase
         SettingsControl settingsControl = new();
 
         absenceReasons = settingsControl.GetAbsenceReasons();
+
+        DarkMode = settingsControl.GetDarkMode();
 
         //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
