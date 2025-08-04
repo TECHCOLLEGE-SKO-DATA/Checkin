@@ -30,14 +30,12 @@
                     Margin="10 0 0 0"
                     FontSize="15"
                     Background="#808080"
-                    Foreground="Black"
                     Command="{Binding EditNextScannedCardCommand}"/>
 
 			<Button Content="Settings"
                     Margin="10 0 0 0"
                     FontSize="15"
                     Background="#808080"
-                    Foreground="Black"
                     Command="{Binding Btn_SettingsView}"/>
 		</WrapPanel>
 
@@ -46,8 +44,14 @@
                 HorizontalAlignment="Right"
                 Margin="0 0 10 0"
                 Background="#808080"
-                Foreground="Black"
                 Command="{Binding Btn_LoginView}"/>
+
+		<Button Content="Admin's"
+				Grid.Row="0"
+				HorizontalAlignment="Right"
+				Margin="0 0 80 0"
+				Background="#808080"
+				Command="{Binding Btn_AdminAdministration}"/>
 
 		<!-- Main tab content -->
 		<TabControl Grid.Row="1"

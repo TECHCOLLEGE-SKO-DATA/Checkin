@@ -65,7 +65,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
         }
 
         // ReactiveCommands for actions
-        public ReactiveCommand<Unit, Unit> Btn_Damn { get; }
+
+        public ReactiveCommand<Unit, Unit> Btn_AdminAdministration { get; }
         public ReactiveCommand<Unit, Unit> EditGroupsForEmployeesCommand { get; }
         public ReactiveCommand<Unit, Unit> MarkAsOffsiteCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteEmployeesCommand { get; }
@@ -123,6 +124,8 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
+
+            //Btn_AdminAdministration = ReactiveCommand.Create(() => );
         }
         
         public void EditNextScannedCard()
