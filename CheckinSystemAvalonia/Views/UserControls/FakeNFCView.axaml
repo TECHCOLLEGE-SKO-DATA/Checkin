@@ -16,10 +16,10 @@
 			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Orientation="Horizontal" Spacing="20">
+		<StackPanel Orientation="Horizontal">
 			<!-- Employee List -->
 			<ListBox ItemsSource="{Binding Employees}"
-					 SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" Width="200" >
+					 SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" Width="400" >
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">

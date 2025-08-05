@@ -7,14 +7,16 @@ namespace CheckInSystemAvalonia;
 
 public partial class UpdateAdmin : Window
 {
-    public string AdminName { get; set; }
-
-    public string UserName { get; set; }
 
     public UpdateAdmin()
     {
         InitializeComponent();
-        
+
+        if (!Design.IsDesignMode)
+        {
+            txtUserName.Text = "";
+            txtPassword.Text = "";
+        }
     }
     private void InitializeComponent()
     {
@@ -22,7 +24,16 @@ public partial class UpdateAdmin : Window
     }
     private  void Btn_SaveAdmin(object sender, RoutedEventArgs e)
     {
+        Close(true);
+    }
 
-        Close();
+    public string Password
+    {
+        get { return txtPassword.Text; }
+    }
+
+    public string Username
+    {
+        get { return txtUserName.Text; }
     }
 }

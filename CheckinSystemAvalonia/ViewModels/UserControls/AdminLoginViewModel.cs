@@ -1,9 +1,11 @@
 ﻿using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckInSystemAvalonia.Controls;
 using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
@@ -41,10 +43,10 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             AdminUser? adminUser = databaseHelper.Login(Username, PassWord);
             if (adminUser == null)
             {
-                //MessageBox.Show("Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(_platform.MainWindow, "Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK);
             }
             else
-            {
+            { 
                 _platform.MainWindowViewModel.SwitchToAdminPanel();
             }
         }

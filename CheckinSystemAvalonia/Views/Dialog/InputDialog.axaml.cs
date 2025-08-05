@@ -11,8 +11,12 @@ public partial class InputDialog : Window
     public InputDialog(string question, string defaultAnswer = "")
     {
         InitializeComponent();
-        lblQuestion.Content = question;
-        txtAnswer.Text = defaultAnswer;
+        
+        if (!Design.IsDesignMode)
+        {
+            lblQuestion.Content = question;
+            txtAnswer.Text = defaultAnswer;
+        }
     }
 
     private void Window_ContentRendered(object? sender, EventArgs e)

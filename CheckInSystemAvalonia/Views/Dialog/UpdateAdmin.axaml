@@ -31,7 +31,7 @@
 					<TextBlock Margin="0 5 5 0">UserName:</TextBlock>
 
 					<TextBox Width="130"
-							 ></TextBox>
+							 Name="txtUserName"></TextBox>
 					
 				</StackPanel>
 
@@ -41,7 +41,7 @@
 					<TextBlock Margin="0 5 10 0">PassWord:</TextBlock>
 
 					<TextBox Width="130"
-							 ></TextBox>
+							 Name="txtPassword"></TextBox>
 					
 				</StackPanel>
 
