@@ -10,12 +10,14 @@ public partial class UpdateAdmin : Window
 
     public UpdateAdmin()
     {
+        string empty = "";
+
         InitializeComponent();
 
         if (!Design.IsDesignMode)
         {
-            txtUserName.Text = "";
-            txtPassword.Text = "";
+            txtUserName.Text = empty;
+            txtPassword.Text = empty;
         }
     }
     private void InitializeComponent()

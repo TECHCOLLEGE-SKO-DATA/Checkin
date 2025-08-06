@@ -47,7 +47,11 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
             }
             else
             { 
-                _platform.MainWindowViewModel.SwitchToAdminPanel();
+                UpdateAdmin updateAdmin = new UpdateAdmin();
+
+                updateAdmin.Show();
+
+                //_platform.MainWindowViewModel.SwitchToAdminPanel();
             }
         }
     }
