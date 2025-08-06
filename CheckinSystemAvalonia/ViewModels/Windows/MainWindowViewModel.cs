@@ -98,7 +98,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (!Design.IsDesignMode)
         {
-            platform.CardReader.CardScanned += (sender, args) => EmployeeCardScanned(args.CardId);
+            platform.CardReader.CardInserted += (sender, args) => EmployeeCardScanned(args.Value);
 
             //loads data before making instances of ViewModels
             LoadDataFromDatabase();

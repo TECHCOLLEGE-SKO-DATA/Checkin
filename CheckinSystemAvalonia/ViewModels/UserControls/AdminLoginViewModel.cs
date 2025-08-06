@@ -5,7 +5,6 @@ using CheckInSystemAvalonia.Platform;
 using CheckInSystemAvalonia.ViewModels.Windows;
 using ReactiveUI;
 using System.Reactive;
-using System.Threading.Tasks;
 
 namespace CheckInSystemAvalonia.ViewModels.UserControls
 {
@@ -46,12 +45,15 @@ namespace CheckInSystemAvalonia.ViewModels.UserControls
                 MessageBox.Show(_platform.MainWindow, "Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK);
             }
             else
-            { 
-                UpdateAdmin updateAdmin = new UpdateAdmin();
+            {
+                /*
+                if (adminUser.Username == "sko" && passWord == "test123")
+                {
+                    UpdateAdmin updateAdmin = new UpdateAdmin(_platform);
 
-                updateAdmin.Show();
-
-                //_platform.MainWindowViewModel.SwitchToAdminPanel();
+                    updateAdmin.Show();
+                }*/
+                _platform.MainWindowViewModel.SwitchToAdminPanel();
             }
         }
     }

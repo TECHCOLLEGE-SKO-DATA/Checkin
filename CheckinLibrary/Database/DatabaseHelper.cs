@@ -45,6 +45,20 @@ public class DatabaseHelper : IDatabaseHelper
         connection.Query(insertQuery, new { username = username, passwordHash = passwordHash });
     }
 
+    public void UpdateUser(string username, string password, int Id)
+    {
+        string updateQuery = @"UPDATE adminUser SET username = @username, hashedPassword = @passwordHash WHERE ID = @id";
+
+        string passwordHash = BCrypt.EnhancedHashPassword(password);
+        Debug.WriteLine(passwordHash);
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(updateQuery, new { username = username, passwordHash = passwordHash, id = Id });
+    }
+
     public AdminUser? Login(string username, string password)
     {
         string passwordHashQuery = @"SELECT hashedPassword FROM adminUser WHERE username = @username";
