@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckInSystem", "CheckInSystem\CheckInSystem.csproj", "{F1B639C8-F99B-4CDF-A588-49C677BDC4CF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem.Tests", "CheckInSystem.Tests\CheckInSystem.Tests.csproj", "{5E065F17-F636-497F-8F47-35E24CC1FDD3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinLibrary", "CheckinLibrary\CheckinLibrary.csproj", "{BE982E27-7420-4000-B7CD-908887C4572D}"
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F1B639C8-F99B-4CDF-A588-49C677BDC4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1B639C8-F99B-4CDF-A588-49C677BDC4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1B639C8-F99B-4CDF-A588-49C677BDC4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1B639C8-F99B-4CDF-A588-49C677BDC4CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E065F17-F636-497F-8F47-35E24CC1FDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
