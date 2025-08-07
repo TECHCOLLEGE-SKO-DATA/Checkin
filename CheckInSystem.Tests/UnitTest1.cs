@@ -1,5 +1,6 @@
-using CheckInSystem.Models;
+using CheckinLibrary.Models;
 using Xunit.Sdk;
+using CheckinLibrary;
 
 namespace CheckInSystem.Tests
 

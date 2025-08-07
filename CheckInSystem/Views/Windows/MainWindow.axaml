@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CheckInSystem.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:DataType="vm:Windows.MainWindowViewModel"
+        x:Class="CheckInSystem.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="CheckInSystem"
+		Width="1200" Height="550" CanResize="False">
+
+	<Grid>
+		<ContentControl Content="{Binding CurrentViewModel}" ContentTemplate="{DynamicResource ViewLocator}"/>
+	</Grid>
+</Window>

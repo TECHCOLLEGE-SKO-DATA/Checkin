@@ -1,0 +1,134 @@
+<Window 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:CheckInSystem.ViewModels.Windows"
+	xmlns:Customcontrols="clr-namespace:CheckInSystem.Customcontrols"
+	mc:Ignorable="d"
+	d:DesignWidth="800"
+	d:DesignHeight="450"
+	x:Class="CheckInSystem.EmployeeOverviewWindow"
+	Title="EmployeeOverviewWindow"
+	x:DataType="vm:EmployeeOverviewViewModel"
+	Icon="/Assets/avalonia-logo.ico"
+	WindowState="{Binding WindowState}">
+
+	<Window.Resources>
+		<Customcontrols:EmployeeStatusToBrushConverter x:Key="EmployeeStatusToBrushConverter"/>
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="40"/>
+		</Grid.RowDefinitions>
+
+		<LayoutTransformControl>
+			<LayoutTransformControl.LayoutTransform>
+				<ScaleTransform ScaleX="{Binding ScaleSize}" ScaleY="{Binding ScaleSize}"/>
+			</LayoutTransformControl.LayoutTransform>
+
+			<!-- ItemsControl for Groups -->
+			<ItemsControl ItemsSource="{Binding Groups}"
+						  Grid.Row="0"
+						  RenderTransform="{Binding ScaleSize}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+
+						<StackPanel IsVisible="{Binding Isvisible}"
+									RenderTransformOrigin="0.5,0.5">
+							<!-- Group Name -->
+							<TextBlock Text="{Binding Name}"
+									   FontSize="100"
+									   Margin="20 0 0 5"/>
+							<!-- Members -->
+							<Border BorderBrush="Black"
+									BorderThickness="2"
+									Margin="10">
+
+								<ItemsControl ItemsSource="{Binding Members}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel Orientation="Horizontal"/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+
+											<StackPanel Margin="5">
+												<StackPanel.Background>
+													<MultiBinding Converter="{StaticResource EmployeeStatusToBrushConverter}">
+														<Binding Path="IsOffSite"/>
+														<Binding Path="IsCheckedIn"/>
+														<Binding Path="."/>
+													</MultiBinding>
+												</StackPanel.Background>
+												<StackPanel Orientation="Horizontal"
+															Margin="10">
+													<TextBlock Text="{Binding FirstName}"
+															   FontSize="70"
+															   Margin="0 0 20 0"/>
+													<TextBlock Text="{Binding MiddleNameShort}"
+															   FontSize="70"
+															   Margin="0 0 20 0"/>
+													<TextBlock Text="{Binding LastName}"
+															   FontSize="70"
+															   Margin="0 0 0 0"/>
+												</StackPanel>
+											</StackPanel>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								
+							</Border>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</LayoutTransformControl>
+
+		<!-- App Version -->
+		<TextBlock Text="{Binding AppVersion, StringFormat=Version: {0}}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Margin="10"
+                   FontSize="14"
+                   Foreground="Gray"/>
+
+		<StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+					Height="80">
+			<TextBlock Text="⌕" FontSize="30"
+					   VerticalAlignment="Center"/>
+			
+			<Button Content="-"
+                    Width="40"
+                    Height="40"
+                    FontSize="50"
+                    Padding="6 -12 0 0"
+                    Command="{Binding ZoomOut}"
+                    VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Margin="5,0,5,0"/>
+			
+			<Button Content="+"
+                    Width="40"
+                    Height="40"
+                    FontSize="50"
+                    Padding="4 -13 0 0"
+                    Command="{Binding ZoomIn}"
+                    VerticalAlignment="Center"
+					Margin="0,0,5,0"/>
+			
+			<Button Content="⛶"
+                    Width="35"
+                    Height="40"
+                    FontSize="40"
+                    Padding="0 -10 0 0"
+                    Command="{Binding Btn_ToggleFullscreen}"
+                    VerticalAlignment="Center"/>
+		</StackPanel>
+	</Grid>
+</Window>

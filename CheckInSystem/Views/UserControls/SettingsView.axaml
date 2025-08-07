@@ -1,0 +1,153 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:color="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.ColorPicker"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckInSystem.Views.UserControls.SettingsView"
+			 xmlns:vm="clr-namespace:CheckInSystem.ViewModels.UserControls"
+			 xmlns:conv="clr-namespace:CheckInSystem.Converters"
+			 x:DataType="vm:SettingsViewModel"
+			 x:Name="RootControl">
+	
+	<UserControl.Resources>
+		<conv:DrawingColorToAvaloniaColorConverter x:Key="DrawingToAvaloniaColorConverter"/>
+		<conv:IdZeroToBoolConverter x:Key="IdZeroToBoolConverter"/>
+		<conv:IdNotZeroToBoolConverter x:Key="IdNotZeroToBoolConverter"/>
+	</UserControl.Resources>
+
+	<Grid ShowGridLines="True">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="45" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="45" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<WrapPanel Background="Blue"
+				   Grid.Row="0" Grid.ColumnSpan="2">
+			
+			<Button Content="Back"
+					Margin="6"
+					Background="Gray"
+					Command="{Binding Btn_BackToAdminPanel}"/>
+			
+		</WrapPanel>
+		
+		<Button Content="LogOut" 
+				Background="Gray"
+				HorizontalAlignment="Right"
+				Margin="0 -1 10 0" 
+				Grid.ColumnSpan="2"
+				Command="{Binding Btn_Logout}"/>
+
+		<WrapPanel Grid.Row="1">
+			<StackPanel>
+				
+				<TextBlock Margin="10"
+						   FontSize="20">
+					
+					Screen Settings
+				</TextBlock>
+
+				<TextBlock Margin="10 0 0 0">
+					Primary screen for Employee Overview
+				</TextBlock>
+
+				<TextBox Margin="10 10 0 0" 
+						 MinWidth="100"
+						 HorizontalAlignment="Left"
+						 Text="{Binding ScreenEmployeeOVerviewOpenOn}"/>
+				
+			</StackPanel>
+			<StackPanel>
+				<TextBlock Margin="10"
+						   FontSize="20">
+					Light/Dark Mode
+				</TextBlock>
+
+				<TextBlock Margin="10 0 0 0">
+					Experimental featuere to swap colors used for background
+				</TextBlock>
+
+				<CheckBox Margin="10"
+						  IsChecked="{Binding DarkMode, Mode=TwoWay}">
+					Dark mode
+				</CheckBox>
+			</StackPanel>
+			
+		</WrapPanel>
+
+		<StackPanel Grid.Column="2"
+				   Grid.Row="1"
+				   HorizontalAlignment="Right"
+				   Margin="0 10 10 0">
+			
+			<TextBlock FontSize="20"
+					   Text="Absence Settings"
+					   Margin="0 0 0 10">
+			</TextBlock>
+			
+			<TextBlock Text="List over Valid reasons for absence">
+			</TextBlock>
+
+			<WrapPanel>
+
+				<Button Content="Add Valid Absence"
+						VerticalAlignment="Top"
+						Margin="0 5 10 0"
+						Command="{Binding Btn_AddValidAbsence}"/>
+
+				<Border BorderBrush="Black" 
+						BorderThickness="3" 
+						MaxHeight="360">
+					<ScrollViewer AllowAutoHide="False">
+						<ItemsControl ItemsSource="{Binding AbsenceReasons}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
+										<StackPanel Orientation="Vertical" Spacing="5">
+											<TextBox Width="200" Height="25"
+													 Text="{Binding Reason}"
+													 IsReadOnly="{Binding Id, Converter={StaticResource IdZeroToBoolConverter}}"/>
+
+											<StackPanel Orientation="Horizontal">
+												<!-- Only show delete button if Id != 0 -->
+												<Button Width="30" Height="30"
+														Background="Transparent"
+														Command="{Binding DataContext.Btn_DeleteReason, ElementName=RootControl}"
+														CommandParameter="{Binding}"
+														IsVisible="{Binding Id, Converter={StaticResource IdNotZeroToBoolConverter}}">
+													<TextBlock Text="X" Foreground="Red" FontSize="16"
+															   HorizontalAlignment="Center" VerticalAlignment="Center" />
+												</Button>
+
+												<color:ColorPicker Width="150" Height="30"
+																   Color="{Binding HexColor, Converter={StaticResource DrawingToAvaloniaColorConverter}, Mode=TwoWay}"
+																   />
+											</StackPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Border>
+			</WrapPanel>
+		</StackPanel>
+
+		<WrapPanel Background="Blue"
+				   Grid.Row="2" Grid.ColumnSpan="2">
+			
+			<Button Content="Gem"
+					Margin="6"
+					Background="Gray"
+					Command="{Binding Btn_Save}"/>
+		</WrapPanel>
+
+	</Grid>
+</UserControl>
