@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Platform;
 using CheckInSystemAvalonia.Platform;
@@ -28,6 +30,7 @@ public partial class MainWindow : Window
     }
     public void OnWindowClosing(object sender, CancelEventArgs e)
     {
+        System.Environment.Exit(1);
     }
 
     private static void OpenFakeNFCWindow(IPlatform platform)
