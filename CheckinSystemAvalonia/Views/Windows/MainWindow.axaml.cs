@@ -30,7 +30,7 @@ public partial class MainWindow : Window
     }
     public void OnWindowClosing(object sender, CancelEventArgs e)
     {
-        System.Environment.Exit(1);
+        System.Environment.Exit(0);
     }
 
     private static void OpenFakeNFCWindow(IPlatform platform)

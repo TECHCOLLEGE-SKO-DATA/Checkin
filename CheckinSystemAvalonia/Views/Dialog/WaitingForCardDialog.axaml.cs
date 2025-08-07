@@ -2,16 +2,25 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using System;
 
 namespace CheckInSystemAvalonia;
 
 public partial class WaitingForCardDialog : Window
 {
+
     public static WaitingForCardDialog? Instance;
     public WaitingForCardDialog()
     {
         InitializeComponent();
         Topmost = true;
+
+        Closing += close;
+    }
+
+    private void close(object sender, EventArgs e)
+    {
+        CardReader.State.UpdateNextEmployee = false;
     }
 
     private void Cancel(object sender, RoutedEventArgs e)
