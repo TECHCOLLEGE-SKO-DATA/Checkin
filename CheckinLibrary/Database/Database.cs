@@ -53,36 +53,33 @@ public static class Database
         }
     }
 
-    public static bool EnsureDatabaseAvailable()
+    public static (bool success, string message, string title) EnsureDatabaseAvailable()
     {
-
         try
         {
             if (!IsSqlServerInstalled())
             {
-                /*MessageBox.Show("Microsoft SQL Server er ikke installeret!",
-                    "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);*/
-                return false;
+                return (false, "Microsoft SQL Server er ikke installeret!", "Database Fejl");
             }
 
             if (!EnsureSqlServiceRunning())
             {
-                /*MessageBox.Show("Kunne ikke starte SQL Serveren, kontakt IT support!",
-                    "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);*/
-                return false;
+                return (false, "Kunne ikke starte SQL Serveren, kontakt IT support!", "Database Fejl");
             }
 
-            return TestDatabaseConnection();
+            bool testResult = TestDatabaseConnection();
+            if (testResult)
+                return (true, "Database er tilgængelig", "Success");
+            else
+                return (false, "Kan ikke forbinde til databasen", "Database Fejl");
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
-
-            /*MessageBox.Show($"Database opstartsfejl: {e.Message}",
-                "Database Fejl", MessageBoxButton.OK, MessageBoxImage.Error);*/
-            return false;
+            return (false, $"Database opstartsfejl: {e.Message}", "Database Fejl");
         }
     }
+
 
     public static SqlConnection GetConnection()
     {

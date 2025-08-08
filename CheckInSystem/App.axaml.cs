@@ -26,7 +26,7 @@ public partial class App : Application
 
             BackGroundTheme(Platform.MainWindowViewModel.DarkMode);
 
-            if (!Startup.Run())
+            if (!Startup.Run(Platform))
             {
             }
         }
