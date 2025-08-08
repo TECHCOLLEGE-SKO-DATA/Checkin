@@ -25,4 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\CheckinLibrary\CheckinLibrary.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Dialog\InputDialog.axaml.cs">
+      <DependentUpon>InputDialog.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

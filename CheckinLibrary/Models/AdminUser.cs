@@ -9,7 +9,7 @@ using Database;
 
 public class AdminUser
 {
-    DatabaseHelper databasehelper;
+    DatabaseHelper databasehelper = new();
     public int ID { get; private set; }
     public string Username { get; private set; }
     public AdminUser()
@@ -20,12 +20,12 @@ public class AdminUser
         Username = username;
     }
 
-    public void UpdateUser(string username, string password)
+    public void UpdateUser(string NewUsername, string NewPassword, string OldUsername, string OldPassword)
     {
-        var user = databasehelper.Login(username, password);
+        var user = databasehelper.Login(OldUsername, OldPassword);
         if (user != null)
         {
-            databasehelper.UpdateUser(username, password, user.ID);
+            databasehelper.UpdateUser(NewUsername, NewPassword, user.ID);
         }
         else
         {

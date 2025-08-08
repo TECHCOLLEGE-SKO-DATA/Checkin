@@ -71,6 +71,16 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    UpdateAdminViewModel _updateAdminViewModel;
+    public UpdateAdminViewModel UpdateAdminViewModel
+    {
+        get => _updateAdminViewModel;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _updateAdminViewModel, value, nameof(UpdateAdminViewModel));
+        }
+    }
+
     public bool DarkMode { get; set; }
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
@@ -103,13 +113,14 @@ public class MainWindowViewModel : ViewModelBase
             //loads data before making instances of ViewModels
             LoadDataFromDatabase();
         }
-        
+
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
         SettingsViewModel = new(platform);
+        UpdateAdminViewModel = new(platform);
 
         SettingsControl settingsControl = new();
 
@@ -232,13 +243,13 @@ public class MainWindowViewModel : ViewModelBase
     {
         _employeeTimeViewModel.SelectedEmployee = employee;
         //exists because for some reason i cant get avalonia to keep the reasonId when going in and out and then back into an employee's 
-        _employeeTimeViewModel.RefreshAbsences(); 
+        _employeeTimeViewModel.RefreshAbsences();
         _platform.MainWindowViewModel.CurrentViewModel = EmployeeTimeViewModel;
     }
 
 
     public void SwitchToAdminPanel()
-    {   
+    {
         CurrentViewModel = AdminPanelViewModel;
     }
 
@@ -258,4 +269,14 @@ public class MainWindowViewModel : ViewModelBase
         LoginScreenViewModel.PassWord = "";
         CurrentViewModel = LoginScreenViewModel;
     }
+    public void SwitchToUpdateAdmin(string Username, string Password)
+    {
+        UpdateAdminViewModel.txtUserName = "";
+        UpdateAdminViewModel.txtPassword = "";
+
+        UpdateAdminViewModel.OldUsername = Username;
+        UpdateAdminViewModel.OldPassword = Password;
+
+        CurrentViewModel = UpdateAdminViewModel;
+    } 
 }

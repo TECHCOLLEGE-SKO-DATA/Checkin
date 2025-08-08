@@ -14,8 +14,10 @@ public class Startup
     {
 
         if (!EnsureDatabaseAvailable(platform)) return false;
-
-        AddAdmin();
+        if (!Design.IsDesignMode)
+        {
+            AddAdmin();
+        }
         return true;
     }
 
@@ -69,13 +71,15 @@ public class Startup
     // Ensure database is available
     private static bool EnsureDatabaseAvailable(IPlatform platform)
     {
-        var resault = Database.EnsureDatabaseAvailable();
-        if (resault.success)
+        if (!Design.IsDesignMode)
         {
-            return false;
+            var resault = Database.EnsureDatabaseAvailable();
+            if (resault.success)
+            {
+                return false;
+            }
+            MessageBoxViewModel messageBoxViewModel = new(platform.MainWindow, resault.message, resault.title, CheckInSystem.Controls.MessageBoxButton.OK);
         }
-        MessageBoxViewModel messageBoxViewModel = new(platform.MainWindow, resault.message, resault.title, CheckInSystem.Controls.MessageBoxButton.OK);
-
         return true;
     }
 }

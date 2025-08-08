@@ -46,14 +46,14 @@ namespace CheckInSystem.ViewModels.UserControls
             }
             else
             {
-                /*
                 if (adminUser.Username == "sko" && passWord == "test123")
                 {
-                    UpdateAdmin updateAdmin = new UpdateAdmin(_platform);
-
-                    updateAdmin.Show();
-                }*/
-                _platform.MainWindowViewModel.SwitchToAdminPanel();
+                    _platform.MainWindowViewModel.SwitchToUpdateAdmin(adminUser.Username, passWord);
+                }
+                else
+                {
+                    _platform.MainWindowViewModel.SwitchToAdminPanel();
+                }
             }
         }
     }
