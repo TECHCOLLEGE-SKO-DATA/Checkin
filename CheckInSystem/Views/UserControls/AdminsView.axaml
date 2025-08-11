@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="550"
-             x:Class="CheckInSystem.AdminsView"
+             x:Class="CheckInSystem.Views.UserControls.AdminsView"
+			 xmlns:vm="clr-namespace:CheckInSystem.ViewModels.UserControls"
+			 x:DataType="vm:AdminsViewModel"
 			 Width="1200" Height="550">
 	
 	<Grid ShowGridLines="True">
@@ -39,7 +41,8 @@
 			
 			<TextBox Height="40" 
 					 FontSize="20"
-					 Width="200"/>
+					 Width="200"
+					 Text="{Binding txtUsername}"/>
 
 			<TextBlock Margin="30 20 20 0"
 					   FontSize="20"
@@ -48,11 +51,13 @@
 			<TextBox Height="40"
 					 Margin="8 10 0 0"
 					 FontSize="20"
-					 Width="200"/>
+					 Width="200"
+					 Text="{Binding txtPassword}"/>
 			
 			<Button Margin="30"
 					FontSize="18"
-					Content="Add Admin"/>
+					Content="Add Admin"
+					Command="{Binding Btn_AddAdmin}"/>
 			
 		</WrapPanel>
 		

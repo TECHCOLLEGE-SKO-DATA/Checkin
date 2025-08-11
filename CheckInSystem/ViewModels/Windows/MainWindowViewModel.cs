@@ -29,6 +29,8 @@ public class MainWindowViewModel : ViewModelBase
 {
     public List<AbsenceReason> absenceReasons { get; set; }
 
+    //ViewModels start here
+
     AdminPanelViewModel _adminPanelViewModel;
     public AdminPanelViewModel AdminPanelViewModel
     {
@@ -81,6 +83,17 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    AdminsViewModel _adminsViewModel;
+    public AdminsViewModel AdminsViewModel
+    {
+        get => _adminsViewModel;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _adminsViewModel, value, nameof(AdminsViewModel));
+        }
+    }
+    //Viewmodels ends here
+
     public bool DarkMode { get; set; }
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
@@ -121,6 +134,7 @@ public class MainWindowViewModel : ViewModelBase
         EmployeeTimeViewModel = new(platform);
         SettingsViewModel = new(platform);
         UpdateAdminViewModel = new(platform);
+        AdminsViewModel = new(platform);
 
         SettingsControl settingsControl = new();
 
@@ -279,4 +293,9 @@ public class MainWindowViewModel : ViewModelBase
 
         CurrentViewModel = UpdateAdminViewModel;
     } 
+
+    public void SwitchToAdmins()
+    {
+        CurrentViewModel = AdminsViewModel;
+    }
 }
