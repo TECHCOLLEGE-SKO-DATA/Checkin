@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="350"
+        x:Class="CheckInSystem.UpdateAdmin"
+        Title="UpdateAdmin">
+	<Grid ShowGridLines="True">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="30"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="30"/>
+		</Grid.ColumnDefinitions>
+
+		<Border BorderThickness="2"
+				BorderBrush="Black"
+				Grid.Column="1"
+				Grid.Row="1">
+			
+			<StackPanel>
+				<TextBlock HorizontalAlignment="Center">Set New Admin</TextBlock>
+				
+				<StackPanel Margin="10 20 0 0"
+							Orientation="Horizontal">
+					
+					<TextBlock Margin="0 5 5 0">UserName:</TextBlock>
+
+					<TextBox Width="130"
+							 Name="txtUserName"></TextBox>
+					
+				</StackPanel>
+
+				<StackPanel Margin="10 20 0 0"
+							Orientation="Horizontal">
+
+					<TextBlock Margin="0 5 10 0">PassWord:</TextBlock>
+
+					<TextBox Width="130"
+							 Name="txtPassword"></TextBox>
+					
+				</StackPanel>
+
+				<Button HorizontalAlignment="Center"
+						Margin="0 40 0 0"
+						Click="Btn_SaveAdmin">Save Admin</Button>
+			</StackPanel>
+			
+		</Border>
+		
+	</Grid>
+</Window>

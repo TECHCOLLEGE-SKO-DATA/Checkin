@@ -1,224 +1,235 @@
-﻿using System.Collections.ObjectModel;
-using CheckInSystem.Models;
+﻿using Avalonia.Controls;
+using CheckinLibrary.Background_tasks;
+using CheckinLibrary.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.UserControls;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CheckInSystem.ViewModels.UserControls;
-
-public class EmployeeTimeViewModel : ViewModelBase
+namespace CheckInSystem.ViewModels.UserControls
 {
-    Absence absenc = new();
-    public ObservableCollection<Absence> Absences { get; set; } = new();
-    public List<Absence> AbsencesToAddToDb { get; set; } = new();
-    public List<Absence> AbsencesToDelete { get; set; } = new();
-
-    public ObservableCollection<OnSiteTime> SiteTimes { get; set; } = new();
-    public List<OnSiteTime> SiteTimesToDelete { get; set; } = new();
-    public List<OnSiteTime> SiteTimesToAddToDb { get; set; } = new();
-    //public Employee SelectedEmployee { get; set; }
-
-    Employee _selectedEmployee = new();
-    public Employee SelectedEmployee
+    public class EmployeeTimeViewModel : ViewModelBase
     {
-        get => _selectedEmployee;
-        set
+
+        public List<AbsenceReason> AbsenceReasons { get; set; } = new();
+
+        Absence absenc = new();
+        public ObservableCollection<Absence> Absences { get; set; } = new();
+        public List<Absence> AbsencesToAddToDb { get; set; } = new();
+        public List<Absence> AbsencesToDelete { get; set; } = new();
+
+        public ObservableCollection<OnSiteTime> SiteTimes { get; set; } = new();
+        public List<OnSiteTime> SiteTimesToDelete { get; set; } = new();
+        public List<OnSiteTime> SiteTimesToAddToDb { get; set; } = new();
+
+        Employee _selectedEmployee = new();
+        public Employee SelectedEmployee
         {
-            if (_selectedEmployee != value) // Ensure we only update if different
+            get => _selectedEmployee;
+            set
             {
-                SetProperty(ref _selectedEmployee, value);
-
-                Absences.Clear();
-                foreach (var absence in Absence.GetAllAbsence(value))
+                if (_selectedEmployee != value) // Ensure we only update if different
                 {
-                    Absences.Add(absence);
-                }
+                    SetProperty(ref _selectedEmployee, value);
 
-                SiteTimes.Clear();
-                foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
-                {
-                    SiteTimes.Add(siteTime);
-                }
+                    Absences.Clear();
+                    foreach (var absence in Absence.GetAllAbsence(value))
+                    {
+                        Absences.Add(absence);
+                    }
 
-                OnPropertyChanged(nameof(Absences));
-                OnPropertyChanged(nameof(SiteTimes));
+                    SiteTimes.Clear();
+                    foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
+                    {
+                        SiteTimes.Add(siteTime);
+                    }
+
+                    this.RaisePropertyChanged(nameof(Absences));
+                    this.RaisePropertyChanged(nameof(SiteTimes));
+                }
             }
         }
-    }
 
-    public EmployeeTimeViewModel(IPlatform platform) : base(platform)
-    {
-        //SelectedEmployee = employee;
-        SiteTimesToDelete = new();
-        SiteTimesToAddToDb = new();
-    }
+        public ReactiveCommand<Unit, Unit> Btn_AddAbsence {  get; set; }
 
-    public void AppendSiteTimesToDelete(OnSiteTime siteTime)
-    {
-        SiteTimesToDelete.Add(siteTime);
-        SiteTimes.Remove(siteTime);
-        SiteTimesToAddToDb.Remove(siteTime);
-    }
+        public ReactiveCommand<Unit, Unit> Btn_LogOut { get; set; }
 
-    public void AppendSiteTimesToAddToDb(OnSiteTime siteTime)
-    {
-        SiteTimes.Add(siteTime);
-        SiteTimesToAddToDb.Add(siteTime);
-    }
+        public ReactiveCommand<Unit, Unit> Btn_Cancel { get; set; }
 
-    public void RevertSiteTimes()
-    {
-        foreach (var siteTime in SiteTimes)
+        public ReactiveCommand<Unit, Unit> Btn_Save { get; set; }
+
+        public ReactiveCommand<Unit, Unit> Btn_AddSiteTime { get; set; }
+
+        public EmployeeTimeViewModel(IPlatform platform) : base(platform)
         {
-            siteTime.RevertTopreviousTime();
-        }
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
-    }
-
-    public void SaveChanges()
-    {
-        UpdateSiteTimes();
-        DeleteSiteTimes();
-        AddSiteTimes();
-
-        UpdateAbsenceTimes();
-        DeleteAbsences();
-        AddAbsences();
-
-        SelectedEmployee.GetUpdatedSiteTimes();
-        _platform.MainWindowViewModel.RequestView(typeof(AdminPanelViewModel));
-    }
-
-    private void UpdateSiteTimes()
-    {
-        List<OnSiteTime> changedSiteTimes = new List<OnSiteTime>();
-        foreach (var siteTime in SiteTimes)
-        {
-            if (siteTime.IsChanged())
+            platform.DataLoaded += (sender, args) =>
             {
-                changedSiteTimes.Add(siteTime);
-            }
-        }
-        if (SiteTimes.Count > 0)
-        {
-            OnSiteTime.UpdateMutipleSiteTimes(changedSiteTimes);
-        }
-    }
+                AbsenceReasons = platform.MainWindowViewModel.absenceReasons;
+            };
 
-    private void DeleteSiteTimes()
-    {
-        foreach (var siteTime in SiteTimesToDelete)
-        {
+            SiteTimesToDelete = new ();
+            SiteTimesToAddToDb = new();
+
+            Btn_LogOut = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
+
+            Btn_Cancel = ReactiveCommand.Create(() => RevertSiteTimes()); 
+
+            Btn_Save = ReactiveCommand.Create(() => SaveChanges());
             
-            siteTime.DeleteFromDb();
         }
-        SiteTimesToDelete.Clear();
-    }
 
-    private void AddSiteTimes()
-    {
-        foreach (var siteTime in SiteTimesToAddToDb)
+        public void AppendSiteTimesToDelete(OnSiteTime siteTime)
         {
-            if (siteTime.ArrivalTime != null)
+            SiteTimesToDelete.Add(siteTime);
+            SiteTimes.Remove(siteTime);
+            SiteTimesToAddToDb.Remove(siteTime);
+        }
+
+        public void AppendSiteTimesToAddToDb(OnSiteTime siteTime)
+        {
+            SiteTimes.Add(siteTime);
+            SiteTimesToAddToDb.Add(siteTime);
+        }
+
+        public void RevertSiteTimes()
+        {
+            foreach (var siteTime in SiteTimes)
             {
-                OnSiteTime.AddTimeToDb(siteTime.EmployeeID, siteTime.ArrivalTime ?? DateTime.Now, siteTime.DepartureTime);
+                siteTime.RevertTopreviousTime();
+            }
+            _platform.MainWindowViewModel.SwitchToAdminPanel();
+        }
+
+        public void SaveChanges()
+        {
+            UpdateSiteTimes();
+            DeleteSiteTimes();
+            AddSiteTimes();
+
+            UpdateAbsenceTimes();
+            DeleteAbsences();
+            AddAbsences();
+
+            _platform.MainWindowViewModel.absencBackGroundService.AbsenceTask();
+
+            SelectedEmployee.GetUpdatedSiteTimes();
+
+            _platform.MainWindowViewModel.SwitchToAdminPanel();
+        }
+
+        private void UpdateSiteTimes()
+        {
+            List<OnSiteTime> changedSiteTimes = new List<OnSiteTime>();
+            foreach (var siteTime in SiteTimes)
+            {
+                if (siteTime.IsChanged())
+                {
+                    changedSiteTimes.Add(siteTime);
+                }
+            }
+            if (SiteTimes.Count > 0)
+            {
+                OnSiteTime.UpdateMutipleSiteTimes(changedSiteTimes);
             }
         }
-        SiteTimesToAddToDb.Clear();
-    }
-    public void AppendAbsenceToAddToDb(Absence absence)
 
-    {
-
-        Absences.Add(absence);
-
-        AbsencesToAddToDb.Add(absence);
-
-    }
-
-
-
-    public void AppendAbsenceToDelete(Absence absence)
-
-    {
-
-        AbsencesToDelete.Add(absence);
-
-        Absences.Remove(absence);
-
-        AbsencesToAddToDb.Remove(absence);
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    private void AddAbsences()
-
-    {
-
-        foreach (var absence in AbsencesToAddToDb)
-
+        private void DeleteSiteTimes()
         {
-
-            absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReason);
-
+            foreach (var siteTime in SiteTimesToDelete)
+            {
+                siteTime.DeleteFromDb();
+            }
+            SiteTimesToDelete.Clear();
         }
 
-        AbsencesToAddToDb.Clear();
-
-    }
-
-
-
-    private void DeleteAbsences()
-    {
-
-        foreach (var absence in AbsencesToDelete)
+        private void AddSiteTimes()
         {
-
-            absence.DeleteAbsence(absence.ID);
-
+            foreach (var siteTime in SiteTimesToAddToDb)
+            {
+                if (siteTime.ArrivalTime != null)
+                {
+                    OnSiteTime.AddTimeToDb(siteTime.EmployeeID, siteTime.ArrivalTime ?? DateTime.Now, siteTime.DepartureTime);
+                }
+            }
+            SiteTimesToAddToDb.Clear();
         }
 
-        AbsencesToDelete.Clear();
-
-    }
-
-    private void UpdateAbsenceTimes()
-
-    {
-
-        List<Absence> changedAbsence = new List<Absence>();
-
-        foreach (var absence in Absences)
-
+        public void AppendAbsenceToAddToDb(Absence absence)
         {
+            Absences.Add(absence);
 
-            absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
-
-
-
-            absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
-
-
-
-            changedAbsence.Add(absence);
-
+            AbsencesToAddToDb.Add(absence);
         }
 
-        if (Absences.Count > 0)
-
+        public void AppendAbsenceToDelete(Absence absence)
         {
+            AbsencesToDelete.Add(absence);
 
-            absenc.EditAbsence(changedAbsence);
+            Absences.Remove(absence);
 
+            AbsencesToAddToDb.Remove(absence);
         }
+
+        private void AddAbsences()
+        {
+            foreach (var absence in AbsencesToAddToDb)
+            {
+                absence.InsertAbsence(absence.EmployeeId, absence.FromDate, absence.ToDate, absence.Note, absence.AbsenceReasonId);
+            }
+            AbsencesToAddToDb.Clear();
+        }
+
+
+
+        private void DeleteAbsences()
+        {
+            foreach (var absence in AbsencesToDelete)
+            {
+                absence.DeleteAbsence(absence.ID);
+            }
+            AbsencesToDelete.Clear();
+        }
+
+        private void UpdateAbsenceTimes()
+        {
+            List<Absence> changedAbsence = new List<Absence>();
+
+            foreach (var absence in Absences)
+            {
+                absence.FromDate = absence.FromDate.Date.Add(absence.FromTime.ToTimeSpan());
+
+                absence.ToDate = absence.ToDate.Date.Add(absence.ToTime.ToTimeSpan());
+
+                changedAbsence.Add(absence);
+            }
+
+            if (Absences.Count > 0)
+            {
+                absenc.EditAbsence(changedAbsence);
+            }
+        }
+
+        //added this since for some reason it would forget the Index of the absence for the reason of absence
+        public void RefreshAbsences()
+        {
+            if (SelectedEmployee == null)
+                return;
+
+            Absences.Clear();
+
+            var freshAbsences = Absence.GetAllAbsence(SelectedEmployee);
+            foreach (var absence in freshAbsences)
+            {
+                Absences.Add(absence);
+            }
+
+            this.RaisePropertyChanged(nameof(Absences));
+        }
+
     }
 }

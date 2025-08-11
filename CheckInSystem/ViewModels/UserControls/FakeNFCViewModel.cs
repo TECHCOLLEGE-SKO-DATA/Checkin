@@ -1,83 +1,103 @@
-﻿using CheckInSystem.Models;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using CheckInSystem.Database;
-using System.Windows.Documents;
-using CheckInSystem.Platform;
+﻿using Avalonia.Controls;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
 using CheckInSystem.CardReader;
-using System.Windows;
-using System.Text;
+using CheckInSystem.Platform;
+using ReactiveUI;
 using System;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Text;
 
-namespace CheckInSystem.ViewModels.UserControls;
-
-public class FakeNFCViewModel : ViewModelBase
+namespace CheckInSystem.ViewModels.UserControls
 {
-    DatabaseHelper dbHelper = new();
-
-    private static Random random = new Random();
-
-    public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
-
-    public string NewCardId { get; set; }
-
-    ScriptedCardReader _cardReader => (ScriptedCardReader) _platform.CardReader;
-
-    public FakeNFCViewModel(IPlatform platform) : base(platform)
+    public class FakeNFCViewModel : ViewModelBase
     {
+        private readonly DatabaseHelper dbHelper = new();
+        private readonly Random random = new();
 
-        NewCardId = RandomCardGen();
-
-        Employees = new ObservableCollection<Employee>(dbHelper.GetAllEmployees());
-    }
-
-    public void ScanNewCard()
-    {
-        if(NewCardId.Length == 11)
+        private string _newCardId;
+        public string NewCardId
         {
-            //Add the Actual method for scaning new car
-            _cardReader.TriggerCardInserted(NewCardId);
+            get => _newCardId;
+            set => this.RaiseAndSetIfChanged(ref _newCardId, value);
         }
-        else
+
+        private Employee _selectedEmployee;
+        public Employee SelectedEmployee
         {
+            get => _selectedEmployee;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedEmployee, value);
+                if (value != null)
+                    CheckIn(value);
+            }
+        }
+
+        public ObservableCollection<Employee> Employees { get; } = new();
+
+        public ReactiveCommand<Unit, Unit> ScanNewCardCommand { get; }
+        public ReactiveCommand<Unit, Unit> GetFromDatabaseCommand { get; }
+
+        private ScriptedCardReader _cardReader => (ScriptedCardReader)_platform.CardReader;
+
+        public FakeNFCViewModel(IPlatform platform) : base(platform)
+        {
+            NewCardId = RandomCardGen();
+
+
+            if (!Design.IsDesignMode)
+            {
+                foreach (var emp in dbHelper.GetAllEmployees())
+                    Employees.Add(emp);
+            }
             
-            _cardReader.TriggerCardInserted(RandomCardGen());
+
+            ScanNewCardCommand = ReactiveCommand.Create(ScanNewCard);
+            GetFromDatabaseCommand = ReactiveCommand.Create(RefreshEmployees);
         }
-        Employees.Clear();
-        foreach (var employee in dbHelper.GetAllEmployees())
+
+        private void ScanNewCard()
         {
-            Employees.Add(employee);
+            if (NewCardId.Length == 11)
+            {
+                //Add the Actual method for scaning new car
+                _cardReader.TriggerCardInserted(NewCardId);
+            }
+            else
+            {
+
+                _cardReader.TriggerCardInserted(RandomCardGen());
+            }
+            Employees.Clear();
+            foreach (var employee in dbHelper.GetAllEmployees())
+            {
+                Employees.Add(employee);
+            }
         }
-    }
 
-    public void CheckIn(Employee employee)
-    {
-        //Add the Actual method for checkin/out 
-        //dbHelper.CardScanned(employee.CardID);   
-        
-        _cardReader.TriggerCardInserted(employee.CardID);
-    }
-
-    public ObservableCollection<Employee> GetDataFromDB()
-    {
-        Employees.Clear();
-        foreach (var employee in dbHelper.GetAllEmployees())
+        private void CheckIn(Employee employee)
         {
-            Employees.Add(employee); 
+            _cardReader.TriggerCardInserted(employee.CardID);
         }
-        return Employees;
-    }
 
-    public string RandomCardGen()
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < 11; i++)
+        private void RefreshEmployees()
         {
-            result.Append(chars[random.Next(chars.Length)]);
+            Employees.Clear();
+            foreach (var emp in dbHelper.GetAllEmployees())
+                Employees.Add(emp);
         }
-        return result.ToString();
-    }
 
+        private string RandomCardGen()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder result = new();
+
+            for (int i = 0; i < 11; i++)
+                result.Append(chars[random.Next(chars.Length)]);
+
+            return result.ToString();
+        }
+    }
 }

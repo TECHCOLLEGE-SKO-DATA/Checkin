@@ -1,4 +1,4 @@
-﻿using CheckInSystem.Models;
+﻿using CheckinLibrary.Models;
 
 namespace CheckInSystem.CardReader;
 

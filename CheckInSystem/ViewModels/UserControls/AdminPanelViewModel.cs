@@ -1,181 +1,206 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using CheckInSystem.Models;
+﻿using Avalonia.Controls;
+using Avalonia.Platform;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.Views.Dialog;
-using static Dapper.SqlMapper;
-using WpfScreenHelper;
-using CheckInSystem.Settings;
-using static System.Net.Mime.MediaTypeNames;
+using CheckInSystem.ViewModels.Windows;
+using CheckInSystem.Views.UserControls;
+using DynamicData;
+using PCSC;
+using PCSC.Interop;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CheckInSystem.ViewModels.UserControls;
-
-
-public class AdminPanelViewModel : ViewModelBase
+namespace CheckInSystem.ViewModels.UserControls
 {
-    public const int EMPLOYEE_LISTPAGE_TAB = 0;
-    public const int EMPLOYEE_TIME_TAB = 1;
-    public const int GROUP_LISTPAGE_TAB = 2;
-    ObservableCollection<Group> _groups = new();
-    public ObservableCollection<Group> Groups
+    public class AdminPanelViewModel : ViewModelBase
     {
-        get => _groups;
-        set => SetProperty(ref _groups, value, nameof(Groups));
-    }
-    /// <summary>
-    /// User filters a group. Render only employees in that group
-    /// </summary>
-    public Group? ChangeGroupList
-    {
-        set
+
+        public const int EMPLOYEE_LISTPAGE_TAB = 0;
+        public const int EMPLOYEE_TIME_TAB = 1;
+        public const int GROUP_LISTPAGE_TAB = 2;
+
+        DatabaseHelper databaseHelper = new();
+
+        public ObservableCollection<Group> Groups { get; private set; } = new();
+
+        private Control _adminPanelContent;
+        public Control AdminPanelContent
         {
-            SelectedTab = EMPLOYEE_LISTPAGE_TAB;
-            if (value != null)
+            get => _adminPanelContent;
+            set => this.RaiseAndSetIfChanged(ref _adminPanelContent, value);
+        }
+
+        AdminEmployeeViewModel _adminEmployeeViewModel;
+        public AdminEmployeeViewModel adminEmployeeViewModel
+        {
+            get => _adminEmployeeViewModel;
+            set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
+        }
+
+        //public AdminEmployeeViewModel AdminEmployeeViewModel { get; }
+        public AdminGroupViewModel AdminGroupViewModel { get; }
+        public EmployeeTimeViewModel EmployeeTimeViewModel { get; }
+
+        private int _selectedTab;
+        public int SelectedTab
+        {
+            get => _selectedTab;
+            set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+        }
+
+
+        private Group _selectedGroup;
+        public Group SelectedGroup
+        {
+            get => _selectedGroup;
+            set => this.RaiseAndSetIfChanged(ref _selectedGroup, value);
+        }
+
+        // ReactiveCommands for actions
+
+        public ReactiveCommand<Unit, Unit> Btn_AdminAdministration { get; }
+        public ReactiveCommand<Unit, Unit> EditGroupsForEmployeesCommand { get; }
+        public ReactiveCommand<Unit, Unit> MarkAsOffsiteCommand { get; }
+        public ReactiveCommand<Unit, Unit> DeleteEmployeesCommand { get; }
+        public ReactiveCommand<Unit, Unit> EditNextScannedCardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
+        public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
+        public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
+
+        public AdminPanelViewModel(IPlatform platform) : base(platform)
+        {
+            _platform.DataLoaded += (sender, args) =>
             {
-                AdminEmployeeViewModel.SelectedEmployeeGroup = value.Members;
-            }
-            else
+                Groups.Add(platform.MainWindowViewModel.GroupAll);
+                foreach (var group in platform.MainWindowViewModel.Groups)
+                {
+                    Groups.Add(group);
+                }
+
+                SelectedGroup = Groups.First();
+            };
+
+            adminEmployeeViewModel = new(platform, this);
+
+            Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
+            Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());
+            Btn_SettingsView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToSettingsView());
+
+            EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployeesAsync);
+
+            MarkAsOffsiteCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                AdminEmployeeViewModel.SelectedEmployeeGroup.Clear();
+                var editOffsiteDialog = new EditOffsiteDialog(
+                         _platform.MainWindowViewModel.absenceReasons.ToList(),
+                         selectedReason: _platform.MainWindowViewModel.absenceReasons.FirstOrDefault(r => r.Reason == "Ferie")
+                     );
+
+
+                var result = await editOffsiteDialog.ShowDialog<bool>(platform.MainWindow);
+
+                if (result)
+                {
+                    var fromDate = editOffsiteDialog.FromDate ?? DateTime.Today;
+                    var toDate = editOffsiteDialog.ToDate ?? DateTime.Today;
+                    var note = editOffsiteDialog.Note ?? string.Empty;
+                    var reason = editOffsiteDialog.AbsenceReason ?? platform.MainWindowViewModel.absenceReasons.FirstOrDefault(r => r.Reason == "Ferie");                    // Fallback if none selected
+
+                    UpdateOffsite(AdminEmployeeViewModel.SelectedEmployees, fromDate.Date, toDate.Date, note, reason);
+                }
+            });
+
+
+            DeleteEmployeesCommand = ReactiveCommand.Create(() =>
+            {
+                DeleteEmployee(AdminEmployeeViewModel.SelectedEmployees);
+            });
+
+            EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
+
+            //Btn_AdminAdministration = ReactiveCommand.Create(() => );
+        }
+        
+        public void EditNextScannedCard()
+        {
+            CardReader.State.UpdateNextEmployee = true;
+            WaitingForCardDialog.Open();
+        }
+
+        public void DeleteEmployee(Employee employee)
+        {
+            employee.DeleteFromDb();
+            foreach (Group group in _platform.MainWindowViewModel.Groups)
+            {
+                group.Members.Remove(employee);
+            }
+            _platform.MainWindowViewModel.Employees.Remove(employee);
+        }
+
+        public void DeleteEmployee(ObservableCollection<Employee> employees)
+        {
+            foreach (Employee employee in employees)
+            {
+                DeleteEmployee(employee);
+                _platform.MainWindowViewModel.Employees.Remove(employee);
+                _platform.MainWindowViewModel.GroupAll.Members.Remove(employee);
+            }
+        }
+
+        public void UpdateOffsite(Employee employee, bool isOffsite, DateTime? offsiteUntil)
+        {
+            employee.IsOffSite = isOffsite;
+            employee.OffSiteUntil = offsiteUntil;
+            employee.UpdateDb();
+        }
+
+        public void UpdateOffsite(ObservableCollection<Employee> employees,
+            DateTime FromDate, DateTime ToDate, string Note, AbsenceReason AbsenceReason)
+        {
+            Absence absence = new();
+            absence.ToTime = absence.ToTime.AddHours(23);
+            foreach (Employee employee in employees)
+            {
+                absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason.Id);
+            }
+            _platform.MainWindowViewModel.absencBackGroundService.AbsenceTask();
+        }
+
+        public void AddSelectedUsersToGroup(Group group)
+        {
+            foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            {
+                group.AddEmployee(employee);
+            }
+        }
+
+        public void RemoveSelectedUsersToGroup(Group group)
+        {
+            foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
+            {
+                group.RemoveEmployee(employee);
+            }
+        }
+
+        public async void EditGroupsForEmployeesAsync()
+        {
+            EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
+            var result = await editGroupsForEmployees.ShowDialog<bool>(_platform.MainWindow);
+            if (result == true && editGroupsForEmployees.SelectedGroup != null)
+            {
+                if (editGroupsForEmployees.AddGroup)
+                    AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
+
+                if (editGroupsForEmployees.RemoveGroup)
+                    RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
             }
         }
     }
-    Control _adminPanelContent;
-    public Control AdminPanelContent
-    {
-        get => _adminPanelContent;
-        set => SetProperty(ref _adminPanelContent, value, nameof(AdminPanelContent));
-    }
-    AdminEmployeeViewModel _adminEmployeeViewModel;
-    public AdminEmployeeViewModel AdminEmployeeViewModel 
-    {
-        get => _adminEmployeeViewModel;
-        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminEmployeeViewModel));
-    }
-    AdminGroupViewModel _adminGroupViewModel;
-    public AdminEmployeeViewModel AdminGroupViewModel 
-    {
-        get => _adminEmployeeViewModel;
-        set => SetProperty(ref _adminEmployeeViewModel, value, nameof(AdminGroupViewModel));
-    }
-    EmployeeTimeViewModel _employeeTimeViewModel;
-    public EmployeeTimeViewModel EmployeeTimeViewModel
-    {
-        get => _employeeTimeViewModel;
-        set => SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
-    }
-
-    int _selectedTab = 0;
-    public int SelectedTab
-    {
-        get => _selectedTab;
-        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
-    }
-    
-    public AdminPanelViewModel(IPlatform platform) : base(platform)
-    {
-        AdminEmployeeViewModel = new(platform);
-        EmployeeTimeViewModel = new(platform);
-
-
-        platform.DataLoaded += (sender, args) =>
-        {
-            Groups = platform.MainWindowViewModel.Groups;
-        };
-
-        Screen = settings.GetEmployeeOverViewSettings();
-    }
-
-    public void Logout()
-    {
-        SelectedTab = EMPLOYEE_LISTPAGE_TAB;
-        _platform.MainWindowViewModel.RequestView(typeof(LoginScreenViewModel));
-    }
-
-    public void EditNextScannedCard()
-    {
-        CardReader.State.UpdateNextEmployee = true;
-        Views.Dialog.WaitingForCardDialog.Open();
-    }
-
-    public void SwitchToGroups()
-    {
-        SelectedTab = GROUP_LISTPAGE_TAB;
-        _platform.MainWindowViewModel.RequestView(typeof(AdminGroupViewModel));
-    }
-
-    public void DeleteEmployee(Employee employee)
-    {
-        employee.DeleteFromDb();
-        foreach (Group group in _platform.MainWindowViewModel.Groups)
-        {
-            group.Members.Remove(employee);
-        }
-        _platform.MainWindowViewModel.Employees.Remove(employee);
-    }
-
-    public void DeleteEmployee(ObservableCollection<Employee> employees)
-    {
-        foreach (Employee employee in employees)
-        {
-            DeleteEmployee(employee);
-        }
-    }
-
-    public void UpdateOffsite(Employee employee, bool isOffsite, DateTime? offsiteUntil)
-    {
-        employee.IsOffSite = isOffsite;
-        employee.OffSiteUntil = offsiteUntil;
-        employee.UpdateDb();
-    }
-    
-    public void UpdateOffsite(ObservableCollection<Employee> employees, /*bool isOffsite, DateTime? offsiteUntil,*/
-        DateTime FromDate, DateTime ToDate,string Note, Absence.absenceReason AbsenceReason)
-    {
-        Absence absence = new();
-        absence.ToTime = absence.ToTime.AddHours(23);
-        foreach (Employee employee in employees)
-        {
-            absence.InsertAbsence(employee.ID, FromDate, ToDate, Note, AbsenceReason);
-
-            //UpdateOffsite(employee, isOffsite, offsiteUntil);
-            //employee.IsOffSite = true;
-        }
-    }
-
-    public void AddSelectedUsersToGroup(Group group)
-    {
-        foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
-        {
-            group.AddEmployee(employee);
-        }
-    }
-    public void RemoveSelectedUsersToGroup(Group group)
-    {
-        foreach (var employee in AdminEmployeeViewModel.SelectedEmployees)
-        {
-            group.RemoveEmployee(employee);
-        }
-    }
-
-    public void EditGroupsForEmployees()
-    {
-        EditGroupsForEmployees editGroupsForEmployees = new(_platform.MainWindowViewModel.Groups);
-
-        if (editGroupsForEmployees.ShowDialog() == true && editGroupsForEmployees.SelectedGroup != null)
-        {
-            if (editGroupsForEmployees.AddGroup) AddSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-            if (editGroupsForEmployees.RemoveGroup) RemoveSelectedUsersToGroup(editGroupsForEmployees.SelectedGroup);
-        }
-    }
-    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
-    public int Screen { get; set; }
-    SettingsControl settings = new();
-
-    public void setscreen()
-    {
-        settings.SetEmployeeOverViewSettings(Screen);
-    }
-    //TEST FOR CHANGING WHAT SCREEN EmployeeOverview
 }

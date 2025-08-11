@@ -57,7 +57,7 @@ CREATE TABLE Absence (
     employeeId INT NOT NULL,
     fromDate DATETIME NOT NULL,
     toDate DATETIME NOT NULL,
-    AbsenceReason INT NOT NULL,
+    AbsenceReasonId INT NOT NULL,
     note NVARCHAR(MAX),
     FOREIGN KEY (employeeId) REFERENCES employee(ID) ON DELETE CASCADE
 );
