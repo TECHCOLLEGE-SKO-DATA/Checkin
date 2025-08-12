@@ -1,3 +1,5 @@
+using System;
+
 namespace CheckInSystem.Platform;
 public class ReaderEventArgs : EventArgs
 {

@@ -1,107 +1,147 @@
+﻿
+using Avalonia.Controls;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using CheckInSystem.Platform;
+using CheckInSystem.ViewModels.Windows;
+using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.Views.UserControls;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Threading.Tasks;
+using CheckinLibrary.Background_tasks;
 using System.Windows;
 using CheckInSystem.CardReader;
-using CheckInSystem.Database;
-using CheckInSystem.Models;
-using CheckInSystem.Platform;
-using CheckInSystem.ViewModels.UserControls;
-using System.Windows.Controls;
-using System.Collections.ObjectModel;
-using PCSC.Interop;
-using CheckInSystem.Views.Windows;
-using CheckInSystem.Background_tasks;
-using System.Reflection;
+using Avalonia;
+using Avalonia.Threading;
+using CheckInSystem.Views;
+using CheckinLibrary.Settings;
+using CheckInSystem.Customcontrols;
+using DynamicData;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
+    public List<AbsenceReason> absenceReasons { get; set; }
+
     AdminPanelViewModel _adminPanelViewModel;
-
-    public string AppVersion
-    {
-        get
-        {
-            string? version = Assembly.GetExecutingAssembly()
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-                .InformationalVersion;
-
-            // Remove anything after '+' to keep it clean
-            return "v" + (version?.Split('+')[0] ?? "Unknown");
-        }
-    }
     public AdminPanelViewModel AdminPanelViewModel
     {
         get => _adminPanelViewModel;
-        set => SetProperty(ref _adminPanelViewModel, value, nameof(AdminPanelViewModel));
+        set => this.RaiseAndSetIfChanged(ref _adminPanelViewModel, value, nameof(AdminPanelViewModel));
     }
     AdminGroupViewModel _adminGroupViewModel;
     public AdminGroupViewModel AdminGroupViewModel
     {
         get => _adminGroupViewModel;
-        set => SetProperty(ref _adminGroupViewModel, value, nameof(AdminGroupViewModel));
+        set => this.RaiseAndSetIfChanged(ref _adminGroupViewModel, value, nameof(AdminGroupViewModel));
     }
 
-    LoginScreenViewModel _loginViewModel;
-    public LoginScreenViewModel LoginScreenViewModel
+    AdminLoginViewModel _loginViewModel;
+    public AdminLoginViewModel LoginScreenViewModel
     {
         get => _loginViewModel;
-        set => SetProperty(ref _loginViewModel, value, nameof(LoginScreenViewModel));
+        set => this.RaiseAndSetIfChanged(ref _loginViewModel, value, nameof(LoginScreenViewModel));
     }
     EmployeeTimeViewModel _employeeTimeViewModel;
     public EmployeeTimeViewModel EmployeeTimeViewModel
     {
         get => _employeeTimeViewModel;
-        set {
+        set
+        {
             // if (_employeeTimeView != null)
             // {
             //     _employeeTimeView.DataContext = value;
             // }
-            SetProperty(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+            this.RaiseAndSetIfChanged(ref _employeeTimeViewModel, value, nameof(EmployeeTimeViewModel));
+        }
+    }
+    SettingsViewModel _settingsViewModel;
+    public SettingsViewModel SettingsViewModel
+    {
+        get => _settingsViewModel;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _settingsViewModel, value, nameof(SettingsViewModel));
         }
     }
 
+    public bool DarkMode { get; set; }
     public ObservableCollection<Employee> Employees { get; private set; } = new();
     public ObservableCollection<Group> Groups { get; private set; } = new();
+    public Group GroupAll { get; private set; } = new();
 
     int _selectedTab = 0;
     public int SelectedTab
     {
         get => _selectedTab;
-        set => SetProperty(ref _selectedTab, value, nameof(SelectedTab));
+        set => this.RaiseAndSetIfChanged(ref _selectedTab, value, nameof(SelectedTab));
     }
 
     ContentControl _mainContentControl;
     public ContentControl MainContentControl
     {
         get => _mainContentControl;
-        set => SetProperty(ref _mainContentControl, value, nameof(MainContentControl));
+        set => this.RaiseAndSetIfChanged(ref _mainContentControl, value, nameof(MainContentControl));
     }
+
+    public AbsencBackGroundService absencBackGroundService = new();
+
+    public EmployeeStatusToBrushConverter brushConverter { get; set; }
 
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
-        platform.CardReader.CardScanned += (sender, args) => EmployeeCardScanned(args.CardId);
+        if (!Design.IsDesignMode)
+        {
+            platform.CardReader.CardInserted += (sender, args) => EmployeeCardScanned(args.Value);
 
+            //loads data before making instances of ViewModels
+            LoadDataFromDatabase();
+        }
+        
+        //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
         AdminGroupViewModel = new(platform);
         EmployeeTimeViewModel = new(platform);
+        SettingsViewModel = new(platform);
 
-        LoginScreenViewModel.LoginSuccessful += (sender, args) => {
-            RequestView(typeof(AdminPanelViewModel));
-        };
+        SettingsControl settingsControl = new();
+
+        absenceReasons = settingsControl.GetAbsenceReasons();
+
+        DarkMode = settingsControl.GetDarkMode();
+
+        //starting View and ViewModel
+        CurrentViewModel = LoginScreenViewModel;
     }
 
     public void LoadDataFromDatabase()
     {
-        AbsencBackGroundService absence = new();
+        if (Design.IsDesignMode)
+            return;
+
         DatabaseHelper databaseHelper = new DatabaseHelper();
         foreach (var employee in databaseHelper.GetAllEmployees())
         {
-            absence.AddEmployeesToAbsenceCheck(employee);
+            //Adds Employees to a list in AbsenceBackgroundService.cs
+            absencBackGroundService.AddEmployeesToAbsenceCheck(employee);
 
-            absence.AbsenceTask();
+            //runs a inital check on if people have upcoming absence
+            absencBackGroundService.AbsenceTask();
 
             Employees.Add(employee);
         }
+
+        GroupAll = new Group(0, "All");
+
+        GroupAll.InitializeMembers(Employees);
+
         Groups = new ObservableCollection<Group>(Group.GetAllGroups(new List<Employee>(Employees)));
 
         List<Employee> employees = new List<Employee>(Employees);
@@ -110,41 +150,12 @@ public class MainWindowViewModel : ViewModelBase
         Maintenance.CheckForEndedOffSiteTime(employees);
     }
 
-    public void RequestView(Type view)
-    {
-        if (view == typeof(LoginScreenViewModel))
-        {
-            SelectedTab = 0;
-        }
-        else if (view == typeof(AdminPanelViewModel))
-        {
-            SelectedTab = 1;
-        } 
-        else if (view == typeof(AdminGroupViewModel))
-        {
-            SelectedTab = 2;
-        }
-        else if (view == typeof(EmployeeTimeViewModel))
-        {
-            SelectedTab = 3;
-        }
-        else
-        {
-            throw new InvalidOperationException($"Cannot switch to unknown view {view}");
-        }
-    }
-    
-    public void RequestView(UserControl control)
-    {
-        MainContentControl = control;
-    }
-
-    public void EmployeeCardScanned(string cardID) 
+    public void EmployeeCardScanned(string cardID)
     {
         if (State.UpdateNextEmployee)
         {
-           UpdateNextEmployee(cardID);
-           return;
+            UpdateNextEmployee(cardID);
+            return;
         }
 
         if (State.UpdateCardId)
@@ -155,12 +166,7 @@ public class MainWindowViewModel : ViewModelBase
 
         UpdateEmployeeLocal(cardID);
     }
-    public void SeeEmployeeTime(Employee employee)
-    {
-        _employeeTimeViewModel.SelectedEmployee = employee;
-        RequestView(typeof(EmployeeTimeViewModel));
-    }
-    
+
     void UpdateNextEmployee(string cardID)
     {
         DatabaseHelper databaseHelper = new();
@@ -170,17 +176,18 @@ public class MainWindowViewModel : ViewModelBase
         {
             databaseHelper.CardScanned(cardID);
             editEmployee = databaseHelper.GetFromCardId(cardID);
-            if (editEmployee == null) {
+            if (editEmployee == null)
+            {
                 throw new Exception("Failed saving employee");
             }
             Employees.Add(editEmployee);
         }
-        if (Views.Dialog.WaitingForCardDialog.Instance != null) 
-            Application.Current.Dispatcher.Invoke( () => {
-                Views.Dialog.WaitingForCardDialog.Instance.Close();
+
+        if (WaitingForCardDialog.Instance != null)
+            Dispatcher.UIThread.Post(() => {
+                WaitingForCardDialog.Instance.Close();
             });
-        
-        EditEmployeeWindow.Open(editEmployee);
+        EditEmployeeWindow.Open(editEmployee, _platform);
     }
 
     void UpdateEmployeeLocal(string cardID)
@@ -197,15 +204,58 @@ public class MainWindowViewModel : ViewModelBase
             var dbEmployee = databaseHelper.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
-                Application.Current.Dispatcher.Invoke( () => {
+                Dispatcher.UIThread.Post(() =>
+                {
                     Employees.Add(dbEmployee);
                 });
+
             }
         }
     }
-    
+
     private void UpdateCardId(string cardID)
     {
         State.UpdateCard(cardID);
+    }
+
+    //made to set current Viewmodel used for MainWindow
+    private ViewModelBase _currentViewModel;
+    public ViewModelBase CurrentViewModel
+    {
+        get => _currentViewModel;
+        set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
+    }
+
+    //switching methods for changing the View and ViewModel 
+
+    public void SwitchToEmployeeTime(Employee employee)
+    {
+        _employeeTimeViewModel.SelectedEmployee = employee;
+        //exists because for some reason i cant get avalonia to keep the reasonId when going in and out and then back into an employee's 
+        _employeeTimeViewModel.RefreshAbsences(); 
+        _platform.MainWindowViewModel.CurrentViewModel = EmployeeTimeViewModel;
+    }
+
+
+    public void SwitchToAdminPanel()
+    {   
+        CurrentViewModel = AdminPanelViewModel;
+    }
+
+    public void SwitchToGroupView()
+    {
+        CurrentViewModel = AdminGroupViewModel;
+    }
+
+    public void SwitchToSettingsView()
+    {
+        CurrentViewModel = SettingsViewModel;
+    }
+
+    public void SwitchToLoginView()
+    {
+        LoginScreenViewModel.Username = "";
+        LoginScreenViewModel.PassWord = "";
+        CurrentViewModel = LoginScreenViewModel;
     }
 }

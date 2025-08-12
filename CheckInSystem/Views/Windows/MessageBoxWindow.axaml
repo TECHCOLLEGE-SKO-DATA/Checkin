@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
+        x:Class="CheckInSystem.Views.MessageBoxWindow"
+        xmlns:vm="using:CheckInSystem.ViewModels.Windows"
+		x:DataType="vm:MessageBoxViewModel"
+		Width="400" Height="200"
+		CanResize="False"
+		Title="{Binding Title}"
+		Icon="/Assets/avalonia-logo.ico">
+
+	<StackPanel Margin="20" VerticalAlignment="Center">
+		<TextBlock Text="{Binding Message}" FontSize="16" TextWrapping="Wrap" Margin="0 0 0 20"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+			<Button Content="Yes" Command="{Binding YesCommand}" IsVisible="{Binding ShowYes}" Width="80"/>
+			<Button Content="No" Command="{Binding NoCommand}" IsVisible="{Binding ShowNo}" Width="80"/>
+			<Button Content="OK" Command="{Binding OKCommand}" IsVisible="{Binding ShowOK}" Width="80"/>
+			<Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding ShowCancel}" Width="80"/>
+		</StackPanel>
+	</StackPanel>
+</Window>

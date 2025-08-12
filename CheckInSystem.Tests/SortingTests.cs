@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using Xunit;
-using CheckInSystem.Models;
+using CheckinLibrary.Models;
 
 namespace CheckInSystem.Tests
 {
@@ -43,11 +41,11 @@ namespace CheckInSystem.Tests
             var viewModelGroups = new ObservableCollection<Group>(groups);
 
             // Assert
-            Assert.Equal(2, viewModelGroups.Count); // Ensure 2 groups are loaded
-            Assert.Equal(2, viewModelGroups[0].Members.Count); // Group 1 has 2 members
-            Assert.Equal(2, viewModelGroups[1].Members.Count); // Group 2 has 2 members
-            Assert.Equal("Alice", viewModelGroups[0].Members[0].FirstName); // First member in Group 1 is Alice
-            Assert.Equal("Charlie", viewModelGroups[1].Members[0].FirstName); // First member in Group 2 is Charlie
+            Assert.Equal(2, viewModelGroups.Count);
+            Assert.Equal(2, viewModelGroups[0].Members.Count);
+            Assert.Equal(2, viewModelGroups[1].Members.Count);
+            Assert.Equal("Alice", viewModelGroups[0].Members[0].FirstName);
+            Assert.Equal("Charlie", viewModelGroups[1].Members[0].FirstName);
         }
 
         [Fact]
@@ -59,15 +57,16 @@ namespace CheckInSystem.Tests
             group.InitializeMembers(employees);
 
             // Act
-            var view = CollectionViewSource.GetDefaultView(group.Members);
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending));
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.FirstName), ListSortDirection.Ascending));
-            view.Refresh();
+            var sorted = group.Members
+                .OrderByDescending(e => e.IsCheckedIn)
+                .ThenBy(e => e.FirstName)
+                .ToList();
 
             // Assert
-            Assert.Equal("Alice", ((Employee)view.Cast<Employee>().First()).FirstName); // Checked-in, alphabetical
-            Assert.Equal("Charlie", ((Employee)view.Cast<Employee>().Skip(1).First()).FirstName); // Checked-in, alphabetical
-            Assert.Equal("Bob", ((Employee)view.Cast<Employee>().Skip(2).First()).FirstName); // Not checked-in
+            Assert.Equal("Alice", sorted[0].FirstName);
+            Assert.Equal("Charlie", sorted[1].FirstName);
+            Assert.Equal("Bob", sorted[2].FirstName);
+            Assert.Equal("David", sorted[3].FirstName);
         }
 
         [Fact]
@@ -78,18 +77,19 @@ namespace CheckInSystem.Tests
             var group = new Group(1, "Test Group");
             group.InitializeMembers(employees);
 
-            var view = CollectionViewSource.GetDefaultView(group.Members);
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending));
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.FirstName), ListSortDirection.Ascending));
-            view.Refresh();
+            var bob = group.Members.First(e => e.FirstName == "Bob");
+            bob.IsCheckedIn = true;
 
             // Act
-            var bob = group.Members.First(e => e.FirstName == "Bob");
-            bob.IsCheckedIn = true; // Update property
-            view.Refresh(); // Refresh sorting
+            var sorted = group.Members
+                .OrderByDescending(e => e.IsCheckedIn)
+                .ThenBy(e => e.FirstName)
+                .ToList();
 
             // Assert
-            Assert.Equal("Bob", ((Employee)view.Cast<Employee>().Skip(1).First()).FirstName); // Bob should now be sorted with checked-in members
+            Assert.Equal("Alice", sorted[0].FirstName);
+            Assert.Equal("Bob", sorted[1].FirstName);
+            Assert.Equal("Charlie", sorted[2].FirstName);
         }
 
         [Fact]
@@ -100,21 +100,23 @@ namespace CheckInSystem.Tests
             var group = new Group(1, "Test Group");
             group.InitializeMembers(employees);
 
-            var view = CollectionViewSource.GetDefaultView(group.Members);
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.IsCheckedIn), ListSortDirection.Descending));
-            view.SortDescriptions.Add(new SortDescription(nameof(Employee.FirstName), ListSortDirection.Ascending));
-            view.Refresh();
-
             // Act
-            foreach (var employee in group.Members)
+            foreach (var emp in group.Members)
             {
-                employee.IsCheckedIn = true; // Set all to checked-in
+                emp.IsCheckedIn = true;
             }
-            view.Refresh();
+
+            var sorted = group.Members
+                .OrderByDescending(e => e.IsCheckedIn)
+                .ThenBy(e => e.FirstName)
+                .ToList();
 
             // Assert
-            Assert.True(group.Members.All(e => e.IsCheckedIn)); // Ensure all are checked in
-            Assert.Equal("Alice", ((Employee)view.Cast<Employee>().First()).FirstName); // Alphabetical order within checked-in
+            Assert.True(sorted.All(e => e.IsCheckedIn));
+            Assert.Equal("Alice", sorted[0].FirstName);
+            Assert.Equal("Bob", sorted[1].FirstName);
+            Assert.Equal("Charlie", sorted[2].FirstName);
+            Assert.Equal("David", sorted[3].FirstName);
         }
     }
 }

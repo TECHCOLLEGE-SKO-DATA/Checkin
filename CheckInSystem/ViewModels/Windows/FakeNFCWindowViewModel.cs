@@ -1,14 +1,29 @@
+﻿using Avalonia.Controls;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
-namespace CheckInSystem.ViewModels.Windows;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Threading.Tasks;
 
-public class FakeNFCWindowViewModel : ViewModelBase
+namespace CheckInSystem.ViewModels.Windows
 {
-    FakeNFCViewModel _fakeNFCViewModel;
-    public FakeNFCViewModel FakeNFCViewModel { get => _fakeNFCViewModel; set => _fakeNFCViewModel = value; }
-
-    public FakeNFCWindowViewModel(IPlatform platform) : base(platform)
+    public class FakeNFCWindowViewModel : ViewModelBase
     {
-        _fakeNFCViewModel = new FakeNFCViewModel(platform);
+        private ViewModelBase _currentViewModel;
+
+        public ViewModelBase CurrentViewModel
+        {
+            get => _currentViewModel;
+            set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
+        }
+        
+        public FakeNFCWindowViewModel(IPlatform platform) : base(platform)
+        {
+            CurrentViewModel = new FakeNFCViewModel(platform);
+        }
     }
 }

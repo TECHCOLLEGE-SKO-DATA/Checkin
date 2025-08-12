@@ -2,6 +2,7 @@ using CheckInSystem.Platform;
 using FrApp42.ACR122U;
 using PCSC;
 using PCSC.Iso7816;
+using System;
 namespace CheckInSystem.CardReader;
 
 public class ACR122UCardReader : Platform.ICardReader
