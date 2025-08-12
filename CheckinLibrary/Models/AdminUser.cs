@@ -22,14 +22,27 @@ public class AdminUser
 
     public void UpdateUser(string NewUsername, string NewPassword, string OldUsername, string OldPassword)
     {
-        var user = databasehelper.Login(OldUsername, OldPassword);
-        if (user != null)
+        if (OldUsername != "" && OldPassword != "")
         {
-            databasehelper.UpdateUser(NewUsername, NewPassword, user.ID);
+            var user = databasehelper.Login(OldUsername, OldPassword);
+            if (user != null)
+            {
+                databasehelper.UpdateUser(NewUsername, NewPassword, user.ID);
+            }
+            else
+            {
+                Debug.WriteLine("Failed to Update user: User was Null/not found or returned");
+            }
+        }
+        else if (NewUsername != null && NewPassword != null)
+        {
+            AdminUser adminUser = databasehelper.GetAdminUsers().First(x => x.Username == NewUsername);
+
+            databasehelper.UpdateUser(NewUsername, NewPassword, adminUser.ID);
         }
         else
         {
-            Debug.WriteLine("Failed to Update user: User was Null/not found or returned");
+            Debug.WriteLine("Failed to Update user: no new Username/Password");
         }
     }
     

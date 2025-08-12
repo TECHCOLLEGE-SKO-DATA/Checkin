@@ -6,13 +6,14 @@
              x:Class="CheckInSystem.Views.UserControls.AdminsView"
 			 xmlns:vm="clr-namespace:CheckInSystem.ViewModels.UserControls"
 			 x:DataType="vm:AdminsViewModel"
-			 Width="1200" Height="550">
+			 Width="1200" Height="550"
+			 x:Name="Root">
 	
 	<Grid ShowGridLines="True">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="30"/>
+			<RowDefinition Height="40"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="30"/>
+			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="30"/>
@@ -26,6 +27,15 @@
 					Grid.ColumnSpan="4">
 			
 		</StackPanel>
+
+		<Button Grid.Column="1" 
+				Content="back"
+				Command="{Binding Btn_Back}"/>
+		
+		<Button Grid.Column="2"
+				Content="Logout"
+				HorizontalAlignment="Right"
+				Command="{Binding Btn_Logout}"/>
 		
 		<!--Left Side-->
 		<WrapPanel Grid.Column="1"
@@ -67,7 +77,7 @@
 
 			<ItemsControl ItemsSource="{Binding AdminList}"
               Background="LightGray"
-              Height="490">
+              Height="470">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal" Margin="5">
@@ -75,7 +85,7 @@
 									   Margin="5 5 0 0"
 									   FontSize="20"/>
 
-							<TextBlock Text="{Binding Username}"
+							<TextBlock Text="{Binding User.Username}"
 									   Margin="5 5 0 0"
 									   FontSize="20"/>
 
@@ -83,18 +93,25 @@
 									   Margin="5 5 0 0"
 									   FontSize="20"/>
 
+							<!-- Bind to the temporary password -->
 							<TextBox Width="200"
 									 Margin="0"
 									 FontSize="20"
-									 Text=""/>
-
+									 Text="{Binding NewPassword, Mode=TwoWay}"/>
+							
+							<!-- Pass the current item as command parameter -->
 							<Button Content="Update"
 									FontSize="18"
-									Margin="5 0 0 0"/>
-
+									Margin="5 0 0 0"
+									Command="{Binding DataContext.UpdateAdminCommand, ElementName=Root}"
+									CommandParameter="{Binding}"/>
+							
 							<Button Content="X"
 									FontSize="18"
-									Margin="20 0 0 0"/>
+									Margin="20 0 0 0"
+									Command="{Binding DataContext.DeleteAdminCommand, ElementName=Root}"
+									CommandParameter="{Binding}"/>
+
 						</StackPanel>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

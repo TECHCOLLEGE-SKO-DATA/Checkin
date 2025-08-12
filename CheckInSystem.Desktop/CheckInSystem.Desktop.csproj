@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CheckInSystemAvalonia\CheckInSystem.csproj" />
+    <ProjectReference Include="..\CheckInSystem\CheckInSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
