@@ -65,10 +65,41 @@
 		<StackPanel Grid.Column="2"
 					Grid.Row="1">
 
-			<ItemsControl>
-				
+			<ItemsControl ItemsSource="{Binding AdminList}"
+              Background="LightGray"
+              Height="490">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<TextBlock Text="UserName:"
+									   Margin="5 5 0 0"
+									   FontSize="20"/>
+
+							<TextBlock Text="{Binding Username}"
+									   Margin="5 5 0 0"
+									   FontSize="20"/>
+
+							<TextBlock Text="| Password:"
+									   Margin="5 5 0 0"
+									   FontSize="20"/>
+
+							<TextBox Width="200"
+									 Margin="0"
+									 FontSize="20"
+									 Text=""/>
+
+							<Button Content="Update"
+									FontSize="18"
+									Margin="5 0 0 0"/>
+
+							<Button Content="X"
+									FontSize="18"
+									Margin="20 0 0 0"/>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
 			</ItemsControl>
-			
+
 		</StackPanel>
 	</Grid>
 </UserControl>
