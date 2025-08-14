@@ -9,7 +9,7 @@
 			 Width="1200" Height="550"
 			 x:Name="Root">
 	
-	<Grid ShowGridLines="True">
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="*"/>
