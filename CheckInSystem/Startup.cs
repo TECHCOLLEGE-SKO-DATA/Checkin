@@ -13,10 +13,13 @@ public class Startup
     public static bool Run(IPlatform platform)
     {
 
-        if (!EnsureDatabaseAvailable(platform)) return false;
-        if (!Design.IsDesignMode)
+        if (!EnsureDatabaseAvailable(platform))
         {
-            AddAdmin();
+            if (!Design.IsDesignMode)
+            {
+                AddAdmin();
+            }
+            return false;
         }
         return true;
     }
