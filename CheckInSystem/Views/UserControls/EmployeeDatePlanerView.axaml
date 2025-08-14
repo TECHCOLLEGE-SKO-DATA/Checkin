@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CheckInSystem.Customcontrols"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckInSystem.Views.UserControls.EmployeeDatePlanerView"
+			 xmlns:vm="clr-namespace:CheckInSystem.ViewModels.UserControls"
+			 x:DataType="vm:EmployeeDatePlanerViewModel">
+	
+	<Grid ShowGridLines="true">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="50"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0"
+					Background="Blue"
+					Height="50">
+		</StackPanel>
+		
+		<Button Content="Back"
+				FontSize="20"
+				Margin="30 0 0 0"
+				Grid.Row="0" 
+				Command="{Binding Btn_Back}"/>
+
+		<Button Content="Logout"
+				FontSize="20"
+				Margin="0 0 30 0"
+				HorizontalAlignment="Right"
+				Grid.Row="0"
+				Command="{Binding Btn_Logout}"/>
+
+		<ScrollViewer Grid.Row="1">
+			<DataGrid ItemsSource="asd">
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="Mandag">
+						<DataTemplate>
+							<Canvas/>
+						</DataTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="Tirsdag">
+						<DataTemplate>
+							<Canvas/>
+						</DataTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="Onsdag">
+						<DataTemplate>
+							<Canvas/>
+						</DataTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="Torsdag">
+						<DataTemplate>
+							<Canvas/>
+						</DataTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="fredag">
+						<DataTemplate>
+							<Canvas/>
+						</DataTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</ScrollViewer>
+		
+	</Grid>
+</UserControl>
