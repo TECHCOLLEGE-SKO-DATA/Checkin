@@ -3,9 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
 using CheckInSystem.Background_tasks;
 using CheckInSystem.Controls;
 using CheckInSystem.Platform;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace CheckInSystem;

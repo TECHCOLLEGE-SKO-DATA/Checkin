@@ -1,6 +1,10 @@
 ﻿using CheckinLibrary.Background_tasks;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using System.Collections.ObjectModel;
 public class BackgroundTimeService
 {
+    private readonly DatabaseHelper _dbHelper;
     AbsencBackGroundService absence = new();
 
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
@@ -12,15 +16,24 @@ public class BackgroundTimeService
     private readonly Func<DateTime> _timeProvider;
     
     public event Action OnDailyReset;
-    public Action PerformMaintenanceAction { get; set; } = () => { };
+    public Action<List<Employee>> PerformMaintenanceAction { get; set; } = _ => { };
 
-    public BackgroundTimeService(Func<DateTime> timeProvider = null)
+    public Func<List<Employee>> GetEmployees { get; set; }
+
+
+    public BackgroundTimeService(Func<DateTime> timeProvider = null, DatabaseHelper dbHelper = null)
     {
         _timeProvider = timeProvider ?? (() => DateTime.Now);
     }
 
     public void Start()
     {
+        this.PerformMaintenanceAction = (employees) =>
+        {
+            Maintenance.CheckOutEmployeesIfTheyForgot(employees);
+            Maintenance.CheckForEndedOffSiteTime(employees);
+        };
+
         _cts = new CancellationTokenSource();
         Task.Run(async () =>
         {
@@ -43,10 +56,23 @@ public class BackgroundTimeService
 
         if ((currentTime >= _startTime || currentTime < _endTime) && !_hasLoggedToday)
         {
-            _hasLoggedToday = true;
-            PerformMaintenanceAction.Invoke();
+            // Retrieve employees: use the test delegate if set, otherwise query the database
+            List<Employee> employees;
 
-            // Run absence check 8 hours later (approx. 01:00–04:00)
+            if (GetEmployees != null)
+            {
+                employees = GetEmployees(); // Use fake/test employees
+            }
+            else
+            {
+                employees = _dbHelper.GetAllEmployees(); // Use real database
+            }
+
+
+            _hasLoggedToday = true;
+            PerformMaintenanceAction.Invoke(employees);
+
+            // Run absence check 8 hours later
             _ = Task.Run(async () =>
             {
                 await Task.Delay(TimeSpan.FromHours(8));
@@ -59,7 +85,6 @@ public class BackgroundTimeService
             OnDailyReset?.Invoke();
         }
     }
-
 }
 
 
