@@ -15,8 +15,6 @@ public partial class AdminEmployeeView : UserControl
 {
     public AdminEmployeeViewModel _vm => (AdminEmployeeViewModel)DataContext;
 
-    IPlatform _platform;
-
     public AdminEmployeeView()
     {
         InitializeComponent();

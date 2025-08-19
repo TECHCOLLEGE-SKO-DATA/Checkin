@@ -62,6 +62,12 @@ public class BackgroundTimeServiceTests
         var fakeTime = new DateTime(2025, 1, 27, 5, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
+
         bool resetTriggered = false;
         service.OnDailyReset += () => resetTriggered = true;
 
@@ -78,6 +84,12 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 10:00 AM (outside valid range)
         var fakeTime = new DateTime(2025, 1, 27, 10, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
         bool maintenanceCalled = false;
         service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
@@ -118,6 +130,12 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 6:00 AM
         var fakeTime = new DateTime(2025, 1, 27, 6, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
         bool resetTriggered = false;
         service.OnDailyReset += () => resetTriggered = true;
