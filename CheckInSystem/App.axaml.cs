@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using CheckinLibrary;
 using CheckInSystem;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels;
 using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
@@ -22,12 +23,14 @@ public partial class App : Application
         AppDomain.CurrentDomain.UnhandledException += log;
         try
         {
+            IPlatform platform = Platform;
             Platform.Start();
 
             BackGroundTheme(Platform.MainWindowViewModel.DarkMode);
 
             if (!Startup.Run(Platform))
             {
+                //there should be an error message here
             }
         }
         catch (Exception exception)

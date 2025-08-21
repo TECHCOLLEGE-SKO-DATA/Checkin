@@ -12,7 +12,6 @@ public class Startup
 {
     public static bool Run(IPlatform platform)
     {
-
         if (!EnsureDatabaseAvailable(platform))
         {
             if (!Design.IsDesignMode)
