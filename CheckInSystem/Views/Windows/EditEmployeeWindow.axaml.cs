@@ -13,12 +13,10 @@ public partial class EditEmployeeWindow : Window
 {
     EditEmployeeViewModel _vm { get => (EditEmployeeViewModel)DataContext; set => DataContext = value; }
 
-    private IPlatform _platform;
     public EditEmployeeWindow(IPlatform platform, EditEmployeeViewModel viewModel)
     {
         _vm = viewModel;
         //this.DataContext = vm;
-        _platform = platform;
         Closing += _vm.OnWindowClosing;
         InitializeComponent();
         Topmost = true;

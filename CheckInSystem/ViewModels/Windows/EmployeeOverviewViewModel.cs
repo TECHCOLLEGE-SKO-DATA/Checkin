@@ -189,7 +189,7 @@ namespace CheckInSystem.ViewModels.Windows
                 }
                 tempGroups.Add(group);
             }
-            Groups.Clear();
+            
             Groups = tempGroups;
         }
 
