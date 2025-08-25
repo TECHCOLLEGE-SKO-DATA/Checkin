@@ -4,6 +4,7 @@ using Metsys.Bson;
 using System;
 using Xunit;
 
+namespace BackgroundTimeServiceTests;
 public class BackgroundTimeServiceTests
 {
     [Fact]
