@@ -40,17 +40,43 @@ namespace CheckInSystem.ViewModels.UserControls
                         Absences.Add(absence);
                     }
 
+                    var sortedAbsences = Absences
+                        .OrderByDescending(absence => absence.FromDate)
+                        .ToList();
+
+                    Absences.Clear();
+                    foreach (var absence in sortedAbsences)
+                    {
+                        Absences.Add(absence);
+                    }
+
                     SiteTimes.Clear();
                     foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
                     {
                         SiteTimes.Add(siteTime);
                     }
 
+                    // Sort newest to oldest by ArrivalTime
+                    var sortedSiteTimes = SiteTimes
+                        .OrderByDescending(sitetime => sitetime.ArrivalTime)
+                        .ToList();
+
+                    SiteTimes.Clear();
+                    foreach (var SiteTime in sortedSiteTimes)
+                    {
+                        SiteTimes.Add(SiteTime);
+                    }
+
+
                     this.RaisePropertyChanged(nameof(Absences));
                     this.RaisePropertyChanged(nameof(SiteTimes));
                 }
             }
         }
+
+        public ReactiveCommand<Unit, Unit> Btn_AddAbsence { get; }
+
+        public ReactiveCommand<Unit, Unit> Btn_AddSiteTime { get; }
 
         public ReactiveCommand<Unit, Unit> Btn_Back { get; }
 

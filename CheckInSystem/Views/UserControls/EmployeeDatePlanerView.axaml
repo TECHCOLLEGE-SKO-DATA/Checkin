@@ -72,12 +72,26 @@
 				Grid.Row="2"
 				HorizontalAlignment="Right"
 				Command="{Binding Btn_Back}"/>
-		
-		<Button Content="Gem"
-				FontSize="18"
-				Margin="30 0 0 0"
-				Grid.Row="2"
-				Command="{Binding Btn_Save}"/>
+		<StackPanel Margin="10 0 0 0"
+					Grid.Row="2"
+					VerticalAlignment="Center"
+					Orientation="Horizontal">
+			
+			<Button Content="Gem"
+					FontSize="18"
+					Command="{Binding Btn_Save}"/>
+			
+			<Button Content="Add Site Time"
+					FontSize="18"
+					Margin="5 0 0 0"
+					Command="{Binding Btn_AddSiteTime}"/>
+			
+			<Button Content="Add Absence"
+					FontSize="18"
+					Margin="5 0 0 0"
+					Command="{Binding Btn_AddAbsence}"/>
+			
+		</StackPanel>
 		
 	</Grid>
 </UserControl>
