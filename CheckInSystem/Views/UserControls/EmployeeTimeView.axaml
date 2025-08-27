@@ -26,8 +26,10 @@
 		</StackPanel>
 
 		<!-- Site Times DataGrid -->
-		<DataGrid Grid.Row="1" ItemsSource="{Binding Path=SiteTimes}"
+		<DataGrid Grid.Row="1" 
+				  ItemsSource="{Binding Path=SiteTimes}"
                   AutoGenerateColumns="False">
+			
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Dato">
 					<DataGridTemplateColumn.CellTemplate>

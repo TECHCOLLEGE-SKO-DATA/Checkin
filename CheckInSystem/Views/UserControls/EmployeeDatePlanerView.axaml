@@ -12,19 +12,13 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="50"/>
 		</Grid.RowDefinitions>
 
 		<StackPanel Grid.Row="0"
-					Background="Blue"
-					Height="50">
+					Background="Blue">
 		</StackPanel>
 		
-		<Button Content="Back"
-				FontSize="20"
-				Margin="30 0 0 0"
-				Grid.Row="0" 
-				Command="{Binding Btn_Back}"/>
-
 		<Button Content="Logout"
 				FontSize="20"
 				Margin="0 0 30 0"
@@ -67,6 +61,23 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</ScrollViewer>
+
+		<StackPanel Background="Blue"
+					Grid.Row="2">
+		</StackPanel>
+		
+		<Button Content="Chancel"
+				FontSize="18"
+				Margin="0 0 30 0"
+				Grid.Row="2"
+				HorizontalAlignment="Right"
+				Command="{Binding Btn_Back}"/>
+		
+		<Button Content="Gem"
+				FontSize="18"
+				Margin="30 0 0 0"
+				Grid.Row="2"
+				Command="{Binding Btn_Save}"/>
 		
 	</Grid>
 </UserControl>
