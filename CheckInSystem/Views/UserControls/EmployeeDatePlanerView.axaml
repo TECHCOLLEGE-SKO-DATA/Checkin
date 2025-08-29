@@ -26,42 +26,101 @@
 				Grid.Row="0"
 				Command="{Binding Btn_Logout}"/>
 
+		<StackPanel Grid.Row="0"
+					VerticalAlignment="Center"
+					Orientation="Horizontal">
+
+			<Button Content="←"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+			
+			<Button Content="Current Week"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+			
+			<Button Content="→"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+		</StackPanel>
+
+		<!-- Planner Grid -->
 		<ScrollViewer Grid.Row="1">
-			<DataGrid ItemsSource="asd">
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Header="Mandag">
-						<DataTemplate>
-							<Canvas/>
-						</DataTemplate>
-					</DataGridTemplateColumn>
+			<Grid ShowGridLines="True">
+				<Grid.ColumnDefinitions>
+					<!-- Time column -->
+					<ColumnDefinition Width="60"/>
+					<!-- Mon–Fri -->
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="30"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
 
-					<DataGridTemplateColumn Header="Tirsdag">
-						<DataTemplate>
-							<Canvas/>
-						</DataTemplate>
-					</DataGridTemplateColumn>
+				<!-- Day headers -->
+				<TextBlock Grid.Column="1" Text="Mon" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="2" Text="Tue" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="3" Text="Wed" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="4" Text="Thu" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="5" Text="Fri" HorizontalAlignment="Center" FontWeight="Bold"/>
 
-					<DataGridTemplateColumn Header="Onsdag">
+				<!-- Times -->
+				<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Hours}">
+					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Canvas/>
+							<TextBlock Text="{Binding}" Height="50" Margin="2"/>
 						</DataTemplate>
-					</DataGridTemplateColumn>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
 
-					<DataGridTemplateColumn Header="Torsdag">
+				<!-- Hour dividers -->
+				<ItemsControl Grid.Row="1" Grid.ColumnSpan="6" ItemsSource="{Binding Hours}">
+					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Canvas/>
+							<Border Height="50" BorderBrush="LightGray" BorderThickness="0,1,0,0"/>
 						</DataTemplate>
-					</DataGridTemplateColumn>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
 
-					<DataGridTemplateColumn Header="fredag">
-						<DataTemplate>
+				<!-- Entries (check-in / absence blocks) -->
+				<ItemsControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" ItemsSource="{Binding Entries}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
 							<Canvas/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Background="{Binding Color}"
+                                    Opacity="{Binding Opacity}"
+                                    Width="150"
+                                    Canvas.Left="{Binding DayOffset}"
+                                    Canvas.Top="{Binding StartY}"
+                                    Height="{Binding Height}">
+								<TextBlock Text="{Binding Label}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
 						</DataTemplate>
-					</DataGridTemplateColumn>
-				</DataGrid.Columns>
-			</DataGrid>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Grid>
 		</ScrollViewer>
-
+		
 		<StackPanel Background="Blue"
 					Grid.Row="2">
 		</StackPanel>
