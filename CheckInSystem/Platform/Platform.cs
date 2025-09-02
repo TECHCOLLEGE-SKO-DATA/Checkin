@@ -1,8 +1,10 @@
+using CheckinLibrary.Database;
 using CheckInSystem.CardReader;
 using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using PCSC.Interop;
 using System;
+using System.Configuration;
 
 namespace CheckInSystem.Platform;
 public class Platform : IPlatform
@@ -14,11 +16,27 @@ public class Platform : IPlatform
     public MainWindowViewModel MainWindowViewModel => _mainWindowViewModel;
 
     public event DataLoadedEventHandler? DataLoaded;
+
     MainWindow _mainWindow;
     public MainWindow MainWindow => _mainWindow;
 
+    IDatabaseHelper _database;
+    public IDatabaseHelper Database => _database;
+
     public Platform()
     {
+        //if app.config service name is either of the normal sqlserver type names use the DatabaseHelper else its sqlite
+        string serviceName = ConfigurationManager.AppSettings["SqlServiceName"]?.Trim() ?? "";
+        
+        if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
+        {
+            _database = new DatabaseHelper();
+        }
+        else
+        {
+            _database = new DatabaseSqlLite();
+        }
+
 #if DEBUG
         _cardReader = new ScriptedCardReader();
 #else

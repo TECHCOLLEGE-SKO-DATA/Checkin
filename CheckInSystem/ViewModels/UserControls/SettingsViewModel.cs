@@ -87,12 +87,11 @@ namespace CheckInSystem.ViewModels.UserControls
 
         public void DeleteAbsenceReason(AbsenceReason absenceReason)
         {
-            DatabaseHelper dbHelper = new DatabaseHelper();
             List<Absence> relatedAbsences = new();
 
             foreach (var emp in _platform.MainWindowViewModel.Employees)
             {
-                List<Absence> absences = dbHelper.GetAllAbsence(emp);
+                List<Absence> absences = _platform.Database.GetAllAbsence(emp);
 
                 var effectedabsences = absences
                     .Where(a => a.AbsenceReasonId == absenceReason.Id)
@@ -111,7 +110,7 @@ namespace CheckInSystem.ViewModels.UserControls
                     }
                     relatedAbsences.Add(absence);
                 }
-                dbHelper.EditAbsence(relatedAbsences);
+                _platform.Database.EditAbsence(relatedAbsences);
             }
 
             if (absenceReason != null && AbsenceReasons.Contains(absenceReason))

@@ -19,8 +19,6 @@ namespace CheckInSystem.ViewModels.UserControls
 {
     public class AdminsViewModel : ViewModelBase
     {
-        DatabaseHelper dbHelper = new();
-
         AdminUser adminUser = new();
 
         public ObservableCollection<AdminItemViewModel> AdminList { get; set; } = new();
@@ -65,7 +63,7 @@ namespace CheckInSystem.ViewModels.UserControls
         }
         private void UpdateAdmin(AdminItemViewModel adminItem)
         {
-            dbHelper.UpdateUser(adminItem.User.Username, adminItem.NewPassword, adminItem.User.ID);
+            _platform.Database.UpdateUser(adminItem.User.Username, adminItem.NewPassword, adminItem.User.ID);
             adminItem.NewPassword = "";
         }
 

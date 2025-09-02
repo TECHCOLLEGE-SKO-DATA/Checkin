@@ -16,7 +16,7 @@ public class Startup
         {
             if (!Design.IsDesignMode)
             {
-                AddAdmin();
+                AddAdmin(platform);
             }
             return false;
         }
@@ -60,13 +60,12 @@ public class Startup
         employeeOverview.Show();
     }
 
-    private static void AddAdmin()
+    private static void AddAdmin(IPlatform platform)
     {
-        DatabaseHelper databaseHelper = new();
-        var admins = databaseHelper.GetAdminUsers();
+        var admins = platform.Database.GetAdminUsers();
         if (admins.Count == 0)
         {
-            databaseHelper.CreateUser("sko", "test123");
+            platform.Database.CreateUser("sko", "test123");
         }
     }
 

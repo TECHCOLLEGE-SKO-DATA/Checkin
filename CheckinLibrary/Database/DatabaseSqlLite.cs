@@ -1,10 +1,11 @@
-﻿using System;
+﻿using CheckinLibrary.Models;
+using Dapper;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
-using Dapper;
-using CheckinLibrary.Models;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using static CheckinLibrary.Models.Absence;
 
 namespace CheckinLibrary.Database;
@@ -56,33 +57,76 @@ public class DatabaseSqlLite : IDatabaseHelper
     // 🔹 Admin User Management
     public void CreateUser(string username, string password)
     {
-        string query = @"INSERT INTO adminUser (username, hashedPassword) VALUES (@username, @passwordHash)";
+        string insertQuery = @"INSERT INTO adminUser (username, hashedPassword) 
+                           VALUES (@username, @passwordHash)";
+
         string passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(password);
-        Execute(query, new { username, passwordHash });
+        Debug.WriteLine(passwordHash);
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(insertQuery, new { username, passwordHash });
+    }
+
+    public void UpdateUser(string username, string password, int id)
+    {
+        string updateQuery = @"UPDATE adminUser 
+                           SET username = @username, hashedPassword = @passwordHash 
+                           WHERE ID = @id";
+
+        string passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(password);
+        Debug.WriteLine(passwordHash);
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(updateQuery, new { username, passwordHash, id });
     }
 
     public AdminUser? Login(string username, string password)
     {
-        string hashQuery = "SELECT hashedPassword FROM adminUser WHERE username = @username";
-        string? hashedPassword = QuerySingle<string>(hashQuery, new { username });
+        string passwordHashQuery = @"SELECT hashedPassword 
+                                 FROM adminUser 
+                                 WHERE username = @username";
 
-        if (hashedPassword == null || !BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword))
-            return null;
+        string selectQuery = @"SELECT ID, username 
+                           FROM adminUser 
+                           WHERE username = @username";
 
-        string selectQuery = "SELECT ID, username FROM adminUser WHERE username = @username";
-        return QuerySingle<AdminUser>(selectQuery, new { username });
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        string? hashedPassword = connection.Query<string>(passwordHashQuery, new { username }).FirstOrDefault();
+        if (hashedPassword == null) return null;
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword)) return null;
+
+        return connection.Query<AdminUser>(selectQuery, new { username }).FirstOrDefault();
     }
 
     public List<AdminUser> GetAdminUsers()
     {
-        string query = "SELECT * FROM adminUser";
-        return Query<AdminUser>(query);
+        string selectQuery = @"SELECT * FROM adminUser";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        return connection.Query<AdminUser>(selectQuery).ToList();
     }
 
-    public void Delete(int ID)
+    public void Delete(int id)
     {
-        string query = "DELETE FROM adminUser WHERE ID = @ID";
-        Execute(query, new { ID });
+        string deletionQuery = @"DELETE FROM adminUser WHERE ID = @id";
+
+        using var connection = Database.GetConnection();
+        if (connection == null)
+            throw new Exception("Could not establish database connection!");
+
+        connection.Execute(deletionQuery, new { id });
     }
 
     // 🔹 Employee Management

@@ -151,8 +151,7 @@ public class MainWindowViewModel : ViewModelBase
         if (Design.IsDesignMode)
             return;
 
-        DatabaseHelper databaseHelper = new DatabaseHelper();
-        foreach (var employee in databaseHelper.GetAllEmployees())
+        foreach (var employee in _platform.Database.GetAllEmployees())
         {
             //Adds Employees to a list in AbsenceBackgroundService.cs
             absencBackGroundService.AddEmployeesToAbsenceCheck(employee);
@@ -194,13 +193,12 @@ public class MainWindowViewModel : ViewModelBase
 
     void UpdateNextEmployee(string cardID)
     {
-        DatabaseHelper databaseHelper = new();
         State.UpdateNextEmployee = false;
         Employee? editEmployee = Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         if (editEmployee == null)
         {
-            databaseHelper.CardScanned(cardID);
-            editEmployee = databaseHelper.GetFromCardId(cardID);
+            _platform.Database.CardScanned(cardID);
+            editEmployee = _platform.Database.GetFromCardId(cardID);
             if (editEmployee == null)
             {
                 throw new Exception("Failed saving employee");
@@ -217,16 +215,15 @@ public class MainWindowViewModel : ViewModelBase
 
     void UpdateEmployeeLocal(string cardID)
     {
-        DatabaseHelper databaseHelper = new();
         Employee? employee = Employees.Where(e => e.CardID == cardID).FirstOrDefault();
         if (employee != null)
         {
-            databaseHelper.CardScanned(cardID); //Update DB
+            _platform.Database.CardScanned(cardID); //Update DB
             employee.CardScanned(cardID); //Update UI
         }
         else
         {
-            var dbEmployee = databaseHelper.GetFromCardId(cardID);
+            var dbEmployee = _platform.Database.GetFromCardId(cardID);
             if (dbEmployee != null)
             {
                 Dispatcher.UIThread.Post(() =>
