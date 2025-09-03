@@ -32,6 +32,11 @@ public partial class MainWindow : Window
         LoadingStartup.Instance?.Close();
         //ViewModelBase.MainContentControl = MainContent;
         //MainContent.Content = new LoginScreen(new LoginScreenViewModel(platform));
+        UserActivityWatcher.Initialize(
+            getSelectedTabIndex: () => (DataContext as MainWindowViewModel)?.SelectedTab ?? 0,
+            getMainWindow: () => this,
+            loginTabIndex: 0 // Assuming login screen is at TabIndex 0
+        );
 
 #if DEBUG
         OpenFakeNFCWindow();

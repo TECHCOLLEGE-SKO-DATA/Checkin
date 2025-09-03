@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using CheckInSystem.Models;
+
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
 using CheckInSystem.Views.Dialog;
