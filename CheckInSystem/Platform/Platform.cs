@@ -30,7 +30,7 @@ public class Platform : IPlatform
         
         if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
         {
-            _database = new DatabaseHelper();
+            _database = new DatabaseSQLExpress();
         }
         else
         {

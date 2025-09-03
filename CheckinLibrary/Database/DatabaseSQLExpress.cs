@@ -12,7 +12,7 @@ using BCrypt.Net;
 using System.Collections.ObjectModel;
 using CheckinLibrary.Background_tasks;
 
-public class DatabaseHelper : IDatabaseHelper
+public class DatabaseSQLExpress : IDatabaseHelper
 {
     //From ACR122U CardScanned
 
