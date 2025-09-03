@@ -25,18 +25,8 @@ public class Platform : IPlatform
 
     public Platform()
     {
-        //if app.config service name is either of the normal sqlserver type names use the DatabaseHelper else its sqlite
-        string serviceName = ConfigurationManager.AppSettings["SqlServiceName"]?.Trim() ?? "";
+        _database = CheckinLibrary.Database.Database.DatabaseType();
         
-        if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
-        {
-            _database = new DatabaseSQLExpress();
-        }
-        else
-        {
-            _database = new DatabaseSqlLite();
-        }
-
 #if DEBUG
         _cardReader = new ScriptedCardReader();
 #else
