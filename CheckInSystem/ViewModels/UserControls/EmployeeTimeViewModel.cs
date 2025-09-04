@@ -44,7 +44,9 @@ namespace CheckInSystem.ViewModels.UserControls
                     }
 
                     SiteTimes.Clear();
-                    foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
+                    var sorted = OnSiteTime.GetOnsiteTimesForEmployee(value).OrderByDescending(st => st.ArrivalTime);
+
+                    foreach (var siteTime in sorted)
                     {
                         SiteTimes.Add(siteTime);
                     }

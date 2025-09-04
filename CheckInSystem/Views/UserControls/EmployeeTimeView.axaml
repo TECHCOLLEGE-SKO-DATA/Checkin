@@ -29,8 +29,29 @@
 		<DataGrid Grid.Row="1" ItemsSource="{Binding Path=SiteTimes}"
                   AutoGenerateColumns="False">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Dato" Binding="{Binding ArrivalTime, StringFormat=\{0:dd.MM.yy\}}"/>
-				<DataGridTextColumn Header="Ankomsttid" Binding="{Binding ArrivalTime, StringFormat=\{0:HH:mm:ss\}}"/>
+				<DataGridTemplateColumn Header="Dato">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ArrivalTime, StringFormat=\{0:dd.MM.yy\}}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<!-- Arrival time column -->
+				<DataGridTemplateColumn Header="Ankomsttid">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ArrivalTime, StringFormat=\{0:HH:mm:ss\}}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+					<DataGridTemplateColumn.CellEditingTemplate>
+						<DataTemplate>
+							<TextBox Text="{Binding ArrivalTime, Mode=TwoWay, StringFormat=\{0:HH:mm:ss\}}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellEditingTemplate>
+				</DataGridTemplateColumn>
+
+
 				<DataGridTextColumn Header="Afgangstid" Binding="{Binding DepartureTime, StringFormat=\{0:HH:mm:ss\}}"/>
 				<DataGridTemplateColumn>
 					<DataGridTemplateColumn.CellTemplate>
