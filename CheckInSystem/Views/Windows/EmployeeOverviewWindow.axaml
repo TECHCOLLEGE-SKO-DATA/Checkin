@@ -16,6 +16,7 @@
 
 	<Window.Resources>
 		<Customcontrols:EmployeeStatusToBrushConverter x:Key="EmployeeStatusToBrushConverter"/>
+		<Customcontrols:EmployeeStatusToReasonConverter x:Key="EmployeeStatusToReasonConverter"/>
 	</Window.Resources>
 
 	<Grid>
@@ -74,7 +75,17 @@
 															   Margin="0 0 20 0"/>
 													<TextBlock Text="{Binding LastName}"
 															   FontSize="70"
-															   Margin="0 0 0 0"/>
+															   Margin="0 0 20 0"/>
+													<TextBlock FontSize="40" Margin="0" VerticalAlignment="Center">
+														<TextBlock.Text>
+															<MultiBinding Converter="{StaticResource EmployeeStatusToReasonConverter}">
+																<Binding Path="IsOffSite"/>
+																<Binding Path="IsCheckedIn"/>
+																<Binding Path="."/>
+															</MultiBinding>
+														</TextBlock.Text>
+													</TextBlock>
+													
 												</StackPanel>
 											</StackPanel>
 										</DataTemplate>
