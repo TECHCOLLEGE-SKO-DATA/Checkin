@@ -75,7 +75,12 @@ namespace CheckInSystem.ViewModels.UserControls
 
             Btn_Logout = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
 
-            Btn_Save = ReactiveCommand.Create(() => SaveChanges());
+            Btn_Save = ReactiveCommand.Create(() => 
+            { 
+                SaveChanges(); 
+                _platform.MainWindowViewModel.absenceReasons = AbsenceReasons.ToList(); 
+                _platform.MainWindowViewModel.EmployeeTimeViewModel.AbsenceReasons = AbsenceReasons.ToList(); 
+            });
 
             ScreenEmployeeOVerviewOpenOn = SettingsControl.GetEmployeeOverViewSettings().ToString();
         }

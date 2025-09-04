@@ -59,7 +59,7 @@ public partial class EmployeeTimeView : UserControl
 
     private void BtnAddAbsence(object sender, RoutedEventArgs e)
     {
-        var defaultReason = _vm.AbsenceReasons.FirstOrDefault(r => r.Reason == "Ferie") ?? _vm.AbsenceReasons.First();
+        var defaultReason = _vm.AbsenceReasons.FirstOrDefault(r => r.Reason == "Miscellaneous") ?? _vm.AbsenceReasons.First();
 
         var newAbsence = new Absence(0, _vm.SelectedEmployee.ID, DateTime.Now, DateTime.Now, "", defaultReason.Id);
 
