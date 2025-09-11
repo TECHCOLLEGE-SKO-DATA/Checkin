@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckInSystem.AdminEmployeeOverviewView"
+			 xmlns:data="using:CheckInSystem.ViewModels.UserControls"
+			 x:DataType="data:AdminEmployeeOverviewViewModel">
+	<Grid ShowGridLines="True">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+		
+		<StackPanel Background="Blue" Grid.Row="0"/>
+
+		<Grid Grid.Row="1" ShowGridLines="True">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="300"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			
+			<Calendar Grid.Column="0" 
+					  HorizontalAlignment="Center"
+					  VerticalAlignment="Center"/>
+
+			<DataGrid Grid.Column="1"
+					  ItemsSource="asd"
+					  CanUserResizeColumns="False">
+				<!--display first name, middle name, last name, Reason/where, from and to times-->
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="First name" />
+					<DataGridTextColumn Header="Middle name"/>
+					<DataGridTextColumn Header="Last name"/>
+					<DataGridTextColumn Header="Reason"/>
+					<DataGridTextColumn Header="Arrival"/>
+					<DataGridTextColumn Header="Departure"/>
+				</DataGrid.Columns>
+			</DataGrid>
+			
+		</Grid>
+		
+		<StackPanel Background="Blue" Grid.Row="2"/>
+		
+	</Grid>
+</UserControl>
