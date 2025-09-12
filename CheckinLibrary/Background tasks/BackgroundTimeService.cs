@@ -8,8 +8,8 @@ public class BackgroundTimeService
     AbsencBackGroundService absence = new();
 
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
-    private readonly TimeSpan _startTime = new TimeSpan(21, 0, 0);  // 21:00 (9 PM)
-    private readonly TimeSpan _endTime = new TimeSpan(1, 0, 0);    // 01:00 (1 AM)
+    private readonly TimeSpan _startTime = new TimeSpan(0, 0, 0);  // 00:00 
+    private readonly TimeSpan _endTime = new TimeSpan(4, 0, 0);    // 04:00 
 
     private bool _hasLoggedToday = false;
     private CancellationTokenSource _cts;
@@ -75,7 +75,7 @@ public class BackgroundTimeService
             // Run absence check 8 hours later
             _ = Task.Run(async () =>
             {
-                await Task.Delay(TimeSpan.FromHours(8));
+                await Task.Delay(TimeSpan.FromHours(5));
                 absence.AbsenceTask();
             });
         }
