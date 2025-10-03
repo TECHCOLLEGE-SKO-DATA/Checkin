@@ -92,6 +92,16 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _adminsViewModel, value, nameof(AdminsViewModel));
         }
     }
+
+    AdminEmployeeOverviewViewModel _adminEmployeeOverviewViewModel;
+    public AdminEmployeeOverviewViewModel AdminEmployeeOverviewViewModel
+    {
+        get => _adminEmployeeOverviewViewModel;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _adminEmployeeOverviewViewModel, value, nameof(AdminEmployeeOverviewViewModel));
+        }
+    }
     //Viewmodels ends here
 
     public bool DarkMode { get; set; }
@@ -135,6 +145,7 @@ public class MainWindowViewModel : ViewModelBase
         SettingsViewModel = new(platform);
         UpdateAdminViewModel = new(platform);
         AdminsViewModel = new(platform);
+        AdminEmployeeOverviewViewModel = new(platform);
 
         SettingsControl settingsControl = new();
 
@@ -297,5 +308,10 @@ public class MainWindowViewModel : ViewModelBase
     public void SwitchToAdmins()
     {
         CurrentViewModel = AdminsViewModel;
+    }
+
+    public void SwitchToAdminEmployeeOverView()
+    {
+        CurrentViewModel = AdminEmployeeOverviewViewModel;
     }
 }

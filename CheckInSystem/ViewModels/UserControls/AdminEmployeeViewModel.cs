@@ -98,6 +98,7 @@ namespace CheckInSystem.ViewModels.UserControls
         public void SeeEmployeeTime(Employee employee)
         {
             _platform.MainWindowViewModel.SwitchToEmployeeTime(employee);
+            //_platform.MainWindowViewModel.SwitchToAdminEmployeeOverView();
         }
 
         public async Task OpenMessageBoxDeleteAsync(Employee employee)

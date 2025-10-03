@@ -3,34 +3,45 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CheckInSystem.AdminEmployeeOverviewView"
+             x:Class="CheckInSystem.Views.UserControls.AdminEmployeeOverviewView"
 			 xmlns:data="using:CheckInSystem.ViewModels.UserControls"
 			 x:DataType="data:AdminEmployeeOverviewViewModel">
 	<Grid ShowGridLines="True">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="30"/>
+			<RowDefinition Height="35"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="30"/>
+			<RowDefinition Height="35"/>
 		</Grid.RowDefinitions>
 		
 		<StackPanel Background="Blue" Grid.Row="0"/>
 
-		<Grid Grid.Row="1" ShowGridLines="True">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="300"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+		<StackPanel Grid.Row="0"
+					Margin="5 0 0 0"
+					Orientation="Horizontal"
+					VerticalAlignment="Center">
 			
-			<Calendar Grid.Column="0" 
-					  HorizontalAlignment="Center"
-					  VerticalAlignment="Center"/>
+			<Button Content="Change Date"
+					Command="{Binding Btn_ChangeDate}"/>
+			
+		</StackPanel>
 
-			<DataGrid Grid.Column="1"
-					  ItemsSource="asd"
+		<StackPanel Grid.Row="0" 
+					Margin="0 0 5 0"
+					VerticalAlignment="Center">
+			
+			<Button Content="Logout"
+					HorizontalAlignment="Right"
+					Command="{Binding Btn_Logout}"/>
+			
+		</StackPanel>
+		
+		<Grid Grid.Row="1" ShowGridLines="True">
+			
+			<DataGrid ItemsSource="{Binding Employees}"
 					  CanUserResizeColumns="False">
 				<!--display first name, middle name, last name, Reason/where, from and to times-->
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="First name" />
+					<DataGridTextColumn Header="First Name"/>
 					<DataGridTextColumn Header="Middle name"/>
 					<DataGridTextColumn Header="Last name"/>
 					<DataGridTextColumn Header="Reason"/>
@@ -40,8 +51,32 @@
 			</DataGrid>
 			
 		</Grid>
+
+		<Popup x:Name="{Binding Damn}">
+			<StackPanel>
+				<Calendar/>
+				<StackPanel Orientation="Horizontal">
+					<Button Content="Load Selected"/>
+					<Button Content="Cancel"/>
+				</StackPanel>
+			</StackPanel>
+		</Popup>
 		
 		<StackPanel Background="Blue" Grid.Row="2"/>
-		
+
+		<StackPanel Grid.Row="2"
+					Margin="0 0 5 0"
+					HorizontalAlignment="Right"
+					Orientation="Horizontal"
+					VerticalAlignment="Center">
+			
+			<Button Content="Back" 
+					Margin="0 0 5 0"
+					Command="{Binding Btn_Back}"/>
+			
+			<Button Content="Save"
+					Command="{Binding Btn_SaveChange}"/>
+			
+		</StackPanel>
 	</Grid>
 </UserControl>
