@@ -74,7 +74,6 @@ namespace CheckInSystem.ViewModels.UserControls
         public ReactiveCommand<Unit, Unit> Btn_LoginView { get; }
         public ReactiveCommand<Unit, Unit> Btn_GroupView { get; }
         public ReactiveCommand<Unit, Unit> Btn_SettingsView { get; }
-        public ReactiveCommand<Unit, Unit> Btn_AEmployeeOverview {  get; }
 
         public AdminPanelViewModel(IPlatform platform) : base(platform)
         {
@@ -90,8 +89,6 @@ namespace CheckInSystem.ViewModels.UserControls
             };
 
             adminEmployeeViewModel = new(platform, this);
-
-            Btn_AEmployeeOverview =ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToAdminEmployeeOverView());
 
             Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
 

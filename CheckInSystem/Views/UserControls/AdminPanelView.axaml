@@ -37,12 +37,6 @@
                     FontSize="15"
                     Background="#808080"
                     Command="{Binding Btn_SettingsView}"/>
-			
-			<Button Content="(Test UI for #80)employee overview"
-					Margin="10 0 0 0"
-					FontSize="15"
-					Background="#808080"
-					Command="{Binding Btn_AEmployeeOverview}"/>
 		</WrapPanel>
 
 		<Button Content="Logout"
