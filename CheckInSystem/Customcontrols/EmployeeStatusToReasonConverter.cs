@@ -60,8 +60,8 @@ namespace CheckInSystem.Customcontrols
             }
 
             return isCheckedIn
-                ? (Brushes.Green, $"| Checkin {employee.ArrivalTime:MMM dd|HH:mm}")
-                : (new SolidColorBrush(Color.Parse("#d55e00")), $"| Checked Out {employee.DepartureTime:MMM dd|HH:mm}");
+                ? (Brushes.Green, $"| Checkin {employee.ArrivalTime:MMM dd|kl.HH:mm}")
+                : (new SolidColorBrush(Color.Parse("#d55e00")), $"| Checked Out {employee.DepartureTime:MMM dd|kl.HH:mm}");
 
         }
     }
