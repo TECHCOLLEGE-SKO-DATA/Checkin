@@ -8,7 +8,7 @@ public class BackgroundTimeService
     AbsencBackGroundService absence = new();
 
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
-    private readonly TimeSpan _startTime = new TimeSpan(0, 0, 0);  // 00:00 
+    private readonly TimeSpan _startTime = new TimeSpan(1, 0, 0);  // 01:00 
     private readonly TimeSpan _endTime = new TimeSpan(4, 0, 0);    // 04:00 
 
     private bool _hasLoggedToday = false;
@@ -72,14 +72,14 @@ public class BackgroundTimeService
             _hasLoggedToday = true;
             PerformMaintenanceAction.Invoke(employees);
 
-            // Run absence check 8 hours later
+            // Run absence check 3 hours later
             _ = Task.Run(async () =>
             {
-                await Task.Delay(TimeSpan.FromHours(5));
+                await Task.Delay(TimeSpan.FromHours(3));
                 absence.AbsenceTask();
             });
         }
-        else if (_timeProvider().Hour == 5 || _timeProvider().Hour == 6)
+        else if (_timeProvider().Hour == 22 || _timeProvider().Hour == 1)
         {
             _hasLoggedToday = false;
             OnDailyReset?.Invoke();
