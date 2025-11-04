@@ -11,7 +11,7 @@ public class BackgroundTimeServiceTests
     public void CheckTime_ShouldPerformMaintenance_WhenTimeIsAfterStartTime()
     {
         // Arrange
-        var fakeTime = new DateTime(2025, 1, 27, 22, 0, 0);
+        var fakeTime = new DateTime(2025, 1, 27, 3, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
         // Provide fake employees
@@ -35,7 +35,7 @@ public class BackgroundTimeServiceTests
     public void CheckTime_ShouldNotPerformMaintenance_WhenAlreadyLoggedToday()
     {
         // Arrange: Fake time
-        var fakeTime = new DateTime(2025, 1, 27, 22, 0, 0);
+        var fakeTime = new DateTime(2025, 1, 27, 1, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
         // Provide fake employees
@@ -105,8 +105,8 @@ public class BackgroundTimeServiceTests
     [Fact]
     public void CheckTime_ShouldPerformMaintenance_BeforeEndTimeAtMidnight()
     {
-        // Arrange: Set fake time to 00:30 AM (midnight period)
-        var fakeTime = new DateTime(2025, 1, 27, 0, 30, 0);
+        // Arrange: Set fake time to 01:30 AM
+        var fakeTime = new DateTime(2025, 1, 27, 1, 30, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
         // Provide fake employees

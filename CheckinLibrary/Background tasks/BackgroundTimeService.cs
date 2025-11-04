@@ -54,7 +54,7 @@ public class BackgroundTimeService
     {
         var currentTime = _timeProvider().TimeOfDay;
 
-        if ((currentTime >= _startTime || currentTime < _endTime) && !_hasLoggedToday)
+        if (currentTime >= _startTime && currentTime < _endTime && !_hasLoggedToday)
         {
             // Retrieve employees: use the test delegate if set, otherwise query the database
             List<Employee> employees;
@@ -79,7 +79,7 @@ public class BackgroundTimeService
                 absence.AbsenceTask();
             });
         }
-        else if (_timeProvider().Hour == 22 || _timeProvider().Hour == 1)
+        else
         {
             _hasLoggedToday = false;
             OnDailyReset?.Invoke();

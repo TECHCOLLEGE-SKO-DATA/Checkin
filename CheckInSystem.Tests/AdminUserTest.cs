@@ -10,7 +10,7 @@ namespace CheckInSystem.Tests
 {
     public class AdminUserTest
     {
-        DatabaseHelper dbHelper;
+        DatabaseHelper dbHelper = new();
         [Fact]
         public void Admin_Create_Delete_Update_Getlist()
         {
