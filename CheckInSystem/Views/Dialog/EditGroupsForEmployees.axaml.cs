@@ -22,6 +22,11 @@ public partial class EditGroupsForEmployees : Window
         Close(true);
     }
 
+    private void BtnCancel(object sender, RoutedEventArgs e)
+    {
+        Close(false);
+    }
+
     public bool AddGroup
     {
         get => RdAddGroup.IsChecked ?? false;

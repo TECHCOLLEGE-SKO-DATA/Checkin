@@ -31,7 +31,7 @@ public class Startup
         int screenIndex = settings.GetEmployeeOverViewSettings();
 
         var employeeOverviewViewModel = new EmployeeOverviewViewModel(iplatform);
-        var employeeOverview = new EmployeeOverviewWindow(employeeOverviewViewModel)
+        var employeeOverview = new EmployeeOverviewWindow(employeeOverviewViewModel, iplatform)
         {
             DataTemplates = { new ViewLocator() },
             DataContext = employeeOverviewViewModel

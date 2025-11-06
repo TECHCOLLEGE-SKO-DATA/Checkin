@@ -1,17 +1,27 @@
-﻿using System;
+﻿using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using Metsys.Bson;
+using System;
 using Xunit;
 
+namespace BackgroundTimeServiceTests;
 public class BackgroundTimeServiceTests
 {
     [Fact]
     public void CheckTime_ShouldPerformMaintenance_WhenTimeIsAfterStartTime()
     {
-        // Arrange: Set fake time to 22:00 (10 PM)
-        var fakeTime = new DateTime(2025, 1, 27, 22, 0, 0);
+        // Arrange
+        var fakeTime = new DateTime(2025, 1, 27, 3, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
+
         bool maintenanceCalled = false;
-        service.PerformMaintenanceAction = () => maintenanceCalled = true;
+        service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
         service.CheckTime();
@@ -20,17 +30,24 @@ public class BackgroundTimeServiceTests
         Assert.True(maintenanceCalled, "Maintenance should be performed when time is within range.");
     }
 
+
     [Fact]
     public void CheckTime_ShouldNotPerformMaintenance_WhenAlreadyLoggedToday()
     {
-        // Arrange: Set fake time to 22:00 (10 PM)
-        var fakeTime = new DateTime(2025, 1, 27, 22, 0, 0);
+        // Arrange: Fake time
+        var fakeTime = new DateTime(2025, 1, 27, 1, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
-        int maintenanceCallCount = 0;
-        service.PerformMaintenanceAction = () => maintenanceCallCount++;
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
-        // Act: Call twice, it should only trigger once
+        int maintenanceCallCount = 0;
+        service.PerformMaintenanceAction = (employees) => maintenanceCallCount++;
+
+        // Act: Call twice
         service.CheckTime();
         service.CheckTime();
 
@@ -38,12 +55,19 @@ public class BackgroundTimeServiceTests
         Assert.Equal(1, maintenanceCallCount);
     }
 
+
     [Fact]
     public void CheckTime_ShouldResetAt5AM()
     {
         // Arrange: Set fake time to 5:00 AM to trigger reset
         var fakeTime = new DateTime(2025, 1, 27, 5, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
         bool resetTriggered = false;
         service.OnDailyReset += () => resetTriggered = true;
@@ -61,9 +85,15 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 10:00 AM (outside valid range)
         var fakeTime = new DateTime(2025, 1, 27, 10, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
         bool maintenanceCalled = false;
-        service.PerformMaintenanceAction = () => maintenanceCalled = true;
+        service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
         service.CheckTime();
@@ -75,12 +105,18 @@ public class BackgroundTimeServiceTests
     [Fact]
     public void CheckTime_ShouldPerformMaintenance_BeforeEndTimeAtMidnight()
     {
-        // Arrange: Set fake time to 00:30 AM (midnight period)
-        var fakeTime = new DateTime(2025, 1, 27, 0, 30, 0);
+        // Arrange: Set fake time to 01:30 AM
+        var fakeTime = new DateTime(2025, 1, 27, 1, 30, 0);
         var service = new BackgroundTimeService(() => fakeTime);
 
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
+
         bool maintenanceCalled = false;
-        service.PerformMaintenanceAction = () => maintenanceCalled = true;
+        service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
         service.CheckTime();
@@ -95,6 +131,12 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 6:00 AM
         var fakeTime = new DateTime(2025, 1, 27, 6, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+
+        // Provide fake employees
+        service.GetEmployees = () => new List<Employee>
+        {
+            new Employee(1, "Test", false)
+        };
 
         bool resetTriggered = false;
         service.OnDailyReset += () => resetTriggered = true;
