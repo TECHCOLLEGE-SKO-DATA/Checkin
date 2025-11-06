@@ -3,26 +3,18 @@ using Avalonia.Controls;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
-using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.ViewModels.UserControls;
-using CheckInSystem.Views.UserControls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using CheckinLibrary.Background_tasks;
-using System.Windows;
 using CheckInSystem.CardReader;
-using Avalonia;
 using Avalonia.Threading;
 using CheckInSystem.Views;
 using CheckinLibrary.Settings;
 using CheckInSystem.Customcontrols;
-using DynamicData;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
@@ -96,7 +88,16 @@ public class MainWindowViewModel : ViewModelBase
 
     public bool DarkMode { get; set; }
     public ObservableCollection<Employee> Employees { get; private set; } = new();
-    public ObservableCollection<Group> Groups { get; private set; } = new();
+
+
+    ObservableCollection<Group> _groups;
+    public ObservableCollection<Group> Groups 
+    { 
+        get =>_groups;
+        private set => this.RaiseAndSetIfChanged(ref _groups, value, nameof(Groups));
+    }
+
+
     public Group GroupAll { get; private set; } = new();
 
     int _selectedTab = 0;

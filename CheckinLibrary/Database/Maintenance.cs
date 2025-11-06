@@ -21,7 +21,7 @@ public class Maintenance
             
             if (!Equals(lastCheckInDate, currentDate) && employee.DepartureTime == null)
             {
-                employee.DepartureTime = lastCheckInDate.ToDateTime(TimeOnly.Parse("23:50"));
+                employee.DepartureTime = lastCheckInDate.ToDateTime(TimeOnly.Parse("23:00"));
                 employee.IsCheckedIn = false;
 
                 updatedEmployees.Add(employee);

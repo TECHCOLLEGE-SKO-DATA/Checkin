@@ -3,9 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
 using CheckInSystem.Background_tasks;
 using CheckInSystem.Controls;
 using CheckInSystem.Platform;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace CheckInSystem;
@@ -13,9 +17,10 @@ namespace CheckInSystem;
 public partial class EmployeeOverviewWindow : Window
 {
     private BackgroundTimeService _timeService;
-
-    public EmployeeOverviewWindow(ViewModels.Windows.EmployeeOverviewViewModel employeeOverviewViewModel)
+    IPlatform _platform;
+    public EmployeeOverviewWindow(ViewModels.Windows.EmployeeOverviewViewModel employeeOverviewViewModel, IPlatform platform)
     { 
+        _platform = platform;
         InitializeComponent();
         KeyDown += (_, e) =>
         {
@@ -35,11 +40,11 @@ public partial class EmployeeOverviewWindow : Window
 
     private async void UpdateUIOnReset()
     {
-        Dispatcher.UIThread.Invoke(() =>
+        _ = Dispatcher.UIThread.Invoke(async () =>
         {
             // Example: Refreshing the view model or adding a message
             // vm.RefreshData();  Add this method in ViewModel to reload data
-            //await MessageBox.Show(,"Daily reset has been processed!", "Info", MessageBoxButton.OK);
+            var resault = await MessageBox.Show(_platform.MainWindow, "Daily reset has been processed!", "Info", MessageBoxButton.OK);
         });
     }
     private void InitializeComponent()
