@@ -27,8 +27,6 @@ namespace CheckInSystem.ViewModels.UserControls
         public const int EMPLOYEE_TIME_TAB = 1;
         public const int GROUP_LISTPAGE_TAB = 2;
 
-        DatabaseHelper databaseHelper = new();
-
         public ObservableCollection<Group> Groups { get; private set; } = new();
 
         private Control _adminPanelContent;

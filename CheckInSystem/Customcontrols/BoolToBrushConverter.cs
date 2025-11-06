@@ -13,7 +13,7 @@ namespace CheckInSystem.Customcontrols
 {
     public class EmployeeStatusToBrushConverter : IMultiValueConverter
     {
-        DatabaseHelper dbhelper = new DatabaseHelper();
+        IDatabaseHelper dbhelper;
         public IBrush CheckedInBrush { get; set; } = Brushes.Green;
         public IBrush NotCheckedInBrush { get; set; } = new SolidColorBrush(Color.Parse("#d55e00"));
         Brush absenceColor;

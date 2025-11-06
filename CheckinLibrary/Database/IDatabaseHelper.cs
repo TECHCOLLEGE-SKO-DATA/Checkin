@@ -13,6 +13,7 @@ namespace CheckinLibrary.Database
 
         // 🔹 Admin User Management
         void CreateUser(string username, string password);
+        void UpdateUser(string username, string password, int Id);
         AdminUser? Login(string username, string password);
         List<AdminUser> GetAdminUsers();
         void Delete(int ID);

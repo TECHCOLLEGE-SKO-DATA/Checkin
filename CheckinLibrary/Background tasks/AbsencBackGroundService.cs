@@ -16,7 +16,7 @@ public class AbsencBackGroundService
 
     public List<Employee> employees = new List<Employee>();
 
-    private DatabaseHelper databaseHelper = new();
+    private IDatabaseHelper databaseHelper;
 
     public void AbsenceTask()
     {

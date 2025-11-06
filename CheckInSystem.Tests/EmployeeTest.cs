@@ -6,41 +6,44 @@ using System.Text;
 using System.Threading.Tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckInSystem.Platform;
 
 namespace CheckInSystem.Tests
 {
     public class EmployeeTest
     {
-        DatabaseHelper databaseHelper = new();
         Group groupModel = new();
         ObservableCollection<Employee>Members {  get; set; }
-        
+
+        //these test aren't gonna work with this not that they did to begin with
+        IPlatform platform;
+
         [Fact]
         public void Employee_Creat_Update()
         {
-            databaseHelper.CardScanned("abc123die24");
+            platform.Database.CardScanned("abc123die24");
 
-            Employee employee = databaseHelper.GetFromCardId("abc123die24");
+            Employee employee = platform.Database.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
-            databaseHelper.UpdateDb("abc123die24", "Jhon", "Simon", "Doe", false, DateTime.Now, employee.ID);
+            platform.Database.UpdateDb("abc123die24", "Jhon", "Simon", "Doe", false, DateTime.Now, employee.ID);
         }
 
         [Fact]
         public void Employee_Get() 
         {
-            Employee employee = databaseHelper.GetFromCardId("abc123die24");
+            Employee employee = platform.Database.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
             Assert.Equal("Jhon", employee.FirstName);
             Assert.Equal("abc123die24", employee.CardID);
 
-            databaseHelper.CardScanned(employee.CardID);
+            platform.Database.CardScanned(employee.CardID);
 
-            List<Employee> employees = databaseHelper.GetAllEmployees();
+            List<Employee> employees = platform.Database.GetAllEmployees();
             Assert.Contains(employees, e => e.ID == employee.ID);
 
-            var (arrivalTime, departureTime) = databaseHelper.GetUpdatedSiteTimes(employee.ID);
+            var (arrivalTime, departureTime) = platform.Database.GetUpdatedSiteTimes(employee.ID);
 
             Assert.NotNull(arrivalTime);
             if (departureTime != null)
@@ -52,12 +55,12 @@ namespace CheckInSystem.Tests
         [Fact]
         public void Employee_Delete() 
         {
-            Employee employee = databaseHelper.GetFromCardId("abc123die24");
+            Employee employee = platform.Database.GetFromCardId("abc123die24");
             Assert.NotNull(employee);
 
-            databaseHelper.DeleteFromDb(employee.ID);
+            platform.Database.DeleteFromDb(employee.ID);
 
-            List<Employee> employeesAfterDelete = databaseHelper.GetAllEmployees();
+            List<Employee> employeesAfterDelete = platform.Database.GetAllEmployees();
             Assert.DoesNotContain(employeesAfterDelete, e => e.ID == employee.ID);
         }
     }

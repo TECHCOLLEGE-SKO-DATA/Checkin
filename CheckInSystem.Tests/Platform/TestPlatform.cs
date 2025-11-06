@@ -1,3 +1,4 @@
+using CheckinLibrary.Database;
 using CheckInSystem.CardReader;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.Windows;
@@ -19,6 +20,8 @@ public class TestPlatform : IPlatform
     public MainWindowViewModel MainWindowViewModel => _mainWindowViewModel;
 
     MainWindow IPlatform.MainWindow => throw new NotImplementedException();
+
+    public IDatabaseHelper Database => throw new NotImplementedException();
 
     public TestPlatform()
     {

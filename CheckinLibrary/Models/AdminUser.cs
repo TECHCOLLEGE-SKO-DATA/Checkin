@@ -9,7 +9,7 @@ using Database;
 
 public class AdminUser
 {
-    DatabaseHelper databasehelper = new();
+    IDatabaseHelper databasehelper = Database.DatabaseType();
     public int ID { get; private set; }
     public string Username { get; private set; }
     public AdminUser()

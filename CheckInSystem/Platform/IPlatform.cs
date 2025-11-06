@@ -1,3 +1,4 @@
+using CheckinLibrary.Database;
 using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using System;
@@ -8,6 +9,7 @@ public delegate void DataLoadedEventHandler(object sender, EventArgs e);
 
 public interface IPlatform
 {
+    IDatabaseHelper Database { get; }
     ICardReader CardReader { get; }
     MainWindowViewModel MainWindowViewModel { get; }
     MainWindow MainWindow { get; }

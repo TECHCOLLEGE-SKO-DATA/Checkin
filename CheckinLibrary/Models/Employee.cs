@@ -10,7 +10,7 @@ namespace CheckinLibrary.Models;
 
 public class Employee : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper = new();
+    IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
 
     public int ID { get; private set; }
     public Employee()

@@ -1,19 +1,19 @@
 ﻿namespace CheckinLibrary.Database;
 
+using Microsoft.Win32;
 using System;
 using System.Configuration;
-using System.Diagnostics;
+using System.Data.Entity;
 using System.Data.SqlClient;
-using System.Threading;
-using System.Windows;
-using Microsoft.Win32;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using System.Threading;
+using System.Windows;
 
 public static class Database
 {
-
     private const int CONNECTION_TIMEOUT = 30;
     private const int RETRY_ATTEMPTS = 3;
     private const int RETRY_DELAY_MS = 1000;
@@ -160,6 +160,19 @@ public static class Database
         {
             Debug.WriteLine(e);
             return false;
+        }
+    }
+    public static IDatabaseHelper DatabaseType()
+    {
+        string serviceName = ConfigurationManager.AppSettings["SqlServiceName"]?.Trim() ?? "";
+
+        if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
+        {
+            return new DatabaseSQLExpress();
+        }
+        else
+        {
+            return new DatabaseSqlLite();
         }
     }
 }

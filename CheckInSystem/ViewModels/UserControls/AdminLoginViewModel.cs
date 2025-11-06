@@ -38,8 +38,7 @@ namespace CheckInSystem.ViewModels.UserControls
 
         private void Login(string username, string passWord)
         {
-            DatabaseHelper databaseHelper = new();
-            AdminUser? adminUser = databaseHelper.Login(Username, PassWord);
+            AdminUser? adminUser = _platform.Database.Login(Username, PassWord);
             if (adminUser == null)
             {
                 MessageBox.Show(_platform.MainWindow, "Forkert brugernavn eller kodeord, prøv igen.", "Login fejl", MessageBoxButton.OK);

@@ -8,7 +8,7 @@ namespace CheckinLibrary.Models;
 
 public class OnSiteTime : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper;
+    IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
 
     private int _id;
     public int Id
@@ -65,7 +65,7 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public static List<OnSiteTime> GetOnsiteTimesForEmployee(Employee employee)
     {     
-        DatabaseHelper databaseHelper = new ();
+        IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
         return databaseHelper.GetOnsiteTimesForEmployee(employee);
     }
 
@@ -89,13 +89,13 @@ public class OnSiteTime : INotifyPropertyChanged
 
     public static void UpdateMutipleSiteTimes(List<OnSiteTime> siteTimes)
     {
-        DatabaseHelper databaseHelper = new();
+        IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
         databaseHelper.UpdateMutipleSiteTimes(siteTimes);
     }
 
     public static OnSiteTime AddTimeToDb(int employeeId, DateTime arrivalTime, DateTime? departureTime)
     {
-        DatabaseHelper databaseHelper = new();
+        IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
         return databaseHelper.AddTimeToDb(employeeId, arrivalTime, departureTime);
     }
 
