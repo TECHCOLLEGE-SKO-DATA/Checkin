@@ -4,7 +4,7 @@ using CheckinLibrary.Models;
 using System.Collections.ObjectModel;
 public class BackgroundTimeService
 {
-    private readonly DatabaseHelper _dbHelper =new();
+    private readonly IDatabaseHelper _dbHelper;
     AbsencBackGroundService absence = new();
 
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
@@ -21,7 +21,7 @@ public class BackgroundTimeService
     public Func<List<Employee>> GetEmployees { get; set; }
 
 
-    public BackgroundTimeService(Func<DateTime> timeProvider = null, DatabaseHelper dbHelper = null)
+    public BackgroundTimeService(Func<DateTime> timeProvider = null, IDatabaseHelper dbHelper = null)
     {
         _timeProvider = timeProvider ?? (() => DateTime.Now);
     }
