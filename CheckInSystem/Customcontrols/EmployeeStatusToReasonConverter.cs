@@ -11,7 +11,7 @@ namespace CheckInSystem.Customcontrols
 {
     public class EmployeeStatusToReasonConverter : IMultiValueConverter
     {
-        DatabaseHelper dbHelper = new();
+        IDatabaseHelper dbHelper;
 
         public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -29,7 +29,7 @@ namespace CheckInSystem.Customcontrols
     }
     public static class EmployeeStatusHelper
     {
-        public static (IBrush brush, string reason) GetStatus(Employee employee, bool isOffsite, bool isCheckedIn, DatabaseHelper dbhelper)
+        public static (IBrush brush, string reason) GetStatus(Employee employee, bool isOffsite, bool isCheckedIn, IDatabaseHelper dbhelper)
         {
             if (isOffsite)
             {
