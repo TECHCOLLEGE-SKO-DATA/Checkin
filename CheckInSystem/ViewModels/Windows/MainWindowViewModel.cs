@@ -42,8 +42,8 @@ public class MainWindowViewModel : ViewModelBase
         get => _loginViewModel;
         set => this.RaiseAndSetIfChanged(ref _loginViewModel, value, nameof(LoginScreenViewModel));
     }
-    EmployeeDatePlanerViewModel _employeeTimeViewModel;
-    public EmployeeDatePlanerViewModel EmployeeTimeViewModel
+    EmployeeTimeViewModel _employeeTimeViewModel;
+    public EmployeeTimeViewModel EmployeeTimeViewModel
     {
         get => _employeeTimeViewModel;
         set

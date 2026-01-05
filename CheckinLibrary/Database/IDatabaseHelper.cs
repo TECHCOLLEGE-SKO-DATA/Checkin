@@ -6,6 +6,10 @@ using static CheckinLibrary.Models.Absence;
 
 namespace CheckinLibrary.Database
 {
+    /*
+     * This interface is meant to help connect the database data requirements without having to make a refrence
+     * for any uniq version like a refence for SQLite etc
+     */
     public interface IDatabaseHelper
     {
         // 🔹 Card Scanning

@@ -14,6 +14,13 @@ using System.Windows;
 
 public static class Database
 {
+    /*
+     * ################################################################# *
+     * ## This Database class is meant to try and get connection      ## *
+     * ## and then determin wether its a SQLlite or sqlexpress/server ## *
+     * ################################################################# *
+     */
+
     private const int CONNECTION_TIMEOUT = 30;
     private const int RETRY_ATTEMPTS = 3;
     private const int RETRY_DELAY_MS = 1000;

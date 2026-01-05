@@ -12,6 +12,12 @@ namespace CheckinLibrary.Database;
 
 public class DatabaseSqlLite : IDatabaseHelper
 {
+    /*
+     * ########################################### *
+     * ## this holds quries specifik for SQLite ## *
+     * ########################################### *
+     */
+
     private readonly string _databasePath;
     private readonly string _connectionString;
 

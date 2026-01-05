@@ -14,6 +14,12 @@ using CheckinLibrary.Background_tasks;
 
 public class DatabaseSQLExpress : IDatabaseHelper
 {
+    /*
+     * ############################################################ *
+     * ## this holds quries specifik for SQL Server and exspress ## *
+     * ############################################################ *
+     */
+
     //From ACR122U CardScanned
 
     public void CardScanned(string cardID)
