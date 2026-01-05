@@ -17,7 +17,7 @@ namespace CheckinLibrary.Settings
             XDocument xmlDoc = XDocument.Load(_filePath);
 
             AbsenceReason.Reasons.Clear();
-
+            
             return AbsenceReason.Reasons = xmlDoc.Descendants("absence")
                   .Elements("type")
                   .Select(x => new AbsenceReason(
@@ -48,7 +48,8 @@ namespace CheckinLibrary.Settings
                 absenceElement.Add(new XElement("type",
                     new XAttribute("Id", reason.Id),
                     new XAttribute("reason", reason.Reason),
-                    new XAttribute("hexColor", $"#{reason.HexColor.Name}")));
+                    new XAttribute("hexColor", $"#{reason.HexColor.A:X2}{reason.HexColor.R:X2}{reason.HexColor.G:X2}{reason.HexColor.B:X2}")
+                    ));
             }
 
             xmlDoc.Save(_filePath);

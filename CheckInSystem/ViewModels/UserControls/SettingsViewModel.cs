@@ -75,7 +75,12 @@ namespace CheckInSystem.ViewModels.UserControls
 
             Btn_Logout = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
 
-            Btn_Save = ReactiveCommand.Create(() => SaveChanges());
+            Btn_Save = ReactiveCommand.Create(() => 
+            { 
+                SaveChanges(); 
+                _platform.MainWindowViewModel.absenceReasons = AbsenceReasons.ToList(); 
+                _platform.MainWindowViewModel.EmployeeTimeViewModel.AbsenceReasons = AbsenceReasons.ToList(); 
+            });
 
             ScreenEmployeeOVerviewOpenOn = SettingsControl.GetEmployeeOverViewSettings().ToString();
         }
@@ -130,6 +135,17 @@ namespace CheckInSystem.ViewModels.UserControls
 
         private void SaveChanges()
         {
+            ObservableCollection<AbsenceReason> absences = new();
+
+            foreach (var absence in AbsenceReasons)
+            {
+                absence.HexColor = ColorTranslator.FromHtml($"#{absence.HexColor.A:X2}{absence.HexColor.R:X2}{absence.HexColor.G:X2}{absence.HexColor.B:X2}");
+
+                absences.Add(absence);
+            }
+
+            AbsenceReasons = absences;
+
             foreach (var item in AbsenceReasons)
             {
                 var existing = _platform.MainWindowViewModel.absenceReasons.FirstOrDefault(x => x.Id == item.Id);
