@@ -1,18 +1,19 @@
-﻿using ReactiveUI;
+﻿using Avalonia.Controls;
+using CheckinLibrary.Database;
+using CheckinLibrary.Models;
+using CheckInSystem.Platform;
+using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
-using CheckinLibrary.Models;
-using System.Reactive;
-using System.ComponentModel;
 using System.Windows;
-using CheckinLibrary.Database;
-using CheckInSystem.Platform;
-using Avalonia.Controls;
-using System.Diagnostics;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -170,7 +171,7 @@ namespace CheckInSystem.ViewModels.Windows
             Groups = _platform.MainWindowViewModel.Groups;
         }
 
-        private void SortEmployees()
+        public void SortEmployees()
         {
             ObservableCollection<Group> tempGroups = new();
             foreach (var group in Groups)
@@ -190,6 +191,12 @@ namespace CheckInSystem.ViewModels.Windows
             }
             
             Groups = tempGroups;
+        }
+        public List<Employee> GetAllEmployees()
+        {
+            return Groups
+                .SelectMany(g => g.Members)
+                .ToList();
         }
 
     }

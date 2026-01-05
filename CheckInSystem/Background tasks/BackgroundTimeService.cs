@@ -1,7 +1,11 @@
 ﻿using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 public class BackgroundTimeService
 {
     private readonly IDatabaseHelper _dbHelper;
@@ -50,29 +54,20 @@ public class BackgroundTimeService
         _cts?.Cancel();
     }
 
-    public async void CheckTime()
+    public void CheckTime()
     {
         var currentTime = _timeProvider().TimeOfDay;
 
         if (currentTime >= _startTime && currentTime < _endTime && !_hasLoggedToday)
         {
-            // Retrieve employees: use the test delegate if set, otherwise query the database
-            List<Employee> employees;
-
-            if (GetEmployees != null)
-            {
-                employees = GetEmployees(); // Use fake/test employees
-            }
-            else
-            {
-                employees = _dbHelper.GetAllEmployees(); // Use real database
-            }
-
-
             _hasLoggedToday = true;
-            PerformMaintenanceAction.Invoke(employees);
 
-            // Run absence check 3 hours later
+            var employees = GetEmployees?.Invoke();
+            if (employees != null)
+            {
+                PerformMaintenanceAction.Invoke(employees);
+            }
+
             _ = Task.Run(async () =>
             {
                 await Task.Delay(TimeSpan.FromHours(3));
