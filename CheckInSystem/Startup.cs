@@ -12,10 +12,14 @@ public class Startup
 {
     public static bool Run(IPlatform platform)
     {
-
-        if (!EnsureDatabaseAvailable(platform)) return false;
-
-        AddAdmin();
+        if (!EnsureDatabaseAvailable(platform))
+        {
+            if (!Design.IsDesignMode)
+            {
+                AddAdmin(platform);
+            }
+            return false;
+        }
         return true;
     }
 
@@ -27,7 +31,7 @@ public class Startup
         int screenIndex = settings.GetEmployeeOverViewSettings();
 
         var employeeOverviewViewModel = new EmployeeOverviewViewModel(iplatform);
-        var employeeOverview = new EmployeeOverviewWindow(employeeOverviewViewModel)
+        var employeeOverview = new EmployeeOverviewWindow(employeeOverviewViewModel, iplatform)
         {
             DataTemplates = { new ViewLocator() },
             DataContext = employeeOverviewViewModel
@@ -56,26 +60,27 @@ public class Startup
         employeeOverview.Show();
     }
 
-    private static void AddAdmin()
+    private static void AddAdmin(IPlatform platform)
     {
-        DatabaseHelper databaseHelper = new();
-        var admins = databaseHelper.GetAdminUsers();
+        var admins = platform.Database.GetAdminUsers();
         if (admins.Count == 0)
         {
-            databaseHelper.CreateUser("sko", "test123");
+            platform.Database.CreateUser("sko", "test123");
         }
     }
 
     // Ensure database is available
     private static bool EnsureDatabaseAvailable(IPlatform platform)
     {
-        var resault = Database.EnsureDatabaseAvailable();
-        if (resault.success)
+        if (!Design.IsDesignMode)
         {
-            return false;
+            var resault = Database.EnsureDatabaseAvailable();
+            if (resault.success)
+            {
+                return false;
+            }
+            MessageBoxViewModel messageBoxViewModel = new(platform.MainWindow, resault.message, resault.title, CheckInSystem.Controls.MessageBoxButton.OK);
         }
-        MessageBoxViewModel messageBoxViewModel = new(platform.MainWindow, resault.message, resault.title, CheckInSystem.Controls.MessageBoxButton.OK);
-
         return true;
     }
 }

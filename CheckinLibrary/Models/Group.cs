@@ -11,7 +11,7 @@ namespace CheckinLibrary.Models;
 
 public class Group : INotifyPropertyChanged
 {
-    DatabaseHelper databaseHelper = new();
+    IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
 
     public int ID { get; private set; }
     
@@ -33,13 +33,13 @@ public class Group : INotifyPropertyChanged
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {
-        DatabaseHelper databaseHelper = new();
+        IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
         return databaseHelper.GetAllGroups(employees);
     }
 
     public static Group NewGroup(String name)
     {
-        DatabaseHelper databaseHelper = new();
+        IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
         return databaseHelper.NewGroup(name);
     }
 

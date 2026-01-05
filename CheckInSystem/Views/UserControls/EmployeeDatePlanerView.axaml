@@ -1,0 +1,156 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CheckInSystem.Customcontrols"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CheckInSystem.Views.UserControls.EmployeeDatePlanerView"
+			 xmlns:vm="clr-namespace:CheckInSystem.ViewModels.UserControls"
+			 x:DataType="vm:EmployeeDatePlanerViewModel">
+	
+	<Grid ShowGridLines="true">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="50"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="50"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0"
+					Background="Blue">
+		</StackPanel>
+		
+		<Button Content="Logout"
+				FontSize="20"
+				Margin="0 0 30 0"
+				HorizontalAlignment="Right"
+				Grid.Row="0"
+				Command="{Binding Btn_Logout}"/>
+
+		<StackPanel Grid.Row="0"
+					VerticalAlignment="Center"
+					Orientation="Horizontal">
+
+			<Button Content="←"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+			
+			<Button Content="Current Week"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+			
+			<Button Content="→"
+					FontSize="18"
+					Margin="10 0 0 0"/>
+		</StackPanel>
+
+		<!-- Planner Grid -->
+		<ScrollViewer Grid.Row="1">
+			<Grid ShowGridLines="True">
+				<Grid.ColumnDefinitions>
+					<!-- Time column -->
+					<ColumnDefinition Width="60"/>
+					<!-- Mon–Fri -->
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="30"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<!-- Day headers -->
+				<TextBlock Grid.Column="1" Text="Mon" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="2" Text="Tue" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="3" Text="Wed" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="4" Text="Thu" HorizontalAlignment="Center" FontWeight="Bold"/>
+				<TextBlock Grid.Column="5" Text="Fri" HorizontalAlignment="Center" FontWeight="Bold"/>
+
+				<!-- Times -->
+				<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Hours}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding}" Height="50" Margin="2"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+
+				<!-- Hour dividers -->
+				<ItemsControl Grid.Row="1" Grid.ColumnSpan="6" ItemsSource="{Binding Hours}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Height="50" BorderBrush="LightGray" BorderThickness="0,1,0,0"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+
+				<!-- Entries (check-in / absence blocks) -->
+				<ItemsControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" ItemsSource="{Binding Entries}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Canvas/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Background="{Binding Color}"
+                                    Opacity="{Binding Opacity}"
+                                    Width="150"
+                                    Canvas.Left="{Binding DayOffset}"
+                                    Canvas.Top="{Binding StartY}"
+                                    Height="{Binding Height}">
+								<TextBlock Text="{Binding Label}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Grid>
+		</ScrollViewer>
+		
+		<StackPanel Background="Blue"
+					Grid.Row="2">
+		</StackPanel>
+		
+		<Button Content="Chancel"
+				FontSize="18"
+				Margin="0 0 30 0"
+				Grid.Row="2"
+				HorizontalAlignment="Right"
+				Command="{Binding Btn_Back}"/>
+		<StackPanel Margin="10 0 0 0"
+					Grid.Row="2"
+					VerticalAlignment="Center"
+					Orientation="Horizontal">
+			
+			<Button Content="Gem"
+					FontSize="18"
+					Command="{Binding Btn_Save}"/>
+			
+			<Button Content="Add Site Time"
+					FontSize="18"
+					Margin="5 0 0 0"
+					Command="{Binding Btn_AddSiteTime}"/>
+			
+			<Button Content="Add Absence"
+					FontSize="18"
+					Margin="5 0 0 0"
+					Command="{Binding Btn_AddAbsence}"/>
+			
+		</StackPanel>
+		
+	</Grid>
+</UserControl>

@@ -29,7 +29,7 @@
                         Click="BtnConfrimed"
                         MinWidth="60"
                         Margin="0,0,10,0"/>
-				<Button IsCancel="True" MinWidth="60" Content="Annuller"/>
+				<Button IsCancel="True" MinWidth="60" Content="Annuller" Click="BtnCancel"/>
 			</StackPanel>
 		</StackPanel>
 

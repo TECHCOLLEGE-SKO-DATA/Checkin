@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using CheckinLibrary.Background_tasks;
+﻿using Avalonia.Media;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
 using ReactiveUI;
@@ -13,8 +12,77 @@ using System.Threading.Tasks;
 
 namespace CheckInSystem.ViewModels.UserControls
 {
-    public class EmployeeTimeViewModel : ViewModelBase
+    public class EmployeeDatePlanerViewModel : ViewModelBase
     {
+        public ObservableCollection<PlannerEntry> Entries { get; } = new();
+
+        public ObservableCollection<string> Hours { get; } = new ObservableCollection<string>(
+            Enumerable.Range(0, 24).Select(h => $"{h:00}:00")
+        );
+
+
+        private const int HourHeight = 50;   // pixels per hour
+        private const int DayWidth = 150;    // width of a column (adjust to taste)
+
+        private void RefreshEntries()
+        {
+            Entries.Clear();
+
+            // --- Absences ---
+            foreach (var absence in Absences)
+            {
+                var start = absence.FromDate;
+                var end = absence.ToDate;
+
+                var entry = new PlannerEntry
+                {
+                    DayOffset = GetDayOffset(start.DayOfWeek),
+                    StartY = start.Hour * HourHeight + start.Minute * (HourHeight / 60.0),
+                    Height = (end - start).TotalHours * HourHeight,
+                    Label = "Absent",
+                    Color = Brushes.LightGray,
+                    Opacity = 0.5
+                };
+                Entries.Add(entry);
+            }
+
+            // --- SiteTimes ---
+            foreach (var siteTime in SiteTimes)
+            {
+                if (siteTime.ArrivalTime == null || siteTime.DepartureTime == null)
+                    continue;
+
+                var entry = new PlannerEntry
+                {
+                    DayOffset = GetDayOffset(siteTime.ArrivalTime.Value.DayOfWeek),
+                    StartY = siteTime.ArrivalTime.Value.Hour * HourHeight +
+                             siteTime.ArrivalTime.Value.Minute * (HourHeight / 60.0),
+                    Height = ((siteTime.DepartureTime ?? DateTime.Now) - siteTime.ArrivalTime.Value).TotalHours * HourHeight,
+                    Label = "Checked In",
+                    Color = Brushes.LightGreen,
+                    Opacity = 1
+                };
+                Entries.Add(entry);
+            }
+        }
+
+        /// <summary>
+        /// Maps DayOfWeek to X offset in canvas
+        /// (Monday = first column, Friday = last)
+        /// </summary>
+        private double GetDayOffset(DayOfWeek day)
+        {
+            // skip Sunday/Saturday
+            return day switch
+            {
+                DayOfWeek.Monday => 1 * DayWidth,
+                DayOfWeek.Tuesday => 2 * DayWidth,
+                DayOfWeek.Wednesday => 3 * DayWidth,
+                DayOfWeek.Thursday => 4 * DayWidth,
+                DayOfWeek.Friday => 5 * DayWidth,
+                _ => 0
+            };
+        }
 
         public List<AbsenceReason> AbsenceReasons { get; set; } = new();
 
@@ -33,45 +101,20 @@ namespace CheckInSystem.ViewModels.UserControls
             get => _selectedEmployee;
             set
             {
-                if (_selectedEmployee != value) // Ensure we only update if different
+                if (_selectedEmployee != value)
                 {
                     SetProperty(ref _selectedEmployee, value);
 
                     Absences.Clear();
                     foreach (var absence in Absence.GetAllAbsence(value))
-                    {
                         Absences.Add(absence);
-                    }
-
-                    var sortedAbsences = Absences
-                        .OrderByDescending(absence => absence.FromDate)
-                        .ToList();
-
-                    Absences.Clear();
-                    foreach(var absence in sortedAbsences)
-                    {
-                        Absences.Add(absence);
-                    }
 
                     SiteTimes.Clear();
-                    var sorted = OnSiteTime.GetOnsiteTimesForEmployee(value).OrderByDescending(st => st.ArrivalTime);
-
-                    foreach (var siteTime in sorted)
-                    {
+                    foreach (var siteTime in OnSiteTime.GetOnsiteTimesForEmployee(value))
                         SiteTimes.Add(siteTime);
-                    }
 
-                    // Sort newest to oldest by ArrivalTime
-                    var sortedSiteTimes = SiteTimes
-                        .OrderByDescending(sitetime => sitetime.ArrivalTime)
-                        .ToList();
-
-                    SiteTimes.Clear();
-                    foreach (var SiteTime in sortedSiteTimes)
-                    {
-                        SiteTimes.Add(SiteTime);
-                    }
-
+                    // after data reload, rebuild entries for the planner
+                    RefreshEntries();
 
                     this.RaisePropertyChanged(nameof(Absences));
                     this.RaisePropertyChanged(nameof(SiteTimes));
@@ -79,32 +122,26 @@ namespace CheckInSystem.ViewModels.UserControls
             }
         }
 
-        public ReactiveCommand<Unit, Unit> Btn_AddAbsence {  get; set; }
+        public ReactiveCommand<Unit, Unit> Btn_AddAbsence { get; }
 
-        public ReactiveCommand<Unit, Unit> Btn_LogOut { get; set; }
+        public ReactiveCommand<Unit, Unit> Btn_AddSiteTime { get; }
 
-        public ReactiveCommand<Unit, Unit> Btn_Cancel { get; set; }
+        public ReactiveCommand<Unit, Unit> Btn_Back { get; }
 
-        public ReactiveCommand<Unit, Unit> Btn_Save { get; set; }
+        public ReactiveCommand<Unit, Unit> Btn_Logout { get; }
 
-        public ReactiveCommand<Unit, Unit> Btn_AddSiteTime { get; set; }
+        public ReactiveCommand<Unit, Unit> Btn_Save {  get; }
 
-        public EmployeeTimeViewModel(IPlatform platform) : base(platform)
+        public EmployeeDatePlanerViewModel(IPlatform platform) : base(platform) 
         {
             platform.DataLoaded += (sender, args) =>
             {
                 AbsenceReasons = platform.MainWindowViewModel.absenceReasons;
             };
 
-            SiteTimesToDelete = new ();
-            SiteTimesToAddToDb = new();
-
-            Btn_LogOut = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
-
-            Btn_Cancel = ReactiveCommand.Create(() => RevertSiteTimes()); 
-
+            Btn_Back = ReactiveCommand.Create(() => _platform.MainWindowViewModel.SwitchToAdminPanel());
+            Btn_Logout = ReactiveCommand.Create(() => _platform.MainWindowViewModel.SwitchToLoginView());
             Btn_Save = ReactiveCommand.Create(() => SaveChanges());
-            
         }
 
         public void AppendSiteTimesToDelete(OnSiteTime siteTime)
@@ -255,5 +292,15 @@ namespace CheckInSystem.ViewModels.UserControls
             this.RaisePropertyChanged(nameof(Absences));
         }
 
+    }
+
+    public class PlannerEntry
+    {
+        public double DayOffset { get; set; }   // X position (per weekday column)
+        public double StartY { get; set; }      // Y position (based on time of day)
+        public double Height { get; set; }      // Duration in pixels
+        public string Label { get; set; }       // Display text
+        public IBrush Color { get; set; }       // Background
+        public double Opacity { get; set; }     // 1.0 for normal, 0.5 for absence
     }
 }

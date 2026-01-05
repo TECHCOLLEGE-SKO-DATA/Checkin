@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem.Tests", "Chec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckinLibrary", "CheckinLibrary\CheckinLibrary.csproj", "{BE982E27-7420-4000-B7CD-908887C4572D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem.Desktop", "..\..\..\Desktop\CheckInSystem.Desktop\CheckInSystem.Desktop.csproj", "{5A4E404F-F5AD-B34C-9235-40F726329693}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem.Desktop", "CheckInSystem.Desktop\CheckInSystem.Desktop.csproj", "{5A4E404F-F5AD-B34C-9235-40F726329693}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInSystem", "CheckInSystem\CheckInSystem.csproj", "{3F4A0E8E-9983-88C3-83DB-FD8547079813}"
 EndProject

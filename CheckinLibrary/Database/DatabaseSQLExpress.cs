@@ -10,11 +10,16 @@ using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using System.Collections.ObjectModel;
-using static CheckinLibrary.Models.Absence;
 using CheckinLibrary.Background_tasks;
 
-public class DatabaseHelper : IDatabaseHelper
+public class DatabaseSQLExpress : IDatabaseHelper
 {
+    /*
+     * ############################################################ *
+     * ## this holds quries specifik for SQL Server and exspress ## *
+     * ############################################################ *
+     */
+
     //From ACR122U CardScanned
 
     public void CardScanned(string cardID)
@@ -158,34 +163,6 @@ public class DatabaseHelper : IDatabaseHelper
 
         var employees = connection.Query<Employee>(selectQuery, new { cardID = cardID }).FirstOrDefault();
         return employees;
-    }
-
-    public (DateTime? ArrivalTime, DateTime? DepartureTime) GetUpdatedSiteTimes(int employeeId)
-    {
-        DateTime? ArrivalTime = null;
-        DateTime? DepartureTime = null;
-        string selectQuery = @"Select TOP(1) * FROM onSiteTime
-                WHERE employeeID = @ID
-                ORDER BY arrivalTime desc";
-
-        try
-        {
-            using var connection = Database.GetConnection();
-            if (connection == null)
-                throw new Exception("Could not establish database connection!");
-
-            var siteTime = connection.QuerySingle<OnSiteTime>(selectQuery, new { ID = employeeId });
-
-            ArrivalTime = siteTime.ArrivalTime;
-            DepartureTime = siteTime.DepartureTime;
-        }
-        catch (Exception)
-        {
-            ArrivalTime = null;
-            DepartureTime = null;
-        }
-
-        return (ArrivalTime, DepartureTime);
     }
 
     public void DeleteFromDb(int ID)
@@ -345,6 +322,33 @@ public class DatabaseHelper : IDatabaseHelper
             .Select(t => new OnSiteTime(t)).ToList();
 
         return onSiteTimes;
+    }
+    public (DateTime? ArrivalTime, DateTime? DepartureTime) GetUpdatedSiteTimes(int employeeId)
+    {
+        DateTime? ArrivalTime = null;
+        DateTime? DepartureTime = null;
+        string selectQuery = @"Select TOP(1) * FROM onSiteTime
+                WHERE employeeID = @ID
+                ORDER BY arrivalTime desc";
+
+        try
+        {
+            using var connection = Database.GetConnection();
+            if (connection == null)
+                throw new Exception("Could not establish database connection!");
+
+            var siteTime = connection.QuerySingle<OnSiteTime>(selectQuery, new { ID = employeeId });
+
+            ArrivalTime = siteTime.ArrivalTime;
+            DepartureTime = siteTime.DepartureTime;
+        }
+        catch (Exception)
+        {
+            ArrivalTime = null;
+            DepartureTime = null;
+        }
+
+        return (ArrivalTime, DepartureTime);
     }
 
     public void DeleteFromDbOnSiteTime(int Id)

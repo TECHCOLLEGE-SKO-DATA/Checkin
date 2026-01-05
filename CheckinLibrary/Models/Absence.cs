@@ -13,7 +13,7 @@ namespace CheckinLibrary.Models
 {
     public class Absence
     {
-        private DatabaseHelper dbHelper = new();
+        private IDatabaseHelper dbHelper { get; set; } = Database.Database.DatabaseType();
 
         public TimeOnly FromTime { get; set; }
         public TimeOnly ToTime { get; set; }
@@ -86,7 +86,7 @@ namespace CheckinLibrary.Models
 
         public static List<Absence> GetAllAbsence(Employee employee)
         {
-            DatabaseHelper databHelper = new();
+            IDatabaseHelper databHelper = Database.Database.DatabaseType();
             return databHelper.GetAllAbsence(employee);
         }
 

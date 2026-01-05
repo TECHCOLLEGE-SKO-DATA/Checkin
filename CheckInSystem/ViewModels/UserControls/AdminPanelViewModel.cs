@@ -27,8 +27,6 @@ namespace CheckInSystem.ViewModels.UserControls
         public const int EMPLOYEE_TIME_TAB = 1;
         public const int GROUP_LISTPAGE_TAB = 2;
 
-        DatabaseHelper databaseHelper = new();
-
         public ObservableCollection<Group> Groups { get; private set; } = new();
 
         private Control _adminPanelContent;
@@ -91,8 +89,12 @@ namespace CheckInSystem.ViewModels.UserControls
             adminEmployeeViewModel = new(platform, this);
 
             Btn_LoginView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToLoginView());
+
             Btn_GroupView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToGroupView());
+
             Btn_SettingsView = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToSettingsView());
+
+            Btn_AdminAdministration = ReactiveCommand.Create(() => platform.MainWindowViewModel.SwitchToAdmins());
 
             EditGroupsForEmployeesCommand = ReactiveCommand.Create(EditGroupsForEmployeesAsync);
 
@@ -124,8 +126,6 @@ namespace CheckInSystem.ViewModels.UserControls
             });
 
             EditNextScannedCardCommand = ReactiveCommand.Create(EditNextScannedCard);
-
-            //Btn_AdminAdministration = ReactiveCommand.Create(() => );
         }
         
         public void EditNextScannedCard()

@@ -12,6 +12,7 @@ using System.Windows;
 using CheckinLibrary.Database;
 using CheckInSystem.Platform;
 using Avalonia.Controls;
+using System.Diagnostics;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -117,13 +118,18 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardScanned += async (sender, args) =>
+            platform.CardReader.CardInserted += async (sender, args) =>
             {
                 //to ensure correct sorting 10 millisecond delay
                 await Task.Delay(10);
 
                 //Sort again
                 SortEmployees();
+
+                foreach(var group in Groups)
+                {
+                    Debug.WriteLine(group.Members);
+                }
             };
 
         }
@@ -157,31 +163,33 @@ namespace CheckInSystem.ViewModels.Windows
         // New Method: Load groups and apply sorting
         private void LoadGroupsAndEmployees()
         {
-            DatabaseHelper databaseHelper = new();
             // Fetch employees from the database
 
             // Fetch groups and assign employees
             //Groups = new ObservableCollection<Group>(Group.GetAllGroups(Employees.ToList()));
             Groups = _platform.MainWindowViewModel.Groups;
-
         }
 
         private void SortEmployees()
         {
+            ObservableCollection<Group> tempGroups = new();
             foreach (var group in Groups)
             {
-                // Sort using LINQ and recreate the collection
-                var sorted = group.Members
-                    .OrderByDescending(e => e.IsCheckedIn)
-                    .ThenBy(e => e.FirstName)
+                // Sort members by IsCheckedIn (desc: checked-in first), then FirstName alphabetically
+                var sortedMembers = group.Members
+                    .OrderByDescending(m => m.IsCheckedIn)  // true first
+                    .ThenBy(m => m.FirstName)
                     .ToList();
 
                 group.Members.Clear();
-                foreach (var employee in sorted)
+                foreach (var member in sortedMembers)
                 {
-                    group.Members.Add(employee);
+                    group.Members.Add(member);
                 }
+                tempGroups.Add(group);
             }
+            
+            Groups = tempGroups;
         }
 
     }

@@ -3,9 +3,8 @@ using Xunit.Sdk;
 using CheckinLibrary;
 
 namespace CheckInSystem.Tests
-
 {
-    public class UnitTest1
+    public class ValidationTests
     {
         [Fact]
         public void ShortenName()
@@ -22,8 +21,8 @@ namespace CheckInSystem.Tests
             Assert.Equal("K.", emp.MiddleNameShort);
             emp.MiddleName = "Testing Vervy Long Names";
             Assert.Equal("T. V. L. N.", emp.MiddleNameShort);
-            emp.MiddleName = "";
-            Assert.Equal("", emp.MiddleNameShort);
+            emp.MiddleName = "Østergård";
+            Assert.Equal("Ø.", emp.MiddleNameShort);
         }
         [Fact]
         public void ValidatorAdminUser_Tests()

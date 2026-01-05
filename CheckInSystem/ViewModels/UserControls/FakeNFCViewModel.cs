@@ -13,7 +13,6 @@ namespace CheckInSystem.ViewModels.UserControls
 {
     public class FakeNFCViewModel : ViewModelBase
     {
-        private readonly DatabaseHelper dbHelper = new();
         private readonly Random random = new();
 
         private string _newCardId;
@@ -49,7 +48,7 @@ namespace CheckInSystem.ViewModels.UserControls
 
             if (!Design.IsDesignMode)
             {
-                foreach (var emp in dbHelper.GetAllEmployees())
+                foreach (var emp in _platform.Database.GetAllEmployees())
                     Employees.Add(emp);
             }
             
@@ -71,7 +70,7 @@ namespace CheckInSystem.ViewModels.UserControls
                 _cardReader.TriggerCardInserted(RandomCardGen());
             }
             Employees.Clear();
-            foreach (var employee in dbHelper.GetAllEmployees())
+            foreach (var employee in _platform.Database.GetAllEmployees())
             {
                 Employees.Add(employee);
             }
@@ -85,7 +84,7 @@ namespace CheckInSystem.ViewModels.UserControls
         private void RefreshEmployees()
         {
             Employees.Clear();
-            foreach (var emp in dbHelper.GetAllEmployees())
+            foreach (var emp in _platform.Database.GetAllEmployees())
                 Employees.Add(emp);
         }
 
