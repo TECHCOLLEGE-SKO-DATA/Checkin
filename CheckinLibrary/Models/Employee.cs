@@ -163,5 +163,14 @@ public class Employee : INotifyPropertyChanged
         LastName = lastName;
         CardID = cardID;
     }
+
+    public void ValidateTimes()
+    {
+        if (ArrivalTime.HasValue && DepartureTime.HasValue &&
+            ArrivalTime.Value.Date != DepartureTime.Value.Date)
+        {
+            DepartureTime = null;
+        }
+    }
 }
 
