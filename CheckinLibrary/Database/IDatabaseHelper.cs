@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CheckinLibrary.Models;
-using static CheckinLibrary.Models.Absence;
 
 namespace CheckinLibrary.Database
 {

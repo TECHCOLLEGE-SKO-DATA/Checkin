@@ -1,19 +1,15 @@
 ﻿using Avalonia.Controls;
-using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -119,7 +115,7 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardInserted += async (sender, args) =>
+            platform.CardReader.CardScanned += async (sender, args) =>
             {
                 //Sort again
                 SortEmployees();

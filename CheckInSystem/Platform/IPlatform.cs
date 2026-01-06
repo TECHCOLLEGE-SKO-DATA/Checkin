@@ -1,4 +1,5 @@
 using CheckinLibrary.Database;
+using CheckinLibrary.Models;
 using CheckInSystem.ViewModels.Windows;
 using CheckInSystem.Views;
 using System;
