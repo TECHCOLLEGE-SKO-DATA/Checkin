@@ -1,6 +1,7 @@
 ﻿using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
+using CheckInSystem.Tests.Platform;
 using CheckInSystem.ViewModels.Windows;
 using Metsys.Bson;
 using System;
@@ -9,13 +10,15 @@ using Xunit;
 namespace BackgroundTimeServiceTests;
 public class BackgroundTimeServiceTests
 {
-    /*
+    TestPlatform testPlatform;
+
     [Fact]
     public void CheckTime_ShouldPerformMaintenance_WhenTimeIsAfterStartTime()
     {
         // Arrange
         var fakeTime = new DateTime(2025, 1, 27, 3, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
 
         // Provide fake employees
         service.GetEmployees = () => new List<Employee>
@@ -27,7 +30,7 @@ public class BackgroundTimeServiceTests
         service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.True(maintenanceCalled, "Maintenance should be performed when time is within range.");
@@ -40,6 +43,7 @@ public class BackgroundTimeServiceTests
         // Arrange: Fake time
         var fakeTime = new DateTime(2025, 1, 27, 1, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
 
         // Provide fake employees
         service.GetEmployees = () => new List<Employee>
@@ -51,8 +55,8 @@ public class BackgroundTimeServiceTests
         service.PerformMaintenanceAction = (employees) => maintenanceCallCount++;
 
         // Act: Call twice
-        service.CheckTime();
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.Equal(1, maintenanceCallCount);
@@ -74,9 +78,10 @@ public class BackgroundTimeServiceTests
 
         bool resetTriggered = false;
         service.OnDailyReset += () => resetTriggered = true;
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
 
         // Act
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.True(resetTriggered, "Reset should be triggered at 5 AM.");
@@ -88,7 +93,8 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 10:00 AM (outside valid range)
         var fakeTime = new DateTime(2025, 1, 27, 10, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
-        
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
+
         // Provide fake employees
         service.GetEmployees = () => new List<Employee>
         {
@@ -99,7 +105,7 @@ public class BackgroundTimeServiceTests
         service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.False(maintenanceCalled, "Maintenance should not be performed outside valid range.");
@@ -111,6 +117,7 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 01:30 AM
         var fakeTime = new DateTime(2025, 1, 27, 1, 30, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
 
         // Provide fake employees
         service.GetEmployees = () => new List<Employee>
@@ -122,7 +129,7 @@ public class BackgroundTimeServiceTests
         service.PerformMaintenanceAction = (employees) => maintenanceCalled = true;
 
         // Act
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.True(maintenanceCalled, "Maintenance should be performed before 1 AM.");
@@ -134,6 +141,7 @@ public class BackgroundTimeServiceTests
         // Arrange: Set fake time to 6:00 AM
         var fakeTime = new DateTime(2025, 1, 27, 6, 0, 0);
         var service = new BackgroundTimeService(() => fakeTime);
+        EmployeeOverviewViewModel employeeOverviewViewModel = new(testPlatform);
 
         // Provide fake employees
         service.GetEmployees = () => new List<Employee>
@@ -145,10 +153,9 @@ public class BackgroundTimeServiceTests
         service.OnDailyReset += () => resetTriggered = true;
 
         // Act
-        service.CheckTime();
+        service.CheckTime(employeeOverviewViewModel);
 
         // Assert
         Assert.True(resetTriggered, "Logging flag should reset at 6 AM.");
     }
-    */
 }
