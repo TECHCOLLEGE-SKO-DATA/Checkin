@@ -1,6 +1,7 @@
 ﻿using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckInSystem.ViewModels.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +31,7 @@ public class BackgroundTimeService
         _timeProvider = timeProvider ?? (() => DateTime.Now);
     }
 
-    public void Start()
+    public void Start(EmployeeOverviewViewModel _vm)
     {
         this.PerformMaintenanceAction = (employees) =>
         {
@@ -43,7 +44,7 @@ public class BackgroundTimeService
         {
             while (!_cts.Token.IsCancellationRequested)
             {
-                CheckTime();
+                CheckTime(_vm);
                 await Task.Delay(_checkInterval);
             }
         });
@@ -54,7 +55,7 @@ public class BackgroundTimeService
         _cts?.Cancel();
     }
 
-    public void CheckTime()
+    public void CheckTime(EmployeeOverviewViewModel _vm)
     {
         var currentTime = _timeProvider().TimeOfDay;
 
@@ -67,6 +68,8 @@ public class BackgroundTimeService
             {
                 PerformMaintenanceAction.Invoke(employees);
             }
+
+            _vm.UpdateAllEmployees(employees);
 
             _ = Task.Run(async () =>
             {

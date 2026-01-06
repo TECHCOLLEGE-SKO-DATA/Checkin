@@ -121,9 +121,6 @@ namespace CheckInSystem.ViewModels.Windows
 
             platform.CardReader.CardInserted += async (sender, args) =>
             {
-                //to ensure correct sorting 10 millisecond delay
-                await Task.Delay(10);
-
                 //Sort again
                 SortEmployees();
 
@@ -176,7 +173,6 @@ namespace CheckInSystem.ViewModels.Windows
             ObservableCollection<Group> tempGroups = new();
             foreach (var group in Groups)
             {
-                // Sort members by IsCheckedIn (desc: checked-in first), then FirstName alphabetically
                 var sortedMembers = group.Members
                     .OrderByDescending(m => m.IsCheckedIn)  // true first
                     .ThenBy(m => m.FirstName)
@@ -198,6 +194,25 @@ namespace CheckInSystem.ViewModels.Windows
                 .SelectMany(g => g.Members)
                 .ToList();
         }
+        public List<Employee> UpdateAllEmployees(List<Employee> employees)
+        {
+            var employeeById = employees.ToDictionary(e => e.ID);
 
+            foreach (var group in Groups)
+            {
+                foreach (var member in group.Members)
+                {
+                    if (employeeById.TryGetValue(member.ID, out var updated))
+                    {
+                        member.IsCheckedIn = updated.IsCheckedIn;
+                        member.IsOffSite = updated.IsOffSite;
+                    }
+                }
+            }
+
+            return Groups
+                .SelectMany(g => g.Members)
+                .ToList();
+        }
     }
 }

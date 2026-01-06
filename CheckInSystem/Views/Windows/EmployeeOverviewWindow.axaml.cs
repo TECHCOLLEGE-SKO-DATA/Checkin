@@ -54,7 +54,7 @@ public partial class EmployeeOverviewWindow : Window
 
         _timeService.OnDailyReset += UpdateUIOnReset;
 
-        _timeService.Start();
+        _timeService.Start(_vm);
     }
 
 
