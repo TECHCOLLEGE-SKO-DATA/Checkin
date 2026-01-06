@@ -7,6 +7,7 @@ namespace CheckInSystem.CardReader;
 
 public class ACR122UCardReader : Platform.ICardReader
 {
+    //a
     public event CardScannedEventHandler? CardScanned;
 
     public event ReaderConnectedEventHandler? ReaderConnected;
