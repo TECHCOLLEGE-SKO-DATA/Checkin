@@ -26,6 +26,7 @@ public class BackgroundTimeService
         _timeProvider = timeProvider ?? (() => DateTime.Now);
     }
 
+    private Employee employee;
     public void Start()
     {
         this.PerformMaintenanceAction = (employees) =>
@@ -41,6 +42,7 @@ public class BackgroundTimeService
             {
                 CheckTime();
                 await Task.Delay(_checkInterval);
+                employee.ValidateTimes();
             }
         });
     }
