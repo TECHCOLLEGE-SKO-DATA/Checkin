@@ -15,10 +15,13 @@ using Avalonia.Threading;
 using CheckInSystem.Views;
 using CheckinLibrary.Settings;
 using CheckInSystem.Customcontrols;
+using System.Threading.Tasks;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
+    BackgroundTimeService backgroundTimeService = new();
+
     public List<AbsenceReason> absenceReasons { get; set; }
 
     //ViewModels start here
@@ -128,6 +131,7 @@ public class MainWindowViewModel : ViewModelBase
             LoadDataFromDatabase();
         }
 
+        
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);

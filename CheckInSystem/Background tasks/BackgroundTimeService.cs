@@ -1,6 +1,7 @@
 ﻿using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.Windows;
 using System;
 using System.Collections.Generic;
