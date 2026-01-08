@@ -119,7 +119,7 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardInserted += async (sender, args) =>
+            platform.CardReader.CardScanned += async (sender, args) =>
             {
                 //Sort again
                 SortEmployees();
