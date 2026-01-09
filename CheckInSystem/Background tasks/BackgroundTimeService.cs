@@ -15,7 +15,7 @@ public class BackgroundTimeService
     private readonly IDatabaseHelper _dbHelper;
     AbsencBackGroundService absence = new();
 
-    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(2);
+    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
     private readonly TimeSpan _startTime = new TimeSpan(1, 0, 0);  // 01:00 
     private readonly TimeSpan _endTime = new TimeSpan(4, 0, 0);    // 04:00 
 
