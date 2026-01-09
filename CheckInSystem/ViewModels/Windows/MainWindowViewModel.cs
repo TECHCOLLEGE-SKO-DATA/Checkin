@@ -1,27 +1,27 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Threading;
+using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckinLibrary.Settings;
+using CheckInSystem.CardReader;
+using CheckInSystem.Controls;
+using CheckInSystem.Customcontrols;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.Views;
+using PCSC.Interop;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CheckinLibrary.Background_tasks;
-using CheckInSystem.CardReader;
-using Avalonia.Threading;
-using CheckInSystem.Views;
-using CheckinLibrary.Settings;
-using CheckInSystem.Customcontrols;
-using System.Threading.Tasks;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
-    BackgroundTimeService backgroundTimeService = new();
-
+    IPlatform _platform;
     public List<AbsenceReason> absenceReasons { get; set; }
 
     //ViewModels start here
@@ -121,8 +121,15 @@ public class MainWindowViewModel : ViewModelBase
 
     public EmployeeStatusToBrushConverter brushConverter { get; set; }
 
+    private BackgroundTimeService _timeService;
+
+    EmployeeOverviewViewModel _vm;
+
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
+        _platform = platform;
+
+        _vm = new EmployeeOverviewViewModel(_platform);
         if (!Design.IsDesignMode)
         {
             platform.CardReader.CardInserted += (sender, args) => EmployeeCardScanned(args.Value);
@@ -149,6 +156,43 @@ public class MainWindowViewModel : ViewModelBase
 
         //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
+
+        StartBackgroundService(platform);
+    }
+
+    private void StartBackgroundService(IPlatform platform)
+    {
+        _timeService = new BackgroundTimeService();
+
+        _timeService.GetEmployees = () =>
+            GetAllEmployees();
+
+        _timeService.PerformMaintenanceAction = employees =>
+        {
+            Maintenance.CheckOutEmployeesIfTheyForgot(employees.ToList());
+            Maintenance.CheckForEndedOffSiteTime(employees.ToList());
+        };
+
+        _timeService.OnDailyReset += UpdateUIOnReset;
+
+        _timeService.Start(platform);
+    }
+    private void UpdateUIOnReset()
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            _vm.SortEmployees();
+            _ = MessageBox.Show(
+                _platform.MainWindow,
+                "Daily reset has been processed!",
+                "Info",
+                MessageBoxButton.OK);
+        });
+    }
+
+    public ObservableCollection<Employee> GetAllEmployees()
+    {
+        return Employees;
     }
 
     public void LoadDataFromDatabase()

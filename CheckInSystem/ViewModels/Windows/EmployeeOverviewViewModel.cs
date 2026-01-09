@@ -1,19 +1,16 @@
 ﻿using Avalonia.Controls;
-using CheckinLibrary.Database;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -119,8 +116,9 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardScanned += async (sender, args) =>
+            platform.CardReader.CardRemoved += async (sender, args) =>
             {
+                await Task.Delay(10);
                 //Sort again
                 SortEmployees();
 
@@ -188,12 +186,7 @@ namespace CheckInSystem.ViewModels.Windows
             
             Groups = tempGroups;
         }
-        public List<Employee> GetAllEmployees()
-        {
-            return Groups
-                .SelectMany(g => g.Members)
-                .ToList();
-        }
+ 
         public List<Employee> UpdateAllEmployees(List<Employee> employees)
         {
             var employeeById = employees.ToDictionary(e => e.ID);

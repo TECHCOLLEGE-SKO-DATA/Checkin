@@ -6,6 +6,8 @@ using CheckInSystem.ViewModels.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 public class BackgroundTimeService
@@ -13,18 +15,18 @@ public class BackgroundTimeService
     private readonly IDatabaseHelper _dbHelper;
     AbsencBackGroundService absence = new();
 
-    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
+    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(2);
     private readonly TimeSpan _startTime = new TimeSpan(1, 0, 0);  // 01:00 
     private readonly TimeSpan _endTime = new TimeSpan(4, 0, 0);    // 04:00 
 
-    private bool _hasLoggedToday = false;
+    private bool _hasLoggedToday = true;
     private CancellationTokenSource _cts;
     private readonly Func<DateTime> _timeProvider;
     
     public event Action OnDailyReset;
-    public Action<List<Employee>> PerformMaintenanceAction { get; set; } = _ => { };
+    public Action<ObservableCollection<Employee>> PerformMaintenanceAction { get; set; } = _ => { };
 
-    public Func<List<Employee>> GetEmployees { get; set; }
+    public Func<ObservableCollection<Employee>> GetEmployees { get; set; }
 
 
     public BackgroundTimeService(Func<DateTime> timeProvider = null, IDatabaseHelper dbHelper = null)
@@ -32,12 +34,12 @@ public class BackgroundTimeService
         _timeProvider = timeProvider ?? (() => DateTime.Now);
     }
 
-    public void Start(EmployeeOverviewViewModel _vm)
+    public void Start(IPlatform platform)
     {
         this.PerformMaintenanceAction = (employees) =>
         {
-            Maintenance.CheckOutEmployeesIfTheyForgot(employees);
-            Maintenance.CheckForEndedOffSiteTime(employees);
+            Maintenance.CheckOutEmployeesIfTheyForgot(employees.ToList());
+            Maintenance.CheckForEndedOffSiteTime(employees.ToList());
         };
 
         _cts = new CancellationTokenSource();
@@ -45,7 +47,7 @@ public class BackgroundTimeService
         {
             while (!_cts.Token.IsCancellationRequested)
             {
-                CheckTime(_vm);
+                CheckTime(platform);
                 await Task.Delay(_checkInterval);
             }
         });
@@ -56,7 +58,7 @@ public class BackgroundTimeService
         _cts?.Cancel();
     }
 
-    public void CheckTime(EmployeeOverviewViewModel _vm)
+    public void CheckTime(IPlatform platform)
     {
         var currentTime = _timeProvider().TimeOfDay;
 
@@ -70,18 +72,18 @@ public class BackgroundTimeService
                 PerformMaintenanceAction.Invoke(employees);
             }
 
-            _vm.UpdateAllEmployees(employees);
-
             _ = Task.Run(async () =>
             {
                 await Task.Delay(TimeSpan.FromHours(3));
                 absence.AbsenceTask();
             });
+            Debug.WriteLine("Background Timeservice finished");
         }
-        else
+        else if(_hasLoggedToday != false)
         {
             _hasLoggedToday = false;
             OnDailyReset?.Invoke();
+            Debug.WriteLine("Background Timeservice Reset");
         }
     }
 }
