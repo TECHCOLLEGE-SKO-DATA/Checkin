@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -115,8 +116,9 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardScanned += async (sender, args) =>
+            platform.CardReader.CardRemoved += async (sender, args) =>
             {
+                await Task.Delay(10);
                 //Sort again
                 SortEmployees();
 
@@ -184,12 +186,7 @@ namespace CheckInSystem.ViewModels.Windows
             
             Groups = tempGroups;
         }
-        public List<Employee> GetAllEmployees()
-        {
-            return Groups
-                .SelectMany(g => g.Members)
-                .ToList();
-        }
+ 
         public List<Employee> UpdateAllEmployees(List<Employee> employees)
         {
             var employeeById = employees.ToDictionary(e => e.ID);
