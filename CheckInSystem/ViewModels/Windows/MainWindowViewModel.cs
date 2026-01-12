@@ -157,26 +157,32 @@ public class MainWindowViewModel : ViewModelBase
         //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
 
-        StartBackgroundService(platform);
+        StartBackgroundService();
     }
 
-    private void StartBackgroundService(IPlatform platform)
+    private void StartBackgroundService()
     {
-        _timeService = new BackgroundTimeService();
-
-        _timeService.GetEmployees = () =>
-            GetAllEmployees();
-
-        _timeService.PerformMaintenanceAction = employees =>
+        _timeService = new BackgroundTimeService
         {
-            Maintenance.CheckOutEmployeesIfTheyForgot(employees.ToList());
-            Maintenance.CheckForEndedOffSiteTime(employees.ToList());
+            GetEmployeesSnapshot = () => Employees.ToList(),
+
+            RunDailyResetOnUI = () =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    _vm.SortEmployees();
+                    _ = MessageBox.Show(
+                        _platform.MainWindow,
+                        "Daily reset has been processed!",
+                        "Info",
+                        MessageBoxButton.OK);
+                });
+            }
         };
 
-        _timeService.OnDailyReset += UpdateUIOnReset;
-
-        _timeService.Start(platform);
+        _timeService.Start();
     }
+
     private void UpdateUIOnReset()
     {
         Dispatcher.UIThread.Post(() =>
@@ -219,8 +225,8 @@ public class MainWindowViewModel : ViewModelBase
 
         List<Employee> employees = new List<Employee>(Employees);
 
-        Maintenance.CheckOutEmployeesIfTheyForgot(employees);
-        Maintenance.CheckForEndedOffSiteTime(employees);
+        //Maintenance.CheckOutEmployeesIfTheyForgot(employees);
+        //Maintenance.CheckForEndedOffSiteTime(employees);
     }
 
     public void EmployeeCardScanned(string cardID)
