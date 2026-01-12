@@ -26,11 +26,11 @@ public class Platform : IPlatform
     public Platform()
     {
         _database = CheckinLibrary.Database.Database.DatabaseType();
-        
+
 #if DEBUG
-        _cardReader = new ScriptedCardReader();
-#else
         _cardReader = new ACR122UCardReader();
+#else
+_cardReader = new ScriptedCardReader();
 #endif
     }
 

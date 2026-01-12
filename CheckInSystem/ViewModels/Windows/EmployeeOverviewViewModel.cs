@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CheckinLibrary.Models;
 using CheckInSystem.Platform;
 using ReactiveUI;
@@ -116,18 +117,13 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardRemoved += async (sender, args) =>
+            platform.CardReader.CardInserted += (sender, args) =>
             {
-                await Task.Delay(10);
-                //Sort again
-                SortEmployees();
-
-                foreach(var group in Groups)
+                Dispatcher.UIThread.Post(() =>
                 {
-                    Debug.WriteLine(group.Members);
-                }
+                    SortEmployees();
+                });
             };
-
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
@@ -168,25 +164,29 @@ namespace CheckInSystem.ViewModels.Windows
 
         public void SortEmployees()
         {
-            ObservableCollection<Group> tempGroups = new();
-            foreach (var group in Groups)
+            if (Groups == null) return;
+
+            var groupsSnapshot = Groups.ToList();
+
+            foreach (var group in groupsSnapshot)
             {
-                var sortedMembers = group.Members
-                    .OrderByDescending(m => m.IsCheckedIn)  // true first
+                if (group?.Members == null) continue;
+
+                var membersSnapshot = group.Members
+                    .Where(m => m != null)
+                    .ToList();
+
+                var sortedMembers = membersSnapshot
+                    .OrderByDescending(m => m.IsCheckedIn)
                     .ThenBy(m => m.FirstName)
                     .ToList();
 
                 group.Members.Clear();
                 foreach (var member in sortedMembers)
-                {
                     group.Members.Add(member);
-                }
-                tempGroups.Add(group);
             }
-            
-            Groups = tempGroups;
         }
- 
+
         public List<Employee> UpdateAllEmployees(List<Employee> employees)
         {
             var employeeById = employees.ToDictionary(e => e.ID);
