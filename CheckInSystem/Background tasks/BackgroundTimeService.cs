@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class BackgroundTimeService
 {
-    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(1);
+    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(60);
     private readonly TimeSpan _startTime = new(1, 0, 0);
     private readonly TimeSpan _endTime = new(4, 0, 0);
 
