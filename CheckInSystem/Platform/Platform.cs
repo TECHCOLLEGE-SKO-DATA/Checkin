@@ -28,9 +28,9 @@ public class Platform : IPlatform
         _database = CheckinLibrary.Database.Database.DatabaseType();
 
 #if DEBUG
-        _cardReader = new ACR122UCardReader();
+        _cardReader = new ScriptedCardReader();
 #else
-_cardReader = new ScriptedCardReader();
+        _cardReader = new ACR122UCardReader();
 #endif
     }
 

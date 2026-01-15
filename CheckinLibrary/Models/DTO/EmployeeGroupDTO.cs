@@ -9,7 +9,7 @@ public class EmployeeGroupDTO
 
     public int EmployeeID { get; set; }
     public EmployeeDTO Employee { get; set; }
-
+    
     public int GroupID { get; set; }
     public GroupDTO Group { get; set; }
 }

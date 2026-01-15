@@ -1,5 +1,7 @@
 ﻿namespace CheckinLibrary.Database;
 
+using CheckinLibrary.Database.EF;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Configuration;
@@ -169,17 +171,29 @@ public static class Database
             return false;
         }
     }
+
     public static IDatabaseHelper DatabaseType()
-    {
+    {   
         string serviceName = ConfigurationManager.AppSettings["SqlServiceName"]?.Trim() ?? "";
 
         if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
         {
-            return new DatabaseSQLExpress();
+            return new DatabaseSqlExpressEf(CreateDbContext());
         }
         else
         {
             return new DatabaseSqlLite();
         }
     }
+
+    private static CheckInDbContext CreateDbContext()
+    {
+        var options = new DbContextOptionsBuilder<CheckInDbContext>()
+            .UseSqlServer(ConnectionString)
+            .EnableSensitiveDataLogging() // optional
+            .Options;
+
+        return new CheckInDbContext(options);
+    }
+
 }
