@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class AbsenceDTO
 {
     [Key]
-    public int ID { get; set; }
+    public virtual int ID { get; set; }
 
-    public int EmployeeId { get; set; }
-    public EmployeeDTO Employee { get; set; }
+    public virtual int EmployeeId { get; set; }
+    public virtual EmployeeDTO Employee { get; set; }
 
-    public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
-    public string Note { get; set; }
+    public virtual DateTime FromDate { get; set; }
+    public virtual DateTime ToDate { get; set; }
+    public virtual string Note { get; set; }
 
-    public int AbsenceReasonId { get; set; }
+    public virtual int AbsenceReasonId { get; set; }
 }

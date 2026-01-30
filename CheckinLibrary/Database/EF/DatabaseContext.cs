@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using CheckinLibrary.Database;
 
 namespace CheckinLibrary.Database.EF
 {
@@ -15,6 +16,8 @@ namespace CheckinLibrary.Database.EF
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            base.OnModelCreating(mb);
+
             mb.Entity<EmployeeGroupDTO>()
                 .HasOne(e => e.Employee)
                 .WithMany(e => e.EmployeeGroups)
@@ -34,6 +37,12 @@ namespace CheckinLibrary.Database.EF
                 .HasOne(a => a.Employee)
                 .WithMany(e => e.Absences)
                 .HasForeignKey(a => a.EmployeeId);
+
+            mb.HasDbFunction(
+         typeof(DbFunctions)
+            .GetMethod(nameof(DbFunctions.IsEmployeeCheckedIn))!)
+             .HasName("IsEmployeeCheckedIn")
+             .HasSchema("dbo");
         }
     }
 }

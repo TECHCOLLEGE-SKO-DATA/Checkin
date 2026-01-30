@@ -30,7 +30,7 @@ public partial class App : Application
 
             if (!Startup.Run(Platform))
             {
-                //there should be an error message here
+
             }
         }
         catch (Exception exception)

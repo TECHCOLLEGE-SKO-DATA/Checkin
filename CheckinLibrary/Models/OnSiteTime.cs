@@ -11,10 +11,11 @@ public class OnSiteTime : INotifyPropertyChanged
     IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
 
     private int _id;
+    //was private set
     public int Id
     {
         get => _id;
-        private set => SetProperty(ref _id, value);
+        set => SetProperty(ref _id, value);
     }
 
     private int _employeeID;

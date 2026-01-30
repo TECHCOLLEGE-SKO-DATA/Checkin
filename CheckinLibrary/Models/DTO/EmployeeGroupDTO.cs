@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class EmployeeGroupDTO
 {
     [Key]
-    public int ID { get; set; }
+    public virtual int ID { get; set; }
 
-    public int EmployeeID { get; set; }
-    public EmployeeDTO Employee { get; set; }
+    public virtual int EmployeeID { get; set; }
+    public virtual  EmployeeDTO Employee { get; set; }
     
-    public int GroupID { get; set; }
-    public GroupDTO Group { get; set; }
+    public virtual int GroupID { get; set; }
+    public virtual GroupDTO Group { get; set; }
 }

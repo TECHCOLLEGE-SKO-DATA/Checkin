@@ -9,6 +9,8 @@ using System.Configuration;
 namespace CheckInSystem.Platform;
 public class Platform : IPlatform
 {
+    public static IServiceProvider Provider = AppServices.Provider;
+
     ICardReader _cardReader;
     public ICardReader CardReader => _cardReader;
 
@@ -27,7 +29,7 @@ public class Platform : IPlatform
     {
         _database = CheckinLibrary.Database.Database.DatabaseType();
 
-#if DEBUG
+#if DEBUG || DEBUGINMEMORY || LEGACYDAPPER
         _cardReader = new ScriptedCardReader();
 #else
         _cardReader = new ACR122UCardReader();
@@ -48,4 +50,8 @@ public class Platform : IPlatform
         _mainWindow.Show();
     }
 
+}
+public static class AppServices
+{
+    public static IServiceProvider Provider { get; set; } = null!;
 }

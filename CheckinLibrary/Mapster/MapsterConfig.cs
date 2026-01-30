@@ -12,27 +12,27 @@ public static class MapsterConfig
         // Employee
         // -------------------------------------------------
         TypeAdapterConfig<EmployeeDTO, Employee>.NewConfig()
-            .Map(dest => dest.ID, src => src.ID)
-            .Map(dest => dest.CardID, src => src.CardID)
-            .Map(dest => dest.FirstName, src => src.FirstName)
-            .Map(dest => dest.MiddleName, src => src.MiddleName)
-            .Map(dest => dest.LastName, src => src.LastName)
-            .Map(dest => dest.IsOffSite, src => src.IsOffSite)
-            .Map(dest => dest.OffSiteUntil, src => src.OffSiteUntil)
-            // Latest onsite time
-            .Map(dest => dest.ArrivalTime,
-                src => src.OnSiteTimes
-                    .OrderByDescending(t => t.ArrivalTime)
-                    .Select(t => (DateTime?)t.ArrivalTime)
-                    .FirstOrDefault())
-            .Map(dest => dest.DepartureTime,
-                src => src.OnSiteTimes
-                    .OrderByDescending(t => t.ArrivalTime)
-                    .Select(t => t.DepartureTime)
-                    .FirstOrDefault())
-            .Map(dest => dest.IsCheckedIn,
-                src => src.OnSiteTimes.Any(t => t.DepartureTime == null))
-            .IgnoreNonMapped(true);
+        .Map(dest => dest.ID, src => src.ID)
+        .Map(dest => dest.CardID, src => src.CardID)
+        .Map(dest => dest.FirstName, src => src.FirstName)
+        .Map(dest => dest.MiddleName, src => src.MiddleName)
+        .Map(dest => dest.LastName, src => src.LastName)
+        .Map(dest => dest.IsOffSite, src => src.IsOffSite)
+        .Map(dest => dest.OffSiteUntil, src => src.OffSiteUntil)
+        .Map(dest => dest.ArrivalTime,
+            src => src.OnSiteTimes
+                .OrderByDescending(t => t.ArrivalTime)
+                .Select(t => (DateTime?)t.ArrivalTime)
+                .FirstOrDefault())
+        .Map(dest => dest.DepartureTime,
+            src => src.OnSiteTimes
+                .OrderByDescending(t => t.ArrivalTime)
+                .Select(t => t.DepartureTime)
+                .FirstOrDefault())
+        .Map(dest => dest.IsCheckedIn,
+            src => src.OnSiteTimes.Any(t => t.DepartureTime == null))
+        .IgnoreNonMapped(true)
+        .Compile();
 
         // -------------------------------------------------
         // OnSiteTime
@@ -58,7 +58,7 @@ public static class MapsterConfig
             .Map(dest => dest.ID, src => src.ID)
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Isvisible, src => src.Isvisible)
-            // Eagerly load members using the bridge entity mapping
+
             .Map(dest => dest.Members,
                 src => new ObservableCollection<Employee>(
                     src.EmployeeGroups.Select(eg => eg.Employee.Adapt<Employee>())

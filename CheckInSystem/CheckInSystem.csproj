@@ -5,6 +5,7 @@
 	  <LangVersion>latest</LangVersion>
 	  <Version>0.5.0</Version>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <Configurations>Debug;Release;DebugInMemory;LegacyDapper</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -19,6 +20,9 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)'=='DebugInMemory'">
+      <Version>11.3.0</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

@@ -5,11 +5,14 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Configurations>Debug;Release;DebugInMemory;LegacyDapper</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
 	<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.11" />
   </ItemGroup>
 
   <ItemGroup>

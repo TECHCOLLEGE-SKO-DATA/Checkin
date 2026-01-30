@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class OnSiteTimeDTO
 {
     [Key]
-    public int Id { get; set; }
+    public virtual int Id { get; set; }
 
-    public int EmployeeID { get; set; }
-    public EmployeeDTO Employee { get; set; }
+    public virtual int EmployeeID { get; set; }
+    public virtual EmployeeDTO Employee { get; set; }
 
-    public DateTime ArrivalTime { get; set; }
-    public DateTime? DepartureTime { get; set; }
+    public virtual DateTime ArrivalTime { get; set; }
+    public virtual DateTime? DepartureTime { get; set; }
 }

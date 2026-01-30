@@ -7,6 +7,7 @@ using System;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -173,16 +174,46 @@ public static class Database
     }
 
     public static IDatabaseHelper DatabaseType()
-    {   
+    {
+
         string serviceName = ConfigurationManager.AppSettings["SqlServiceName"]?.Trim() ?? "";
 
+#if DEBUGINMEMORY
+
+        var connection = new SQLiteConnection("DataSource=:memory:");
+        connection.Open();
+
+        var options = new DbContextOptionsBuilder<CheckInDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        var context = new CheckInDbContext(options);
+        context.Database.EnsureCreated();
+
+        return new DatabaseSqliteEF(context);
+
+#endif
+
+#if LEGACYDAPPER
         if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
         {
-            return new DatabaseSqlExpressEf(CreateDbContext());
+            return new DatabaseSQLExpress();
         }
         else
         {
-            return new DatabaseSqlLite();
+            //return new DatabaseSqlLite();
+        }
+#endif
+
+
+        if (serviceName == "MSSQL$SQLEXPRESS" || serviceName == "MSSQLSERVER")
+        {
+            return new DatabaseSqlExpressEF(CreateDbContext());
+        }
+        else
+        {
+            return new DatabaseSqliteEF(CreateDbContext());
+
         }
     }
 
@@ -190,10 +221,10 @@ public static class Database
     {
         var options = new DbContextOptionsBuilder<CheckInDbContext>()
             .UseSqlServer(ConnectionString)
-            .EnableSensitiveDataLogging() // optional
+            .EnableSensitiveDataLogging()
+            .UseChangeTrackingProxies()
             .Options;
 
         return new CheckInDbContext(options);
     }
-
 }

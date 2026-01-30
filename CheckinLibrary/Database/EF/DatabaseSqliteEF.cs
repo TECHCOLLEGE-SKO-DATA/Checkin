@@ -2,7 +2,6 @@
 using CheckinLibrary.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,49 +10,64 @@ using CheckinLibrary.Database.EF;
 
 namespace CheckinLibrary.Database
 {
-    public class DatabaseSqlExpressEF : IDatabaseHelper
+    public class DatabaseSqliteEF : IDatabaseHelper
     {
         private readonly CheckInDbContext _db;
 
-        public DatabaseSqlExpressEF(CheckInDbContext db)
+        public DatabaseSqliteEF(CheckInDbContext db)
         {
             _db = db;
         }
 
         // -------------------------------------------------
-        // ACR122U CardScanned
+        // CardScanned (no stored procedure)
         // -------------------------------------------------
         public void CardScanned(string cardID)
         {
-            _db.Database.ExecuteSqlRaw(
-                "EXEC CardScanned @cardID",
-                new Microsoft.Data.SqlClient.SqlParameter("@cardID", cardID)
-            );
-
             var employee = _db.Employees
                 .Include(e => e.OnSiteTimes)
-                .AsNoTracking()
                 .FirstOrDefault(e => e.CardID == cardID);
 
-            if (employee != null)
+            if (employee == null)
             {
-                var updatedEmployee = employee.Adapt<Employee>();
+                employee = new EmployeeDTO { CardID = cardID, FirstName = "Unknown", LastName = "Unknown" };
+                _db.Employees.Add(employee);
+                _db.SaveChanges();
+                return;
             }
+
+            var lastTime = employee.OnSiteTimes
+                .OrderByDescending(t => t.ArrivalTime)
+                .FirstOrDefault();
+
+            if (lastTime == null || lastTime.DepartureTime != null)
+            {
+                _db.OnSiteTimes.Add(new OnSiteTimeDTO
+                {
+                    EmployeeID = employee.ID,
+                    ArrivalTime = DateTime.Now
+                });
+            }
+            else
+            {
+
+                lastTime.DepartureTime = DateTime.Now;
+            }
+
+            _db.SaveChanges();
         }
 
         // -------------------------------------------------
-        // Admin User
+        // Admin Users
         // -------------------------------------------------
         public void CreateUser(string username, string password)
         {
             var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(password);
-
             var user = new AdminUserDTO
             {
                 Username = username,
                 HashedPassword = passwordHash
             };
-
             _db.AdminUsers.Add(user);
             _db.SaveChanges();
         }
@@ -65,7 +79,6 @@ namespace CheckinLibrary.Database
 
             user.Username = username;
             user.HashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(password);
-
             _db.SaveChanges();
         }
 
@@ -79,7 +92,6 @@ namespace CheckinLibrary.Database
 
             return userDto.Adapt<AdminUser>();
         }
-
 
         public List<AdminUser> GetAdminUsers()
         {
@@ -99,30 +111,25 @@ namespace CheckinLibrary.Database
         }
 
         // -------------------------------------------------
-        // Employee
+        // Employees
         // -------------------------------------------------
         public List<Employee> GetAllEmployees()
         {
             var employees = _db.Employees
-                .Select(e => new
-                {
-                    Employee = e,
-                    LatestTime = e.OnSiteTimes
-                        .OrderByDescending(t => t.ArrivalTime)
-                        .FirstOrDefault(),
-                    IsCheckedIn = EF.DbFunctions.IsEmployeeCheckedIn(e.ID)
-                })
+                .Include(e => e.OnSiteTimes)
                 .AsNoTracking()
                 .ToList();
 
-            return employees.Select(x =>
-            {
-                var emp = x.Employee.Adapt<Employee>();
-                emp.ArrivalTime = x.LatestTime?.ArrivalTime;
-                emp.DepartureTime = x.LatestTime?.DepartureTime;
-                emp.IsCheckedIn = x.IsCheckedIn;
-                return emp;
-            }).ToList();
+            return employees.Adapt<List<Employee>>();
+        }
+
+        public Employee? GetFromCardId(string cardID)
+        {
+            var employee = _db.Employees
+                .Include(e => e.OnSiteTimes)
+                .FirstOrDefault(e => e.CardID == cardID);
+
+            return employee?.Adapt<Employee>();
         }
 
         public void UpdateDb(
@@ -147,15 +154,6 @@ namespace CheckinLibrary.Database
             _db.SaveChanges();
         }
 
-        public Employee? GetFromCardId(string cardID)
-        {
-            var employee = _db.Employees
-                .Include(e => e.OnSiteTimes)
-                .FirstOrDefault(e => e.CardID == cardID);
-
-            return employee?.Adapt<Employee>();
-        }
-
         public void DeleteFromDb(int id)
         {
             var emp = _db.Employees.Find(id);
@@ -166,8 +164,23 @@ namespace CheckinLibrary.Database
         }
 
         // -------------------------------------------------
-        // Group
+        // Groups
         // -------------------------------------------------
+        public List<Group> GetAllGroups(List<Employee> employees)
+        {
+            var groups = _db.Groups
+                .Include(g => g.EmployeeGroups)
+                    .ThenInclude(eg => eg.Employee)
+                        .ThenInclude(e => e.OnSiteTimes)
+                .AsNoTracking()
+                .ToList();
+
+            var localConfig = TypeAdapterConfig.GlobalSettings.Clone();
+            localConfig.RequireExplicitMapping = false;
+
+            return groups.Adapt<List<Group>>(localConfig);
+        }
+
         public void RemoveGroupDb(int id)
         {
             var group = _db.Groups.Find(id);
@@ -213,9 +226,7 @@ namespace CheckinLibrary.Database
         public bool RemoveEmployee(Employee employee, ObservableCollection<Employee> members, int groupId)
         {
             var eg = _db.EmployeeGroups
-                .FirstOrDefault(e =>
-                    e.EmployeeID == employee.ID &&
-                    e.GroupID == groupId);
+                .FirstOrDefault(e => e.EmployeeID == employee.ID && e.GroupID == groupId);
 
             if (eg == null) return false;
 
@@ -223,24 +234,6 @@ namespace CheckinLibrary.Database
             _db.SaveChanges();
             return true;
         }
-
-        public List<Group> GetAllGroups(List<Employee> employees)
-        {
-            var groups = _db.Groups
-                .Include(g => g.EmployeeGroups)
-                    .ThenInclude(eg => eg.Employee)
-                        .ThenInclude(e => e.OnSiteTimes)
-                .AsNoTracking()
-                .ToList();
-
-            // Force Mapster to use the registered config explicitly
-            var localConfig = TypeAdapterConfig.GlobalSettings.Clone();
-            localConfig.RequireExplicitMapping = false;
-
-            return groups.Adapt<List<Group>>(localConfig);
-
-        }
-
 
         public Group NewGroup(string name)
         {
@@ -290,7 +283,7 @@ namespace CheckinLibrary.Database
                 var dto = _db.OnSiteTimes.Find(t.Id);
                 if (dto == null) continue;
 
-                dto.ArrivalTime = t.ArrivalTime.Value;
+                dto.ArrivalTime = t.ArrivalTime ?? DateTime.Now;
                 dto.DepartureTime = t.DepartureTime;
             }
 

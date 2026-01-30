@@ -79,6 +79,7 @@ namespace CheckInSystem.ViewModels.UserControls
         private void CheckIn(Employee employee)
         {
             _cardReader.TriggerCardInserted(employee.CardID);
+            _cardReader.TriggerCardRemoved(employee.CardID);
         }
 
         private void RefreshEmployees()

@@ -117,7 +117,7 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardInserted += (sender, args) =>
+            platform.CardReader.CardRemoved += (sender, args) =>
             {
                 Dispatcher.UIThread.Post(() =>
                 {

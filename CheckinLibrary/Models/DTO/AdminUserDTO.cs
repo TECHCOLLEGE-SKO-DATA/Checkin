@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class AdminUserDTO
 {
     [Key]
-    public int ID { get; set; }
-    public string Username { get; set; }
-    public string HashedPassword { get; set; }
+    public virtual int ID { get; set; }
+    public virtual string Username { get; set; }
+    public virtual string HashedPassword { get; set; }
 }

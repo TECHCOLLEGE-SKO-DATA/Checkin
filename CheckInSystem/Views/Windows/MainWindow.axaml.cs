@@ -24,7 +24,7 @@ public partial class MainWindow : Window
 
         Closing += OnWindowClosing;
         
-#if DEBUG
+#if DEBUG || DEBUGINMEMORY || LEGACYDAPPER
         OpenFakeNFCWindow(platform);
 #endif
     }

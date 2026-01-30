@@ -10,8 +10,10 @@ using Database;
 public class AdminUser
 {
     IDatabaseHelper databasehelper = Database.DatabaseType();
-    public int ID { get; private set; }
-    public string Username { get; private set; }
+    //was private set
+    public int ID { get; set; }
+    //was private set
+    public string Username { get; set; }
     public AdminUser()
     {
     }

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using CheckinLibrary.Database;
 using Dapper;
+using System.ComponentModel;
 using System.Data.SqlClient;
-using CheckinLibrary.Database;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace CheckinLibrary.Models;
@@ -11,8 +12,8 @@ namespace CheckinLibrary.Models;
 public class Employee : INotifyPropertyChanged
 {
     IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
-
-    public int ID { get; private set; }
+    //was private set
+    public int ID { get; set; }
     public Employee()
     {
 
@@ -85,8 +86,12 @@ public class Employee : INotifyPropertyChanged
 
     public void CardScanned(string cardID)
     {
-        Employee? tempEmployee = databaseHelper.GetFromCardId(cardID); //Reload updated employee from database
+        Employee? tempEmployee = databaseHelper.GetFromCardId(cardID); 
         if (tempEmployee == null) return;
+
+        Debug.WriteLine($"UI Employee hash: {this.GetHashCode()}");
+        Debug.WriteLine($"DB Employee hash: {tempEmployee.GetHashCode()}");
+        Debug.WriteLine($"Same instance? {ReferenceEquals(this, tempEmployee)}");
 
         SetProperty(ref _arrivalTime, tempEmployee.ArrivalTime, nameof(ArrivalTime));
         SetProperty(ref _departureTime, tempEmployee.DepartureTime, nameof(DepartureTime));
@@ -173,5 +178,6 @@ public class Employee : INotifyPropertyChanged
             ArrivalTime = null;
         }
     }
+
 }
 

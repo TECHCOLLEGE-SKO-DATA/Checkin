@@ -12,8 +12,8 @@ namespace CheckinLibrary.Models;
 public class Group : INotifyPropertyChanged
 {
     IDatabaseHelper databaseHelper = Database.Database.DatabaseType();
-
-    public int ID { get; private set; }
+    //was private set
+    public int ID { get; set; }
     
     private string _name;
     public string Name
@@ -29,7 +29,8 @@ public class Group : INotifyPropertyChanged
         set => SetProperty(ref _isvisible, value);
     }
 
-    public ObservableCollection<Employee> Members { get; private set; } = new();
+    //was private set
+    public ObservableCollection<Employee> Members { get; set; } = new();
 
     public static List<Group> GetAllGroups(List<Employee> employees)
     {

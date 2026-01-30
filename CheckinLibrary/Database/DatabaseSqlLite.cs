@@ -10,7 +10,7 @@ using static CheckinLibrary.Models.Absence;
 
 namespace CheckinLibrary.Database;
 
-public class DatabaseSqlLite : IDatabaseHelper
+public class DatabaseSqlLite 
 {
     /*
      * ########################################### *
