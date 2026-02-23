@@ -225,8 +225,8 @@ public class MainWindowViewModel : ViewModelBase
 
         List<Employee> employees = new List<Employee>(Employees);
 
-        //Maintenance.CheckOutEmployeesIfTheyForgot(employees);
-        //Maintenance.CheckForEndedOffSiteTime(employees);
+        Maintenance.CheckOutEmployeesIfTheyForgot(employees);
+        Maintenance.CheckForEndedOffSiteTime(employees);
     }
 
     public void EmployeeCardScanned(string cardID)
