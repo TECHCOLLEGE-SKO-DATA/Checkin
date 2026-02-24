@@ -166,6 +166,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             GetEmployeesSnapshot = () => Employees.ToList(),
 
+
             RunDailyResetOnUI = () =>
             {
                 Dispatcher.UIThread.Post(() =>
@@ -181,19 +182,6 @@ public class MainWindowViewModel : ViewModelBase
         };
 
         _timeService.Start();
-    }
-
-    private void UpdateUIOnReset()
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            _vm.SortEmployees();
-            _ = MessageBox.Show(
-                _platform.MainWindow,
-                "Daily reset has been processed!",
-                "Info",
-                MessageBoxButton.OK);
-        });
     }
 
     public ObservableCollection<Employee> GetAllEmployees()

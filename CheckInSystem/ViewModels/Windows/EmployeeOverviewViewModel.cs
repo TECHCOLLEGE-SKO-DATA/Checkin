@@ -124,6 +124,14 @@ namespace CheckInSystem.ViewModels.Windows
                     SortEmployees();
                 });
             };
+
+            platform.CardReader.CardRemoved += (sender, args) =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    SortEmployees();
+                });
+            };
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
