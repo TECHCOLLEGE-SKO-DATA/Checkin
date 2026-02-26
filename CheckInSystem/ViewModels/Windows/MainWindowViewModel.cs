@@ -1,24 +1,27 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Threading;
+using CheckinLibrary.Background_tasks;
 using CheckinLibrary.Database;
 using CheckinLibrary.Models;
+using CheckinLibrary.Settings;
+using CheckInSystem.CardReader;
+using CheckInSystem.Controls;
+using CheckInSystem.Customcontrols;
 using CheckInSystem.Platform;
 using CheckInSystem.ViewModels.UserControls;
+using CheckInSystem.Views;
+using PCSC.Interop;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CheckinLibrary.Background_tasks;
-using CheckInSystem.CardReader;
-using Avalonia.Threading;
-using CheckInSystem.Views;
-using CheckinLibrary.Settings;
-using CheckInSystem.Customcontrols;
 
 namespace CheckInSystem.ViewModels.Windows;
 public class MainWindowViewModel : ViewModelBase
 {
+    IPlatform _platform;
     public List<AbsenceReason> absenceReasons { get; set; }
 
     //ViewModels start here
@@ -118,8 +121,15 @@ public class MainWindowViewModel : ViewModelBase
 
     public EmployeeStatusToBrushConverter brushConverter { get; set; }
 
+    private BackgroundTimeService _timeService;
+
+    EmployeeOverviewViewModel _vm;
+
     public MainWindowViewModel(IPlatform platform) : base(platform)
     {
+        _platform = platform;
+
+        _vm = new EmployeeOverviewViewModel(_platform);
         if (!Design.IsDesignMode)
         {
             platform.CardReader.CardInserted += (sender, args) => EmployeeCardScanned(args.Value);
@@ -128,6 +138,7 @@ public class MainWindowViewModel : ViewModelBase
             LoadDataFromDatabase();
         }
 
+        
         //Making an instance of the VeiwModels
         LoginScreenViewModel = new(platform);
         AdminPanelViewModel = new(platform);
@@ -145,6 +156,37 @@ public class MainWindowViewModel : ViewModelBase
 
         //starting View and ViewModel
         CurrentViewModel = LoginScreenViewModel;
+
+        StartBackgroundService();
+    }
+
+    private void StartBackgroundService()
+    {
+        _timeService = new BackgroundTimeService
+        {
+            GetEmployeesSnapshot = () => Employees.ToList(),
+
+
+            RunDailyResetOnUI = () =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    _vm.SortEmployees();
+                    _ = MessageBox.Show(
+                        _platform.MainWindow,
+                        "Daily reset has been processed!",
+                        "Info",
+                        MessageBoxButton.OK);
+                });
+            }
+        };
+
+        _timeService.Start();
+    }
+
+    public ObservableCollection<Employee> GetAllEmployees()
+    {
+        return Employees;
     }
 
     public void LoadDataFromDatabase()

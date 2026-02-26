@@ -7,7 +7,7 @@ public class State
     public static bool UpdateNextEmployee { get; set; }
     public static bool UpdateCardId { get; set; }
     public static Employee? EmployeeToUpdate { get; set; }
-
+    
     public static void SetUpdateCard(Employee updateEmployee)
     {
         EmployeeToUpdate = updateEmployee;

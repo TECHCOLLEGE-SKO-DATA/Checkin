@@ -10,13 +10,9 @@ namespace CheckinLibrary.Background_tasks;
 
 public class AbsencBackGroundService
 {
-    Absence absence = new();
-
     private TimeSpan waitTime = TimeSpan.FromMinutes(2);
 
     public List<Employee> employees = new List<Employee>();
-
-    private IDatabaseHelper databaseHelper;
 
     public void AbsenceTask()
     {
@@ -34,10 +30,10 @@ public class AbsencBackGroundService
             {
                 offsiteTasks.Add(Task.Run(async () =>
                 {
-                    lock (employees) // Ensure thread safety
+                    lock (employees) 
                     {
                         employees.Remove(employee);
-                    }// Lock is released here for other tasks to do what they need
+                    }
 
                     var emp = await OffsiteTimer(employee, activeAbsences);
 

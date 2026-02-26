@@ -1,18 +1,17 @@
-﻿using ReactiveUI;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using CheckinLibrary.Models;
+using CheckInSystem.Platform;
+using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
-using CheckinLibrary.Models;
-using System.Reactive;
-using System.ComponentModel;
-using System.Windows;
-using CheckinLibrary.Database;
-using CheckInSystem.Platform;
-using Avalonia.Controls;
-using System.Diagnostics;
 
 namespace CheckInSystem.ViewModels.Windows
 {
@@ -120,18 +119,12 @@ namespace CheckInSystem.ViewModels.Windows
 
             platform.CardReader.CardInserted += async (sender, args) =>
             {
-                //to ensure correct sorting 10 millisecond delay
-                await Task.Delay(10);
-
-                //Sort again
-                SortEmployees();
-
-                foreach(var group in Groups)
+                await Task.Delay(200);
+                Dispatcher.UIThread.Post(() =>
                 {
-                    Debug.WriteLine(group.Members);
-                }
+                    SortEmployees();
+                });
             };
-
         }
 
         // TODO: Consider moving ReadConfig() and UpdateConfig to a config class and use a proper saving format
@@ -170,27 +163,50 @@ namespace CheckInSystem.ViewModels.Windows
             Groups = _platform.MainWindowViewModel.Groups;
         }
 
-        private void SortEmployees()
+        public void SortEmployees()
         {
-            ObservableCollection<Group> tempGroups = new();
-            foreach (var group in Groups)
+            if (Groups == null) return;
+
+            var groupsSnapshot = Groups.ToList();
+
+            foreach (var group in groupsSnapshot)
             {
-                // Sort members by IsCheckedIn (desc: checked-in first), then FirstName alphabetically
-                var sortedMembers = group.Members
-                    .OrderByDescending(m => m.IsCheckedIn)  // true first
+                if (group?.Members == null) continue;
+
+                var membersSnapshot = group.Members
+                    .Where(m => m != null)
+                    .ToList();
+
+                var sortedMembers = membersSnapshot
+                    .OrderByDescending(m => m.IsCheckedIn)
                     .ThenBy(m => m.FirstName)
                     .ToList();
 
                 group.Members.Clear();
                 foreach (var member in sortedMembers)
-                {
                     group.Members.Add(member);
-                }
-                tempGroups.Add(group);
             }
-            
-            Groups = tempGroups;
         }
 
+        public List<Employee> UpdateAllEmployees(List<Employee> employees)
+        {
+            var employeeById = employees.ToDictionary(e => e.ID);
+
+            foreach (var group in Groups)
+            {
+                foreach (var member in group.Members)
+                {
+                    if (employeeById.TryGetValue(member.ID, out var updated))
+                    {
+                        member.IsCheckedIn = updated.IsCheckedIn;
+                        member.IsOffSite = updated.IsOffSite;
+                    }
+                }
+            }
+
+            return Groups
+                .SelectMany(g => g.Members)
+                .ToList();
+        }
     }
 }
