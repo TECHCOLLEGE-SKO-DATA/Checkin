@@ -117,16 +117,9 @@ namespace CheckInSystem.ViewModels.Windows
                 SortEmployees();
             };
 
-            platform.CardReader.CardInserted += (sender, args) =>
+            platform.CardReader.CardInserted += async (sender, args) =>
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    SortEmployees();
-                });
-            };
-
-            platform.CardReader.CardRemoved += (sender, args) =>
-            {
+                await Task.Delay(200);
                 Dispatcher.UIThread.Post(() =>
                 {
                     SortEmployees();
